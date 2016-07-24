@@ -2,7 +2,7 @@
 import assert = require("assert");
 
 import {Maybe, Just, Nothing} from "../src/maybe";
-import {Do} from "../src/monad";
+import {Do, join} from "../src/monad";
 import testFunctor from "./functor";
 
 describe("maybe", () => {
@@ -33,6 +33,9 @@ describe("maybe", () => {
       return Just(a + b + c);
     });
     assert.deepEqual(res, Nothing());
+  });
+  it("is joined correctly", () => {
+    assert.deepEqual(join(Just(Just(12))), Just(12));
   });
   testFunctor("Maybe", Just(12));
 });

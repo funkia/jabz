@@ -1,6 +1,14 @@
+function id<A>(a: A) {
+  return a;
+}
+
 export interface Monad<A> {
   of: <B>(b: B) => Monad<B>;
   chain: <B>(f: (a: A) => Monad<B>) => Monad<B>;
+}
+
+export function join<A>(m: Monad<Monad<A>>) {
+  return m.chain(id);
 }
 
 export function Do(gen: () => Iterator<Monad<any>>): Monad<any> {
