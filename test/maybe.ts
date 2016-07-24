@@ -3,9 +3,10 @@ import assert = require("assert");
 
 import {Maybe, Just, Nothing} from "../src/maybe";
 import {Do, join} from "../src/monad";
+import {mapTo} from "../src/functor";
 import testFunctor from "./functor";
 
-describe("maybe", () => {
+describe("Maybe", () => {
   it("gives just on `of`", () => {
     const j = Just(12);
     assert.deepEqual(j, j.of(12));
@@ -38,4 +39,7 @@ describe("maybe", () => {
     assert.deepEqual(join(Just(Just(12))), Just(12));
   });
   testFunctor("Maybe", Just(12));
+  it("works with mapTo", () => {
+    assert.deepEqual(Just(1), mapTo(1, Just(2)));
+  });
 });
