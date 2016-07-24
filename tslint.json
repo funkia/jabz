@@ -49,7 +49,7 @@
     "no-internal-module": true,
     "no-null-keyword": true,
     "no-reference": true,
-    "no-require-imports": true,
+    "no-require-imports": false,
     "no-shadowed-variable": true,
     "no-string-literal": true,
     "no-trailing-whitespace": true,

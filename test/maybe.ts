@@ -3,6 +3,7 @@ import assert = require("assert");
 
 import {Maybe, Just, Nothing} from "../src/maybe";
 import {Do} from "../src/monad";
+import testFunctor from "./functor";
 
 describe("maybe", () => {
   it("gives just on `of`", () => {
@@ -33,4 +34,5 @@ describe("maybe", () => {
     });
     assert.deepEqual(res, Nothing());
   });
+  testFunctor("Maybe", Just(12));
 });

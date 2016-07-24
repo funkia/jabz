@@ -1,48 +1,27 @@
-/* @flow */
-
-// Maybe
-
-// type MaybeVal<T> = {just: T} | "nothing";
+import {Functor} from "./functor";
 
 type MaybeMatch<T, K> = {
   nothing: () => K,
   just: (t: T) => K
 };
 
-// export class Maybe<A> {
-//   val: MaybeVal<A>;
-//   constructor(val: MaybeVal<A>) {
-//     this.val = val;
-//   }
-//   Just(a: A) {
-//     return new Maybe({just: });
-//   }
-//   Nothing() {
-//     return new Maybe("nothing", undefined);
-//   }
-//   match<K>(m: MaybeMatch<A, K>) {
-//     if (this.tag === "nothing") {
-//       return m.nothing();
-//     } else {
-//       return m.just(this.val);
-//     }
-//   }
-// }
-
-export type Maybe<T> = ImplNothing<T> | ImplJust<T>
+export type Maybe<T> = ImplNothing<T> | ImplJust<T>;
 
 function of<V>(v: V): Maybe<V> {
   return new ImplJust(v);
 }
 
-class ImplNothing<A> {
+class ImplNothing<A> implements Functor<A> {
   constructor() {};
   match<K>(m: MaybeMatch<any, K>): K {
     return m.nothing();
   }
   of: <B>(v: B) => Maybe<B> = of;
-  chain<B>(f: (v: any) => Maybe<B>): Maybe<B> {
+  chain<B>(f: (v: any) => Maybe<B>): Maybe<A> {
     return this;
+  }
+  map<B>(f: (a: A) => B): Maybe<B> {
+    return new ImplNothing();
   }
 }
 
@@ -56,10 +35,10 @@ class ImplJust<A> {
   }
   of: <V>(v: V) => Maybe<V> = of;
   chain<B>(f: (v: A) => Maybe<B>): Maybe<B> {
-    return this.match({
-      just: f,
-      nothing: () => this
-    });
+    return f(this.val);
+  }
+  map<B>(f: (a: A) => B): Maybe<B> {
+    return new ImplJust(f(this.val));;
   }
 }
 
