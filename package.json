@@ -1,0 +1,33 @@
+{
+  "name": "jazzstractions",
+  "version": "0.0.1",
+  "description": "Powerful and practical abstractions.",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/.bin/typings install",
+    "build": "./node_modules/.bin/tsc",
+    "test": "./node_modules/.bin/ts-node node_modules/.bin/_mocha test/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paldepind/jazzstractions.git"
+  },
+  "keywords": [
+    "monad"
+  ],
+  "author": "Simon Friis Vindum",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paldepind/jazzstractions/issues"
+  },
+  "homepage": "https://github.com/paldepind/jazzstractions#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "ts-node": "^0.8.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  }
+}
