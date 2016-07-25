@@ -42,4 +42,25 @@ describe("Maybe", () => {
   it("works with mapTo", () => {
     assert.deepEqual(Just(1), mapTo(1, Just(2)));
   });
+  it("lifts function of one argument", () => {
+    const {lift} = Nothing();
+    assert.deepEqual(
+      Just(8),
+      lift((x: number) => x * 2, Just(4))
+    );
+  });
+  it("lifts function of two arguments", () => {
+    const {lift} = Nothing();
+    assert.deepEqual(
+      Just(13),
+      lift((x: number, y: number) => x * 2 + y, Just(4), Just(5))
+    );
+  });
+  it("lifts function of three arguments", () => {
+    const {lift} = Nothing();
+    assert.deepEqual(
+      Just(10),
+      lift((x: number, y: number, z: number) => x + y + z, Just(4), Just(5), Just(1))
+    );
+  });
 });
