@@ -5,35 +5,41 @@ type MaybeMatch<T, K> = {
   just: (t: T) => K
 };
 
-export type Maybe<T> = ImplNothing<T> | ImplJust<T>;
+export abstract class Maybe<A> implements Functor<A> {
+  abstract match<K>(m: MaybeMatch<any, K>): K;
+  of: <B>(v: B) => Maybe<B> = of;
+  abstract chain<B>(f: (v: any) => Maybe<B>): Maybe<A>;
+  abstract map<B>(f: (a: A) => B): Maybe<B>;
+}
 
 function of<V>(v: V): Maybe<V> {
   return new ImplJust(v);
 }
 
-class ImplNothing<A> implements Functor<A> {
-  constructor() {};
+class ImplNothing<A> extends Maybe<A> {
+  constructor() {
+    super();
+  };
   match<K>(m: MaybeMatch<any, K>): K {
     return m.nothing();
   }
-  of: <B>(v: B) => Maybe<B> = of;
   chain<B>(f: (v: any) => Maybe<B>): Maybe<A> {
     return this;
   }
   map<B>(f: (a: A) => B): Maybe<B> {
-    return new ImplNothing();
+    return new ImplNothing<B>();
   }
 }
 
-class ImplJust<A> {
+class ImplJust<A> extends Maybe<A> {
   val: A;
   constructor(val: A) {
+    super();
     this.val = val;
   }
   match<K>(m: MaybeMatch<A, K>): K {
     return m.just(this.val);
   }
-  of: <V>(v: V) => Maybe<V> = of;
   chain<B>(f: (v: A) => Maybe<B>): Maybe<B> {
     return f(this.val);
   }
