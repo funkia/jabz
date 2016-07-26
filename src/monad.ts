@@ -1,9 +1,10 @@
+import {Applicative} from "./applicative";
+
 function id<A>(a: A) {
   return a;
 }
 
-export interface Monad<A> {
-  of: <B>(b: B) => Monad<B>;
+export interface Monad<A> extends Applicative<A> {
   chain: <B>(f: (a: A) => Monad<B>) => Monad<B>;
 }
 
