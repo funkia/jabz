@@ -1,9 +1,16 @@
 ///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
-import {Monoid} from "../src/monoid";
+import {Monoid, merge} from "../src/monoid";
+import {Sum} from "../src/monoids/sum";
 
-export default function<A>(name: string, monoid: Monoid<A>) {
+describe("monoid", () => {
+  it("can merge and id", () => {
+    merge(Sum(12), Sum(1)).identity;
+  });
+});
+
+export default function<M extends Monoid<M>>(name: string, monoid: M): void {
   describe("monoid " + name, () => {
     it("has identity element", () => {
       assert.deepEqual(monoid.identity.merge(monoid),
