@@ -1,5 +1,5 @@
 {
-  "name": "jazzstractions",
+  "name": "jabz",
   "version": "0.0.1",
   "description": "Powerful and practical abstractions.",
   "directories": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paldepind/jazzstractions.git"
+    "url": "git+https://github.com/paldepind/jabz.git"
   },
   "keywords": [
     "monad"
@@ -20,9 +20,9 @@
   "author": "Simon Friis Vindum",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/paldepind/jazzstractions/issues"
+    "url": "https://github.com/paldepind/jabz/issues"
   },
-  "homepage": "https://github.com/paldepind/jazzstractions#readme",
+  "homepage": "https://github.com/paldepind/jabz#readme",
   "dependencies": {},
   "devDependencies": {
     "mocha": "^2.5.3",
