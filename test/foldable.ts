@@ -9,8 +9,7 @@ class List<A> extends AbstractFoldable<A> {
   constructor(private arr: [A]) {
     super();
   };
-  foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
-    let acc = id;
+  foldMapId<M extends Monoid<M>>(acc: M, f: (a: A) => M): M {
     for (let i = 0; i < this.arr.length; ++i) {
       acc = acc.merge(f(this.arr[i]));
     }

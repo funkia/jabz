@@ -14,9 +14,9 @@ function part<A, B>(f: (a: A, b: B) => B, a: A): (b: B) => B {
 export abstract class AbstractFoldable<A> implements Foldable<A> {
   abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;
   foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
-    return this.foldMapId(f.identity, f);
+    return this.foldMapId(f.identity(), f);
   }
   fold<B>(acc: B, f: (a: A, b: B) => B): B {
-    return toFunction(this.foldMapId(Endo.identity, (a: A) => Endo(part(f, a))))(acc);
+    return toFunction(this.foldMapId(Endo.identity(), (a: A) => Endo(part(f, a))))(acc);
   }
 }
