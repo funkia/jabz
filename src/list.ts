@@ -1,12 +1,13 @@
-import {Foldable} from "./foldable";
+import {Foldable, AbstractFoldable} from "./foldable";
 import {MonoidConstructor, Monoid} from "./monoid";
 
 export type List<A> = ListImpl<A>;
 
-class ListImpl<A> implements Foldable<A> {
-  constructor(public arr: [A]) {};
-  foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
-    let m = f.identity;
+class ListImpl<A> extends AbstractFoldable<A> {
+  constructor(public arr: [A]) {
+    super();
+  };
+  foldMapId<M extends Monoid<M>>(m: M, f: (a: A) => M): M {
     for (let i = 0; i < this.arr.length; ++i) {
       m = m.merge(f(this.arr[i]));
     }
