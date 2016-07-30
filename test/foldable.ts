@@ -19,9 +19,14 @@ class List<A> extends AbstractFoldable<A> {
 
 describe("Foldable", () => {
   describe("simple list implementation", () => {
-    assert.deepEqual((new List([1, 2, 3, 4, 5])).foldMap(Sum), Sum(15));
-  });
-  describe("simple list implementation", () => {
-    assert.deepEqual((new List([1, 2, 3, 4, 5])).fold(0, (n, m) => n + m), 15);
+    it("has foldmap", () => {
+      assert.deepEqual((new List([1, 2, 3, 4, 5])).foldMap(Sum), Sum(15));
+    });
+    it("has fold", () => {
+      assert.deepEqual((new List([1, 2, 3, 4, 5])).fold(0, (n, m) => n + m), 15);
+    });
+    it("has size", () => {
+      assert.deepEqual((new List([1, 1, 1, 1])).size(), 4);
+    });
   });
 });
