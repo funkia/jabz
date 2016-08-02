@@ -36,7 +36,7 @@ describe("Maybe", () => {
     assert.deepEqual(res, Nothing());
   });
   it("is joined correctly", () => {
-    assert.deepEqual(join(Just(Just(12))), Just(12));
+    assert.deepEqual(join<number>(Just(Just(12))), Just(12));
   });
   testFunctor("Maybe", Just(12));
   it("is still a maybe after map", () => {

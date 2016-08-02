@@ -1,14 +1,15 @@
-import {Applicative} from "./Applicative";
+import {Monad} from "./monad";
 
 type MaybeMatch<T, K> = {
   nothing: () => K,
   just: (t: T) => K
 };
 
-export abstract class Maybe<A> implements Applicative<A> {
+export abstract class Maybe<A> implements Monad<A> {
   abstract match<K>(m: MaybeMatch<any, K>): K;
   of: <B>(v: B) => Maybe<B> = of;
-  abstract chain<B>(f: (v: any) => Maybe<B>): Maybe<A>;
+  abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
+  abstract flatten<B>(m: Monad<Monad<B>>): Monad<B>;
   abstract map<B>(f: (a: A) => B): Maybe<B>;
   abstract mapTo<B>(b: B): Maybe<B>;
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
@@ -47,8 +48,14 @@ class ImplNothing<A> extends Maybe<A> {
   match<K>(m: MaybeMatch<any, K>): K {
     return m.nothing();
   }
-  chain<B>(f: (v: any) => Maybe<B>): Maybe<A> {
+  chain<B>(f: (a: A) => Maybe<B>): Maybe<A> {
     return this;
+  }
+  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
+    return m.match({
+      nothing: () => Nothing(),
+      just: (m) => m
+    });
   }
   map<B>(f: (a: A) => B): Maybe<B> {
     return new ImplNothing<B>();
@@ -69,6 +76,12 @@ class ImplJust<A> extends Maybe<A> {
   }
   chain<B>(f: (v: A) => Maybe<B>): Maybe<B> {
     return f(this.val);
+  }
+  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
+    return m.match({
+      nothing: () => Nothing(),
+      just: (m) => m
+    });
   }
   map<B>(f: (a: A) => B): Maybe<B> {
     return new ImplJust(f(this.val));;
