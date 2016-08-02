@@ -1,4 +1,5 @@
 import {Applicative} from "./applicative";
+import {mixin} from "./utils";
 
 function id<A>(a: A) {
   return a;
@@ -55,3 +56,7 @@ export function Do(gen: () => Iterator<Monad<any>>): Monad<any> {
   }
   return doRec(undefined);
 };
+
+export function deriveMonad(obj: any) {
+  mixin(obj, [AbstractMonad]);
+}

@@ -1,12 +1,12 @@
 ///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
-import {Monad, AbstractMonad} from "../src/monad";
+import {mixin} from "../src/utils";
+import {Applicative} from "../src/applicative";
+import {Monad, AbstractMonad, deriveMonad} from "../src/monad";
 
-class List<A> extends AbstractMonad<A> {
-  constructor(public arr: A[]) {
-    super();
-  };
+class List<A> implements Monad<A> {
+  constructor(public arr: A[]) {};
   of<B>(b: B): List<B> {
     return new List([b]);
   };
@@ -20,7 +20,13 @@ class List<A> extends AbstractMonad<A> {
     }
     return new List(newArr);
   }
+  flatten: <B>(m: Monad<Monad<B>>) => Monad<B>;
+  map: <B>(f: (a: A) => B) => Monad<B>;
+  mapTo: <B>(b: B) => Monad<B>;
+  lift: (f: Function, ...ms: any[]) => Monad<any>;
 }
+
+deriveMonad(List);
 
 describe("Monad", () => {
   it("has correct chain", () => {
@@ -55,7 +61,7 @@ describe("Monad", () => {
       const {lift} = new List([1]);
       assert.deepEqual(
         new List([-2, -1, 0, -1, 0, 1]),
-        lift((x, y, z) => x + y - z, new List([1, 2]), new List([3, 4, 5]), new List([6]))
+        lift((x: number, y: number, z: number) => x + y - z, new List([1, 2]), new List([3, 4, 5]), new List([6]))
       );
     });
   });
