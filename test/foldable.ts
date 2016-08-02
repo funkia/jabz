@@ -6,7 +6,7 @@ import {Monoid, MonoidConstructor} from "../src/monoid";
 import {Sum} from "../src/monoids/sum";
 
 class List<A> extends AbstractFoldable<A> {
-  constructor(private arr: [A]) {
+  constructor(private arr: A[]) {
     super();
   };
   foldMapId<M extends Monoid<M>>(acc: M, f: (a: A) => M): M {
@@ -19,8 +19,11 @@ class List<A> extends AbstractFoldable<A> {
 
 describe("Foldable", () => {
   describe("simple list implementation", () => {
-    it("has foldmap", () => {
+    it("has foldMap", () => {
       assert.deepEqual((new List([1, 2, 3, 4, 5])).foldMap(Sum), Sum(15));
+    });
+    it("empty foldable gives identity element", () => {
+      assert.deepEqual((new List([])).foldMap(Sum), Sum(0));
     });
     it("has fold", () => {
       assert.deepEqual((new List([1, 2, 3, 4, 5])).fold(0, (n, m) => n + m), 15);

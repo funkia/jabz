@@ -4,7 +4,7 @@ import {MonoidConstructor, Monoid} from "./monoid";
 export type List<A> = ListImpl<A>;
 
 class ListImpl<A> extends AbstractFoldable<A> {
-  constructor(public arr: [A]) {
+  constructor(public arr: A[]) {
     super();
   };
   foldMapId<M extends Monoid<M>>(m: M, f: (a: A) => M): M {
@@ -15,6 +15,6 @@ class ListImpl<A> extends AbstractFoldable<A> {
   }
 }
 
-export function fromArray<A>(arr: [A]): List<A> {
+export function fromArray<A>(arr: A[]): List<A> {
   return new ListImpl(arr);
 }

@@ -28,4 +28,3 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
     return this.fold(0, incr);
   }
 }
-
