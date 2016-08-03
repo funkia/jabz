@@ -6,8 +6,9 @@ export interface Functor<A> {
 }
 
 export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
-export function map<A, B>(fn: (a: A) => B, functor: Functor<A>): Functor<B> {
-  return functor.map(fn);
+export function map<A, B>(f: (a: A) => B, functor: Functor<A>): Functor<B>;
+export function map<A, B>(f: (a: A) => B, functor: Functor<A>): Functor<B> {
+  return functor.map(f);
 }
 
 export function mapTo<A, B>(b: B, functor: Maybe<A>): Maybe<B>;
