@@ -9,10 +9,17 @@ import testFunctor from "./functor";
 describe("Either", () => {
   describe("Functor", () => {
     it("maps over right", () => {
-      assert.deepEqual(right(16), map((x) => x * x, right(4)));
+      assert.deepEqual(right(16), map((x: number) => x * x, right(4)));
     });
-  });
-  describe("Monad", () => {
-    
+    it("does not affect left", () => {
+      assert.deepEqual(left(4), map((x: number) => x * x, left(4)));
+    });
+    it("is still Either after map", () => {
+      // the following should typecheck
+      map((x: number) => x * x, right(4)).match({
+        left: () => ({}),
+        right: () => ({})
+      });
+    });
   });
 });
