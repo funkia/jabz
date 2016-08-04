@@ -1,15 +1,47 @@
 import {Functor} from "./functor";
+import {Applicative} from "./applicative";
 
-export type Either<A, B> = Left<A, B> | Right<A, B>;
+enum EitherTag { Left, Right }
 
 type EitherMatch<A, B, K> = {
   left: (a: A) => K,
   right: (b: B) => K
 }
 
-class Left<A, B> implements Functor<B> {
+export abstract class Either<A, B> implements Applicative<B> {
+  tag: EitherTag;
+  val: A | B;
+  abstract match<K>(m: EitherMatch<A, B, K>): K;
+  abstract map<C>(f: (b: B) => C): Either<A, C>;
+  abstract mapTo<C>(c: C): Either<A, C>;
+  static of<B>(b: B) {
+    return new Right(b);
+  }
+  of<B>(b: B) {
+    return new Right(b);
+  }
+  lift<A, T1, R>(f: (t: T1) => R, m: Either<A, T1>): Either<A, R>;
+  lift<A, T1, T2, R>(f: (t: T1, u: T2) => R, m1: Either<A, T1>, m2: Either<A, T2>): Either<A, R>;
+  lift<A, T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Either<A, T1>, m2: Either<A, T2>, m3: Either<A, T3>): Either<A, R>;
+  lift<A>(f: Function, ...args: Either<A, any>[]): Either<A, any> {
+    for (let i = 0; i < args.length; i++) {
+      if (args[i].tag === EitherTag.Left) {
+        return args[i];
+      }
+    }
+    let rights: Right<A, any>[] = [];
+    for (let i = 0; i < args.length; i++) {
+      rights.push(args[i].val);
+    }
+    return new Right(f(...rights));
+  }
+}
+
+class Left<A, B> extends Either<A, B> {
   val: A;
+  tag: EitherTag = EitherTag.Left;
   constructor(a: A) {
+    super();
     this.val = a;
   }
   match<K>(m: EitherMatch<A, B, K>): K {
@@ -24,9 +56,11 @@ class Left<A, B> implements Functor<B> {
   }
 }
 
-class Right<A, B> implements Functor<B> {
+class Right<A, B> extends Either<A, B> {
   val: B;
+  tag: EitherTag = EitherTag.Right;
   constructor(b: B) {
+    super();
     this.val = b;
   }
   match<K>(m: EitherMatch<A, B, K>): K {
