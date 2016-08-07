@@ -18,10 +18,10 @@ export abstract class Maybe<A> implements Monad<A> {
   lift(f: Function, ...args: any[]): any {
     switch (f.length) {
     case 1:
-      return args[0].val !== undefined ? Just(f(args[0].val)) : nothing;
+      return args[0].val !== undefined ? just(f(args[0].val)) : nothing;
     case 2:
       if (args[0].val !== undefined && args[1].val !== undefined) {
-        return Just(f(args[0].val, args[1].val));
+        return just(f(args[0].val, args[1].val));
       } else {
         return nothing;
       }
@@ -29,7 +29,7 @@ export abstract class Maybe<A> implements Monad<A> {
       if (args[0].val !== undefined &&
           args[1].val !== undefined &&
           args[2].val !== undefined) {
-        return Just(f(args[0].val, args[1].val, args[2].val));
+        return just(f(args[0].val, args[1].val, args[2].val));
       } else {
         return nothing;
       }
@@ -38,10 +38,10 @@ export abstract class Maybe<A> implements Monad<A> {
 }
 
 function of<V>(v: V): Maybe<V> {
-  return new ImplJust(v);
+  return new Just(v);
 }
 
-class ImplNothing<A> extends Maybe<A> {
+class Nothing<A> extends Maybe<A> {
   constructor() {
     super();
   };
@@ -53,19 +53,19 @@ class ImplNothing<A> extends Maybe<A> {
   }
   flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
     return m.match({
-      nothing: () => Nothing(),
+      nothing: () => nothing(),
       just: (m) => m
     });
   }
   map<B>(f: (a: A) => B): Maybe<B> {
-    return new ImplNothing<B>();
+    return new Nothing<B>();
   }
   mapTo<B>(b: B): Maybe<B> {
-    return new ImplNothing<B>();
+    return new Nothing<B>();
   }
 }
 
-class ImplJust<A> extends Maybe<A> {
+class Just<A> extends Maybe<A> {
   val: A;
   constructor(val: A) {
     super();
@@ -79,24 +79,24 @@ class ImplJust<A> extends Maybe<A> {
   }
   flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
     return m.match({
-      nothing: () => Nothing(),
+      nothing: () => nothing(),
       just: (m) => m
     });
   }
   map<B>(f: (a: A) => B): Maybe<B> {
-    return new ImplJust(f(this.val));;
+    return new Just(f(this.val));;
   }
   mapTo<B>(b: B): Maybe<B> {
-    return new ImplJust<B>(b);
+    return new Just<B>(b);
   }
 }
 
-export function Just<V>(v: V): Maybe<V> {
-  return new ImplJust(v);
+export function just<V>(v: V): Maybe<V> {
+  return new Just(v);
 }
 
-const nothing = new ImplNothing();
+const _nothing = new Nothing();
 
-export function Nothing<V>(): Maybe<V> {
-  return nothing;
+export function nothing<V>(): Maybe<V> {
+  return _nothing;
 }

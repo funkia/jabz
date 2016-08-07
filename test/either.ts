@@ -1,4 +1,4 @@
- ///<reference path="../typings/index.d.ts" />
+///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
 import {Either, left, right} from "../src/either";
@@ -43,4 +43,3 @@ describe("Either", () => {
     });
   });
 });
-{}
