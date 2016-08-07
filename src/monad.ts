@@ -42,9 +42,9 @@ export function join<A>(m: Monad<Monad<A>>) {
   return m.chain(id);
 }
 
-export function Do(gen: () => Iterator<Monad<any>>): Monad<any> {
+export function Do(gen: () => Iterator<Monad<any>>) {
   const doing = gen();
-  function doRec(v: any): Monad<any> {
+  function doRec(v: any): any {
     const a = doing.next(v);
     if (a.done === true) {
       return a.value;

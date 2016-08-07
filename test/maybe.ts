@@ -18,7 +18,7 @@ describe("Maybe", () => {
     assert.deepEqual(n.chain<number>(_ => just(12)), n);
   });
   it("passes values through", () => {
-    const res = Do(function*() {
+    const res: Maybe<number> = Do(function*() {
       const a = yield just(1);
       const b = yield just(3);
       const c = yield just(2);
