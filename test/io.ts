@@ -3,17 +3,17 @@ import assert = require("assert");
 
 // import "babel-polyfill";
 
-import {IO, of, runEffects, withEffects, ap} from "../src/io";
+import {IO, of, runIO, withEffects, ap} from "../src/io";
 import {Do, Monad} from "../src/monad";
 
 describe("effects", () => {
   it("gives pure computaion", () => {
-    return runEffects(of(12)).then((res) => {
+    return runIO(of(12)).then((res) => {
       assert.equal(12, res);
     });
   });
   it("chains computations", () => {
-    return runEffects(of(3).chain(n => of(n + 4))).then((res) => {
+    return runIO(of(3).chain(n => of(n + 4))).then((res) => {
       assert.equal(7, res);
     });
   });
@@ -26,7 +26,7 @@ describe("effects", () => {
       const sum = yield f2(a, b);
       return of(sum);
     });
-    return runEffects(comp).then((res) => {
+    return runIO(comp).then((res) => {
       assert.equal(10, res);
     });
   });
@@ -34,6 +34,6 @@ describe("effects", () => {
     const f1 = of((a: number) => a * 2);
     const f2 = of(3);
     const applied = ap(f1, f2);
-    return runEffects(applied).then(res => assert.equal(res, 6));
+    return runIO(applied).then(res => assert.equal(res, 6));
   });
 });

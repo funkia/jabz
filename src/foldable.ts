@@ -12,7 +12,7 @@ function part<A, B>(f: (a: A, b: B) => B, a: A): (b: B) => B {
   return (b: B) => f(a, b);
 }
 
-function incr<A>(_: A, acc: number) {
+function incr<A>(_: A, acc: number): number {
   return acc + 1;
 }
 

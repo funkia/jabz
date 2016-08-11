@@ -12,6 +12,9 @@ export class IO<A> extends AbstractMonad<A> {
   of<B>(k: B): IO<B> {
     return new IO(() => Promise.resolve(k));
   }
+  static of<B>(k: B): IO<B> {
+    return new IO(() => Promise.resolve(k));
+  }
   chain<B>(f: (a: A) => IO<B>): IO<B> {
     return new IO(() => this.comp().then(r => f(r).comp()));
   }
@@ -21,7 +24,7 @@ export function of<B>(k: B): IO<B> {
   return new IO(() => Promise.resolve(k));
 }
 
-export function runEffects<A>(e: IO<A>): Promise<A> {
+export function runIO<A>(e: IO<A>): Promise<A> {
   return e.comp();
 }
 
@@ -34,7 +37,7 @@ export function wrapEffects<A>(f: () => A): IO<A> {
 }
 
 // takes an impure function an converts it to a computation
-// in the effects monad
+// in the IO monad
 export function withEffects<A>(fn: any): (...as: any[]) => IO<A> {
   return (...args: any[]) => new IO(() => Promise.resolve(fn(...args)));
 }
