@@ -2,11 +2,13 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "declaration": true,
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "lib/"
   },
-  "filesGlob":[
-    "src/*.ts"
+  "include": [
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

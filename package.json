@@ -2,9 +2,11 @@
   "name": "jabz",
   "version": "0.0.1",
   "description": "Powerful and practical abstractions.",
-  "directories": {
-    "test": "test"
-  },
+  "main": "lib/index",
+  "typings": "lib/index",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
     "postinstall": "./node_modules/.bin/typings install",
     "build": "./node_modules/.bin/tsc",
