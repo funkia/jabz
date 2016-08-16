@@ -10,7 +10,10 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/typings install",
     "build": "./node_modules/.bin/tsc",
-    "test": "./node_modules/.bin/ts-node node_modules/.bin/_mocha test/**/*.ts"
+    "test": "./node_modules/.bin/ts-node node_modules/.bin/_mocha test/**/*.ts",
+    "release-major": "xyz --repo git@github.com:paldepind/jabz.git --increment major",
+    "release-minor": "xyz --repo git@github.com:paldepind/jabz.git --increment minor",
+    "release-patch": "xyz --repo git@github.com:paldepind/jabz.git --increment patch"
   },
   "repository": {
     "type": "git",
@@ -30,6 +33,7 @@
     "mocha": "^2.5.3",
     "ts-node": "^0.8.0",
     "typescript": "^1.8.10",
-    "typings": "^1.0.4"
+    "typings": "^1.0.4",
+    "xyz": "0.5.x"
   }
 }
