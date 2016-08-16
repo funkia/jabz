@@ -8,6 +8,10 @@ export function identity<A extends Monoid<A>>(m: A): A {
   return m.identity();
 }
 
+export interface MonoidDictionary<M extends Monoid<M>> {
+  identity: () => M;
+}
+
 export interface MonoidConstructor<A, M extends Monoid<M>> {
   (a: A): M;
   identity: () => M;
