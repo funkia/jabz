@@ -2,7 +2,7 @@ import {Monoid, MonoidConstructor} from "../monoid";
 
 export type Sum = ImplSum;
 
-class ImplSum implements Monoid<Sum> {
+export class ImplSum implements Monoid<Sum> {
   constructor(public n: number) {};
   identity(): Sum { return sumId; }
   merge(s: Sum): Sum {

@@ -3,7 +3,7 @@ import {MonoidConstructor, Monoid} from "./monoid";
 
 export type List<A> = ListImpl<A>;
 
-class ListImpl<A> extends AbstractFoldable<A> {
+export class ListImpl<A> extends AbstractFoldable<A> {
   constructor(public arr: A[]) {
     super();
   };

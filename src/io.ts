@@ -1,6 +1,6 @@
 import {Monad, AbstractMonad} from "./monad";
 
-type ImpureComp<A> = () => Promise<A>;
+export type ImpureComp<A> = () => Promise<A>;
 
 export class IO<A> extends AbstractMonad<A> {
   constructor(public comp: ImpureComp<A>) {

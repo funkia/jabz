@@ -6,7 +6,7 @@ function endoComp<A>(f1: (a: A) => A, f2: (a: A) => A): (a: A) => A {
   return (a: A) => f1(f2(a));
 }
 
-class ImplEndo<A> implements Monoid<Endo<A>> {
+export class ImplEndo<A> implements Monoid<Endo<A>> {
   constructor(public fn: (a: A) => A) {};
   identity(): Endo<A> { return endoId; };
   merge(e: Endo<A>): Endo<A> {

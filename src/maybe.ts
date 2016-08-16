@@ -1,6 +1,6 @@
 import {Monad} from "./monad";
 
-type MaybeMatch<T, K> = {
+export type MaybeMatch<T, K> = {
   nothing: () => K,
   just: (t: T) => K
 };

@@ -1,9 +1,9 @@
 import {Functor} from "./functor";
 import {Applicative} from "./applicative";
 
-enum EitherTag { Left, Right }
+export enum EitherTag { Left, Right }
 
-type EitherMatch<A, B, K> = {
+export type EitherMatch<A, B, K> = {
   left: (a: A) => K,
   right: (b: B) => K
 }
@@ -14,10 +14,10 @@ export abstract class Either<A, B> implements Applicative<B> {
   abstract match<K>(m: EitherMatch<A, B, K>): K;
   abstract map<C>(f: (b: B) => C): Either<A, C>;
   abstract mapTo<C>(c: C): Either<A, C>;
-  static of<B>(b: B) {
+  static of<A, B>(b: B): Either<A, B> {
     return new Right(b);
   }
-  of<B>(b: B) {
+  of<B>(b: B): Either<A, B> {
     return new Right(b);
   }
   lift<A, T1, R>(f: (t: T1) => R, m: Either<A, T1>): Either<A, R>;
@@ -37,7 +37,7 @@ export abstract class Either<A, B> implements Applicative<B> {
   }
 }
 
-class Left<A, B> extends Either<A, B> {
+export class Left<A, B> extends Either<A, B> {
   val: A;
   tag: EitherTag = EitherTag.Left;
   constructor(a: A) {
@@ -56,7 +56,7 @@ class Left<A, B> extends Either<A, B> {
   }
 }
 
-class Right<A, B> extends Either<A, B> {
+export class Right<A, B> extends Either<A, B> {
   val: B;
   tag: EitherTag = EitherTag.Right;
   constructor(b: B) {
