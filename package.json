@@ -4,9 +4,6 @@
   "description": "Powerful and practical abstractions.",
   "main": "lib/index",
   "typings": "lib/index",
-  "files": [
-    "lib/"
-  ],
   "scripts": {
     "prepublish": "cp -r lib/* .",
     "postinstall": "./node_modules/.bin/typings install",
