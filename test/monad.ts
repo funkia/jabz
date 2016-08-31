@@ -3,7 +3,8 @@ import assert = require("assert");
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, AbstractMonad, deriveMonad} from "../src/monad";
+import {Monad, AbstractMonad, deriveMonad, fDo} from "../src/monad";
+import {Maybe, just, nothing} from "../src/maybe";
 
 class List<A> implements Monad<A> {
   constructor(public arr: A[]) {};
@@ -64,5 +65,20 @@ describe("Monad", () => {
         lift((x: number, y: number, z: number) => x + y - z, new List([1, 2]), new List([3, 4, 5]), new List([6]))
       );
     });
+  });
+});
+
+describe("fDo", () => {
+  it("fDo works with Maybe", () => {
+    const fDoMaybe: (x: number, y: number, z: number) => Maybe<number> = fDo(function*(x, y, z) {
+      const a = yield just(x);
+      const b = yield just(y);
+      const c = yield just(z)
+      return just(a+b+c);
+    })
+    assert.deepEqual(
+      just(6),
+      fDoMaybe(1,2,3)
+    );
   });
 });
