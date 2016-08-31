@@ -57,6 +57,23 @@ export function Do(gen: () => Iterator<Monad<any>>) {
   return doRec(undefined);
 };
 
+export function fDo(gen: (...a: any[]) => Iterator<Monad<any>>) {
+  return function(...args: any[]) {
+    const doing = gen(...args);
+    function doRec(v: any): any {
+      const a = doing.next(v);
+      if (a.done === true) {
+        return a.value;
+      } else if (typeof a.value !== "undefined") {
+        return a.value.chain(doRec);
+      } else {
+        throw new Error("Expected monad value");
+      }
+    }
+    return doRec(undefined);
+  }
+}
+
 export function deriveMonad(obj: any) {
   mixin(obj, [AbstractMonad]);
 }
