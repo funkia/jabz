@@ -1,5 +1,6 @@
 import {Monoid, MonoidConstructor} from "./monoid";
 import {Applicative, ApplicativeDictionary} from "./applicative";
+import {Traversable} from "./traversable";
 import {Monad} from "./monad";
 
 export type MaybeMatch<T, K> = {
@@ -7,7 +8,7 @@ export type MaybeMatch<T, K> = {
   just: (t: T) => K
 };
 
-export abstract class Maybe<A> implements Monad<A> {
+export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract match<K>(m: MaybeMatch<any, K>): K;
   of: <B>(v: B) => Maybe<B> = of;
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
@@ -81,6 +82,9 @@ class Nothing<A> extends Maybe<A> {
   size(): number {
     return 0;
   }
+  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>> {
+    return a.of(_nothing);
+  }
 }
 
 class Just<A> extends Maybe<A> {
@@ -118,6 +122,9 @@ class Just<A> extends Maybe<A> {
   }
   size(): number {
     return 1;
+  }
+  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>> {
+    return f(this.val).map(just);
   }
 }
 

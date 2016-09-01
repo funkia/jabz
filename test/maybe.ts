@@ -5,6 +5,7 @@ import {Maybe, just, nothing} from "../src/maybe";
 import {Do, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 import testFunctor from "./functor";
+import {Either, right} from "../src/either";
 
 describe("Maybe", () => {
   it("gives just on `of`", () => {
@@ -66,5 +67,19 @@ describe("Maybe", () => {
       just(10),
       lift((x: number, y: number, z: number) => x + y + z, just(4), just(5), just(1))
     );
+  });
+  describe("Traversable", () => {
+    it("gives empty in applicative", () => {
+      assert.deepEqual(
+        nothing<number>().traverse(Either, n => right(n * 2)),
+        right(nothing())
+      );
+    });
+    it("gives just from just", () => {
+      assert.deepEqual(
+        just(12).traverse(Either, (n => right(n * 2))),
+        right(just(24))
+      );
+    });
   });
 });
