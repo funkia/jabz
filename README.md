@@ -1,3 +1,5 @@
+<img align="right" src="https://avatars0.githubusercontent.com/u/21360882?v=3&s=200">
+
 # Jabz
 
 Powerful and practical abstractions for JavaScript. Functors, Monads,
@@ -32,7 +34,8 @@ Traversables and all that jazz.
 
 ### Semigroup
 
-A semigroup is a structure that can be combined.
+A semigroup is a structure that can be combined through a method
+called `merge`. The `merge` operation must be associative.
 
 #### Methods
 
@@ -40,11 +43,17 @@ A semigroup is a structure that can be combined.
 
 ### Monoid
 
+A monoid must be a semigroup. In addition to the `merge` method a
+monoid must have a static method `identity`.
+
 #### Methods
 
 * `identity` (static)
 
 ### Functor
+
+A functor is a structure that contains values. It provides a method
+`map` that applies a function to the values in the functor.
 
 #### Minimal complete definition
 
@@ -88,4 +97,12 @@ A semigroup is a structure that can be combined.
 
 ### Traversable
 
-Todo.
+A traversable offers a function `traverse` that allows one to apply a
+function to the values in the traversable. It is quite similar to a
+functors `map`. But the function is a allowed to return values in an
+applicative. `traverse` applies the function and runs the returned
+applicative in sequence.
+
+#### Methods
+
+* `traverse`
