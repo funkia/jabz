@@ -1,3 +1,5 @@
+import {Monoid, MonoidConstructor} from "./monoid";
+import {Applicative, ApplicativeDictionary} from "./applicative";
 import {Monad} from "./monad";
 
 export type MaybeMatch<T, K> = {
@@ -35,6 +37,10 @@ export abstract class Maybe<A> implements Monad<A> {
       }
     }
   }
+  abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;
+  abstract foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M;
+  abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
+  abstract size(): number;  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>>;
 }
 
 function of<V>(v: V): Maybe<V> {
@@ -63,6 +69,18 @@ class Nothing<A> extends Maybe<A> {
   mapTo<B>(b: B): Maybe<B> {
     return new Nothing<B>();
   }
+  foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
+    return id;
+  }
+  foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
+    return f.identity();
+  }
+  fold<B>(f: (a: A, b: B) => B, acc: B): B {
+    return acc;
+  }
+  size(): number {
+    return 0;
+  }
 }
 
 class Just<A> extends Maybe<A> {
@@ -88,6 +106,18 @@ class Just<A> extends Maybe<A> {
   }
   mapTo<B>(b: B): Maybe<B> {
     return new Just<B>(b);
+  }
+  foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
+    return f(this.val);
+  }
+  foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
+    return f(this.val);
+  }
+  fold<B>(f: (a: A, b: B) => B, acc: B): B {
+    return f(this.val, acc);
+  }
+  size(): number {
+    return 1;
   }
 }
 

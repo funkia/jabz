@@ -21,10 +21,10 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
   foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
     return this.foldMapId(f.identity(), f);
   }
-  fold<B>(acc: B, f: (a: A, b: B) => B): B {
+  fold<B>(f: (a: A, b: B) => B, acc: B): B {
     return toFunction(this.foldMapId(Endo.identity(), (a: A) => Endo(part(f, a))))(acc);
   }
   size(): number {
-    return this.fold(0, incr);
+    return this.fold<number>(incr, 0);
   }
 }
