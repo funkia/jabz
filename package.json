@@ -30,7 +30,7 @@
   "devDependencies": {
     "mocha": "^2.5.3",
     "ts-node": "^0.8.0",
-    "typescript": "^1.8.10",
+    "typescript": "^2.0.0",
     "typings": "^1.0.4",
     "xyz": "0.5.x"
   }

@@ -1,7 +1,7 @@
 ///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
-import {Monoid, merge} from "../src/monoid";
+import {Monoid, merge, identity} from "../src/monoid";
 import {Sum} from "../src/monoids/sum";
 
 describe("monoid", () => {
@@ -15,6 +15,14 @@ export default function<M extends Monoid<M>>(name: string, monoid: M): void {
     it("has identity element", () => {
       assert.deepEqual(monoid.identity().merge(monoid),
                        monoid.merge(monoid.identity()));
+    });
+  });
+  describe("string monoid", () => {
+    it("has empty string as identity", () => {
+      assert.deepEqual(identity(String), "");
+    });
+    it("concatenates strings", () => {
+      assert.deepEqual(merge("hello ", "world"), "hello world");
     });
   });
 };

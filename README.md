@@ -22,6 +22,7 @@ Traversables and all that jazz.
   * Monad
 * Implementations
   * Maybe
+* [Seamless instances](#seamless-instances)
 
 ## Differences from fantasy-land
 
@@ -106,3 +107,11 @@ applicative in sequence.
 #### Methods
 
 * `traverse`
+
+
+## Seamless instances
+
+Seamless instances means that certain native JavaScript types can be
+used as if they implemented the abstractions relevant for them.
+
+* `string`, the primitive, implements setoid, monoid.
