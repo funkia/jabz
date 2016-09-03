@@ -2,8 +2,7 @@
 import assert = require("assert");
 
 import {Either, left, right} from "../src/either";
-import {Do, join} from "../src/monad";
-import {map, mapTo} from "../src/functor";
+import {map} from "../src/functor";
 import testFunctor from "./functor";  
 import {lift} from "../src/applicative";
 

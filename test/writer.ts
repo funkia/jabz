@@ -1,10 +1,11 @@
+///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
 import {createWriter, runWriter} from "../src/writer";
 
 import {Sum} from "../src/monoids/sum";
 
-import {Do, join} from "../src/monad";
+import {go, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 
 describe("Writer", () => {
@@ -12,7 +13,7 @@ describe("Writer", () => {
     const SumWriter = createWriter(Sum);
     const {tell, listen, of} = SumWriter;
     it("works with Sum monoid", () => {
-      const writer = Do(function*() {
+      const writer = go(function*() {
         yield tell(Sum(3));
         yield tell(Sum(2));
         const [_, cur] = yield listen(tell(Sum(7)));
@@ -35,7 +36,7 @@ describe("Writer", () => {
   });
   // it("works with strings", () => {
   //   const StringWriter =
-  //   const written = Do(function*() {
+  //   const written = go(function*() {
   //     yield tell("First");
   //     yield tell("-glance");
   //     const [_, cur] = yield listen(tell(" feeling of "));

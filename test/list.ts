@@ -1,7 +1,7 @@
 ///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
-import {Do} from "../src/monad";
+import {go} from "../src/monad";
 
 import {List, fromArray} from "../src/list";
 import {Sum, toNumber} from "../src/monoids/sum";

@@ -38,11 +38,11 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   }
 }
 
-export function join<A>(m: Monad<Monad<A>>) {
+export function join<A>(m: Monad<Monad<A>>): Monad<A> {
   return m.chain(id);
 }
 
-export function Do(gen: () => Iterator<Monad<any>>) {
+export function go(gen: () => Iterator<Monad<any>>) {
   const doing = gen();
   function doRec(v: any): any {
     const a = doing.next(v);
@@ -57,7 +57,7 @@ export function Do(gen: () => Iterator<Monad<any>>) {
   return doRec(undefined);
 };
 
-export function fDo(gen: (...a: any[]) => Iterator<Monad<any>>) {
+export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
   return function(...args: any[]) {
     const doing = gen(...args);
     function doRec(v: any): any {
@@ -71,9 +71,9 @@ export function fDo(gen: (...a: any[]) => Iterator<Monad<any>>) {
       }
     }
     return doRec(undefined);
-  }
+  };
 }
 
-export function deriveMonad(obj: any) {
+export function deriveMonad(obj: any): void {
   mixin(obj, [AbstractMonad]);
 }

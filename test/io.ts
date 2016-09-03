@@ -1,10 +1,8 @@
 ///<reference path="../typings/index.d.ts" />
 import assert = require("assert");
 
-// import "babel-polyfill";
-
 import {IO, of, runIO, withEffects, ap} from "../src/io";
-import {Do, Monad} from "../src/monad";
+import {go, Monad} from "../src/monad";
 
 describe("effects", () => {
   it("gives pure computaion", () => {
@@ -20,7 +18,7 @@ describe("effects", () => {
   it("works with do-notation", () => {
     const f1 = withEffects((a: number) => a * 2);
     const f2 = withEffects((a: number, b: number) => a + b);
-    const comp: IO<number> = Do(function*() {
+    const comp: IO<number> = go(function*() {
       const a = yield of(4);
       const b = yield f1(3);
       const sum = yield f2(a, b);

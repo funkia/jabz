@@ -2,7 +2,7 @@
 import assert = require("assert");
 
 import {Maybe, just, nothing} from "../src/maybe";
-import {Do, join} from "../src/monad";
+import {go, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 import testFunctor from "./functor";
 import {Either, right} from "../src/either";
@@ -19,7 +19,7 @@ describe("Maybe", () => {
     assert.deepEqual(n.chain<number>(_ => just(12)), n);
   });
   it("passes values through", () => {
-    const res: Maybe<number> = Do(function*() {
+    const res: Maybe<number> = go(function*() {
       const a = yield just(1);
       const b = yield just(3);
       const c = yield just(2);
@@ -28,7 +28,7 @@ describe("Maybe", () => {
     assert.deepEqual(res, just(6));
   });
   it("bails on nothing", () => {
-    const res = Do(function*() {
+    const res = go(function*() {
       const a = yield just(1);
       const b = yield nothing();
       const c = yield just(2);

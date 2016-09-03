@@ -3,7 +3,7 @@ import assert = require("assert");
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, AbstractMonad, deriveMonad, fDo} from "../src/monad";
+import {Monad, AbstractMonad, deriveMonad, fgo} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 
 class List<A> implements Monad<A> {
@@ -68,17 +68,17 @@ describe("Monad", () => {
   });
 });
 
-describe("fDo", () => {
-  it("fDo works with Maybe", () => {
-    const fDoMaybe: (x: number, y: number, z: number) => Maybe<number> = fDo(function*(x, y, z) {
+describe("fgo", () => {
+  it("fgo works with Maybe", () => {
+    const fgoMaybe: (x: number, y: number, z: number) => Maybe<number> = fgo(function*(x, y, z) {
       const a = yield just(x);
       const b = yield just(y);
       const c = yield just(z)
-      return just(a+b+c);
+      return just(a + b + c);
     })
     assert.deepEqual(
       just(6),
-      fDoMaybe(1,2,3)
+      fgoMaybe(1, 2, 3)
     );
   });
 });
