@@ -6,7 +6,7 @@
   "typings": "lib/index",
   "scripts": {
     "postinstall": "typings install",
-    "build": "tsc",
+    "build": "tsc -P ./tsconfig-release.json",
     "test": "nyc ts-node node_modules/.bin/_mocha test/**/*.ts && nyc report",
     "codecov": "codecov -f coverage/coverage-final.json",
     "release-major": "xyz --repo git@github.com:funkia/jabz.git --increment major",
