@@ -5,15 +5,16 @@
 Powerful and practical abstractions for JavaScript. Functors, Monads,
 Traversables and all that jazz.
 
-[![Build Status](https://travis-ci.org/Funkia/jabz.svg?branch=master)](https://travis-ci.org/Funkia/jabz)[![codecov](https://codecov.io/gh/Funkia/jabz/branch/master/graph/badge.svg)](https://codecov.io/gh/Funkia/jabz)
+[![Build Status](https://travis-ci.org/Funkia/jabz.svg?branch=master)](https://travis-ci.org/Funkia/jabz)
+[![codecov](https://codecov.io/gh/Funkia/jabz/branch/master/graph/badge.svg)](https://codecov.io/gh/Funkia/jabz)
 
 ## Goals
 
-* Be simple and convenient in usage
+* Be simple and convenient as possible in usage
 * Allow for performant implementations
 * Support TypeScript to the extent possible
-* Provide a set of implementations for often used instances
-* Provide a set of common derived functions
+* Provide implementations of often used instances
+* Provide commonly used derived functions
 
 ## Features
 
