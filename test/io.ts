@@ -1,5 +1,4 @@
-///<reference path="../typings/index.d.ts" />
-import assert = require("assert");
+import {assert} from "chai";
 
 import {IO, of, runIO, withEffects, ap} from "../src/io";
 import {go, Monad} from "../src/monad";

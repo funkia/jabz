@@ -1,5 +1,4 @@
-///<reference path="../typings/index.d.ts" />
-import assert = require("assert");
+import {assert} from "chai";
 
 import {createWriter, runWriter} from "../src/writer";
 
@@ -17,7 +16,7 @@ describe("Writer", () => {
         yield tell(Sum(3));
         yield tell(Sum(2));
         const [_, cur] = yield listen(tell(Sum(7)));
-        assert.deepStrictEqual(cur, Sum(7));
+        assert.deepEqual(cur, Sum(7));
         const next = yield of(Sum(3));
         yield tell(next);
         return of("Hello");

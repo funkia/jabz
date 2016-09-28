@@ -3,9 +3,7 @@
   "version": "0.0.6",
   "description": "Powerful and practical abstractions.",
   "main": "lib/index",
-  "typings": "lib/index",
   "scripts": {
-    "postinstall": "typings install",
     "build": "tsc -P ./tsconfig-release.json",
     "test": "nyc ts-node node_modules/.bin/_mocha test/**/*.ts && nyc report",
     "codecov": "codecov -f coverage/coverage-final.json",
@@ -28,21 +26,20 @@
   "homepage": "https://github.com/paldepind/jabz#readme",
   "dependencies": {},
   "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "chai": "^3.5.0",
     "codecov": "^1.0.1",
     "mocha": "^2.5.3",
     "nyc": "^8.3.0",
     "ts-node": "^0.8.0",
     "typescript": "^2.1.0-dev.20160928",
-    "typings": "^1.0.4",
     "xyz": "0.5.x"
   },
   "nyc": {
     "include": [
       "src/*.ts",
       "src/**/*.ts"
-    ],
-    "exclude": [
-      "typings"
     ],
     "extension": [
       ".ts"

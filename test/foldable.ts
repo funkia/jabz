@@ -1,5 +1,4 @@
-///<reference path="../typings/index.d.ts" />
-import assert = require("assert");
+import {assert} from "chai";
 
 import {Foldable, AbstractFoldable} from "../src/foldable";
 import {Monoid, MonoidConstructor} from "../src/monoid";

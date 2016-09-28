@@ -1,5 +1,4 @@
- ///<reference path="../typings/index.d.ts" />
-import assert = require("assert");
+import {assert} from "chai";
 
 import {Sum, sumId} from "../src/monoids/sum";
 import {merge} from "../src/monoid";
