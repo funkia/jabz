@@ -5,7 +5,8 @@
     "declaration": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "outDir": "lib/"
+    "outDir": "lib/",
+    "lib": ["dom", "es5", "es2015.core", "es2015.promise", "es2015.iterable", "es2015.generator"]
   },
   "include": [
     "src/**/*.ts"

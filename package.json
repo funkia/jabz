@@ -5,13 +5,13 @@
   "main": "lib/index",
   "typings": "lib/index",
   "scripts": {
-    "prepublish": "cp -r lib/* .",
-    "postinstall": "./node_modules/.bin/typings install",
-    "build": "./node_modules/.bin/tsc",
-    "test": "./node_modules/.bin/ts-node node_modules/.bin/_mocha test/**/*.ts",
-    "release-major": "xyz --repo git@github.com:paldepind/jabz.git --increment major",
-    "release-minor": "xyz --repo git@github.com:paldepind/jabz.git --increment minor",
-    "release-patch": "xyz --repo git@github.com:paldepind/jabz.git --increment patch"
+    "postinstall": "typings install",
+    "build": "tsc",
+    "test": "nyc ts-node node_modules/.bin/_mocha test/**/*.ts && nyc report",
+    "codecov": "codecov -f coverage/coverage-final.json",
+    "release-major": "xyz --repo git@github.com:funkia/jabz.git --increment major",
+    "release-minor": "xyz --repo git@github.com:funkia/jabz.git --increment minor",
+    "release-patch": "xyz --repo git@github.com:funkia/jabz.git --increment patch"
   },
   "repository": {
     "type": "git",
@@ -28,10 +28,28 @@
   "homepage": "https://github.com/paldepind/jabz#readme",
   "dependencies": {},
   "devDependencies": {
+    "codecov": "^1.0.1",
     "mocha": "^2.5.3",
+    "nyc": "^8.3.0",
     "ts-node": "^0.8.0",
-    "typescript": "^2.0.0",
+    "typescript": "^2.1.0-dev.20160928",
     "typings": "^1.0.4",
     "xyz": "0.5.x"
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "json",
+      "html"
+    ]
   }
 }
