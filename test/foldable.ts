@@ -1,6 +1,8 @@
 import {assert} from "chai";
 
-import {Foldable, AbstractFoldable} from "../src/foldable";
+import {
+  Foldable, AbstractFoldable, foldMapId, foldMap, fold, size
+} from "../src/foldable";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import {Sum} from "../src/monoids/sum";
 
@@ -19,13 +21,18 @@ class List<A> extends AbstractFoldable<A> {
 describe("Foldable", () => {
   describe("simple list implementation", () => {
     it("has foldMap", () => {
-      assert.deepEqual((new List([1, 2, 3, 4, 5])).foldMap(Sum), Sum(15));
+      assert.deepEqual(foldMap(Sum, new List([1, 2, 3, 4, 5])), Sum(15));
     });
     it("empty foldable gives identity element", () => {
-      assert.deepEqual((new List([])).foldMap(Sum), Sum(0));
+      assert.deepEqual(foldMap(Sum, new List([])), Sum(0));
     });
     it("has fold", () => {
-      assert.deepEqual((new List([1, 2, 3, 4, 5])).fold((n, m) => n + m, 0), 15);
+      assert.deepEqual(
+        (new List([1, 2, 3, 4, 5])).fold((n, m) => n + m, 0), 15
+      );
+      assert.deepEqual(
+        fold((n, m) => n + m, 0, new List([1, 2, 3, 4, 5])), 15
+      );
     });
     it("has size", () => {
       assert.deepEqual((new List([1, 1, 1, 1])).size(), 4);
