@@ -1,5 +1,16 @@
 import {Monad, AbstractMonad} from "./monad";
 
+export type F1<A, Z> =
+  (a: A) => Z;
+export type F2<A, B, Z> =
+  (a: A, b: B) => Z;
+export type F3<A, B, C, Z> =
+  (a: A, b: B, c: C) => Z;
+export type F4<A, B, C, D, Z> =
+  (a: A, b: B, c: C, d: D) => Z;
+export type F5<A, B, C, D, E, Z> =
+  (a: A, b: B, c: C, d: D, e: E) => Z;
+
 export type ImpureComp<A> = () => Promise<A>;
 
 export class IO<A> extends AbstractMonad<A> {
@@ -52,4 +63,13 @@ export function fromPromise<A>(p: Promise<A>): IO<A> {
 
 export function ap<A, B>(fe: IO<(a: A) => B>, ve: IO<A>): IO<B> {
   return fe.chain(f => ve.chain(v => of(f(v))));
+}
+
+export function call<A, Z>(f: F1<A, Z>, a: A): IO<Z>;
+export function call<A, B, Z>(f: F2<A, B, Z>, a: A, b: B): IO<Z>;
+export function call<A, B, C, Z>(f: F3<A, B, C, Z>, a: A, b: B, c: C): IO<Z>;
+export function call<A, B, C, D, Z>(f: F4<A, B, C, D, Z>, a: A, b: B, c: C, d: D): IO<Z>;
+export function call<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Z>, a: A, b: B, c: C, d: D, e: E): IO<Z>;
+export function call(f: Function, ...args: any[]): IO<any> {
+  return new IO(() => Promise.resolve(f(...args)));
 }

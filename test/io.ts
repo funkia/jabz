@@ -1,6 +1,6 @@
 import {assert} from "chai";
 
-import {IO, of, runIO, withEffects, ap} from "../src/io";
+import {IO, of, runIO, withEffects, ap, call} from "../src/io";
 import {go, Monad} from "../src/monad";
 
 describe("effects", () => {
@@ -32,5 +32,18 @@ describe("effects", () => {
     const f2 = of(3);
     const applied = ap(f1, f2);
     return runIO(applied).then(res => assert.equal(res, 6));
+  });
+  it("calls function", () => {
+    let variable = 0;
+    function imperative(
+      a: number, b: number, c: number, d: number
+    ): number {
+      variable = a + b + c + d;
+      return variable;
+    }
+    return runIO(call(imperative, 1, 2, 3, 4)).then((res) => {
+      assert.strictEqual(variable, 10);
+      assert.strictEqual(res, 10);
+    });
   });
 });
