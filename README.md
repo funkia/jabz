@@ -118,3 +118,49 @@ Seamless instances means that certain native JavaScript types can be
 used as if they implemented the abstractions relevant for them.
 
 * `string`, the primitive, implements setoid, monoid.
+
+## Instances
+
+The Jabz library contains a set of common structures. Below is an
+overview along with the abstractions that they implement.
+
+* Sum — Semigroup, Monoid
+* Endo — Semigroup, Monoid
+* Maybe — Functor, Applicative, Monad, Foldable, Traversable
+* Either — Functor, Applicative
+* State — Functor, Applicative, Monad
+* Writer — Functor, Applicative, Monad
+* [IO](#IO) — Functor, Applicative, Monad
+
+### IO
+
+The IO monad represents imperative computations. These computations
+may be asynchronous.
+
+#### `of`
+
+```ts
+of: <A>(a: A) => IO<A>
+```
+
+Returns an imperative computation that has no effects but deliver the
+result `a`.
+
+#### `call`
+
+```ts
+call: (f: F, ...args: A) => IO<R>
+```
+
+`f` must be a function of _n_ arguments that returns a value of type
+`R`. `args` must match `f`s signature. The returned computation
+invokes `f` with the arguments and returns its result.
+
+#### `runIO`
+
+```ts
+runIO: <A>(comp: IO<A>): Promise<A>
+```
+
+Impure function that executes the computation and returns a promise
+that resolves with the result of executing the computation.
