@@ -1,4 +1,5 @@
 import {Monad, AbstractMonad} from "./monad";
+import {Either, left, right} from "./either";
 
 export type F1<A, Z> =
   (a: A) => Z;
@@ -72,4 +73,13 @@ export function call<A, B, C, D, Z>(f: F4<A, B, C, D, Z>, a: A, b: B, c: C, d: D
 export function call<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Z>, a: A, b: B, c: C, d: D, e: E): IO<Z>;
 export function call(f: Function, ...args: any[]): IO<any> {
   return new IO(() => Promise.resolve(f(...args)));
+}
+
+export function callP<A, Z>(f: F1<A, Promise<Z>>, a: A): IO<Either<any, Z>>;
+export function callP<A, B, Z>(f: F2<A, B, Promise<Z>>, a: A, b: B): IO<Either<any, Z>>;
+export function callP<A, B, C, Z>(f: F3<A, B, C, Promise<Z>>, a: A, b: B, c: C): IO<Either<any, Z>>;
+export function callP<A, B, C, D, Z>(f: F4<A, B, C, D, Promise<Z>>, a: A, b: B, c: C, d: D): IO<Either<any, Z>>;
+export function callP<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Promise<Z>>, a: A, b: B, c: C, d: D, e: E): IO<Either<any, Z>>;
+export function callP(f: Function, ...args: any[]): IO<any> {
+  return new IO(() => f(...args).then(right).catch(left));
 }

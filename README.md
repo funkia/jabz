@@ -130,7 +130,7 @@ overview along with the abstractions that they implement.
 * Either — Functor, Applicative
 * State — Functor, Applicative, Monad
 * Writer — Functor, Applicative, Monad
-* [IO](#IO) — Functor, Applicative, Monad
+* [IO](#io) — Functor, Applicative, Monad
 
 ### IO
 
@@ -149,12 +149,26 @@ result `a`.
 #### `call`
 
 ```ts
-call: (f: F, ...args: A) => IO<R>
+call: <A, B>(f: (...as: A) => B, ...args: A) => IO<B>
 ```
 
-`f` must be a function of _n_ arguments that returns a value of type
-`R`. `args` must match `f`s signature. The returned computation
-invokes `f` with the arguments and returns its result.
+Takes a function of _n_ arguments that returns a value of type `B`.
+`args` must match the functions signature. The returned computation
+invokes the function with the arguments and returns its result.
+
+#### `callP`
+
+```ts
+call: <A, B>(f: (...as: A) => Promise<B>, ...args: A) =>
+IO<Either<any, B>>
+```
+
+Takes a function of _n_ arguments that returns a promise. `args` must
+be _n_ arguments matching the functions signature. The returned
+computation invokes `f` with the arguments and finishes once the
+promise resolves or rejects. If the promise resolves the result will
+be its result in a `right` otherwise the result is the rejection value
+in a `left`.
 
 #### `runIO`
 

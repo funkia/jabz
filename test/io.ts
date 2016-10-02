@@ -1,7 +1,8 @@
 import {assert} from "chai";
 
-import {IO, of, runIO, withEffects, ap, call} from "../src/io";
+import {IO, of, runIO, withEffects, ap, call, callP} from "../src/io";
 import {go, Monad} from "../src/monad";
+import {right, left} from "../src/either";
 
 describe("effects", () => {
   it("gives pure computaion", () => {
@@ -44,6 +45,28 @@ describe("effects", () => {
     return runIO(call(imperative, 1, 2, 3, 4)).then((res) => {
       assert.strictEqual(variable, 10);
       assert.strictEqual(res, 10);
+    });
+  });
+  it("calls promise returning function", () => {
+    let variable = 0;
+    function imperative(a: number, b: number): Promise<number> {
+      variable = a + b;
+      return Promise.resolve(variable);
+    }
+    return runIO(callP(imperative, 1, 2)).then((res) => {
+      assert.deepEqual(variable, 3);
+      assert.deepEqual(res, right(3));
+    });
+  });
+  it("calls promise returning function that rejects", () => {
+    let variable = 0;
+    function imperative(a: number, b: number): Promise<number> {
+      variable = a + b;
+      return Promise.reject(variable);
+    }
+    return runIO(callP(imperative, 1, 2)).then((res) => {
+      assert.deepEqual(variable, 3);
+      assert.deepEqual(res, left(3));
     });
   });
 });
