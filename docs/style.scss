@@ -1,0 +1,305 @@
+/* Import ET Book styles
+   adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
+
+@charset "UTF-8";
+
+@font-face {
+  font-family: "et-book";
+  src: url("./fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot");
+  src: url("./fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot?#iefix") format("embedded-opentype"), url("./fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff") format("woff"), url("./fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf") format("truetype"), url("./fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.svg#etbookromanosf") format("svg");
+  font-weight: normal;
+  font-style: normal
+}
+
+@font-face {
+  font-family: "et-book";
+  src: url("./fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot");
+  src: url("./fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot?#iefix") format("embedded-opentype"), url("./fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff") format("woff"), url("./fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf") format("truetype"), url("./fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.svg#etbookromanosf") format("svg");
+  font-weight: normal;
+  font-style: italic
+}
+
+@font-face {
+  font-family: "et-book";
+  src: url("./fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot");
+  src: url("./fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot?#iefix") format("embedded-opentype"), url("./fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff"), url("./fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf") format("truetype"), url("./fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.svg#etbookromanosf") format("svg");
+  font-weight: bold;
+  font-style: normal
+}
+
+@font-face {
+  font-family: "et-book-roman-old-style";
+  src: url("./fonts/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot");
+  src: url("./fonts/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot?#iefix") format("embedded-opentype"), url("./fonts/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.woff") format("woff"), url("./fonts/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf") format("truetype"), url("./fonts/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.svg#etbookromanosf") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-ExtraLight.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-ExtraLight.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-ExtraLight.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-ExtraLight.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 200;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-ExtraLightIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-ExtraLightIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-ExtraLightIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-ExtraLightIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-ExtraLightIt.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Light.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Light.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Light.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Light.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Light.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 300;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-LightIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-LightIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-LightIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-LightIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-LightIt.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Regular.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Regular.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Regular.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Regular.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Regular.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 400;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-It.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-It.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-It.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-It.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-It.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Medium.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Medium.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Medium.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Medium.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Medium.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 500;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-MediumIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-MediumIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-MediumIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-MediumIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-MediumIt.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Semibold.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Semibold.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Semibold.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Semibold.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Semibold.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 600;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-SemiboldIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-SemiboldIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-SemiboldIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-SemiboldIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-SemiboldIt.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Bold.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Bold.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Bold.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Bold.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Bold.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 700;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-BoldIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-BoldIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-BoldIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-BoldIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-BoldIt.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-Black.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-Black.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-Black.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-Black.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    font-weight: 900;
+    font-style: italic;
+    font-stretch: normal;
+    src: url('./fonts/source-code-pro/EOT/SourceCodePro-BlackIt.eot') format('embedded-opentype'),
+         url('./fonts/source-code-pro/WOFF2/TTF/SourceCodePro-BlackIt.ttf.woff2') format('woff2'),
+         url('./fonts/source-code-pro/WOFF/OTF/SourceCodePro-BlackIt.otf.woff') format('woff'),
+         url('./fonts/source-code-pro/OTF/SourceCodePro-BlackIt.otf') format('opentype'),
+         url('./fonts/source-code-pro/TTF/SourceCodePro-BlackIt.ttf') format('truetype');
+}
+
+body {
+  color: #222;
+  font-size: 18px;
+  font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+  background-color: #fffff8;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.6em;
+  font-weight: normal;
+}
+
+header {
+  padding: 5em;
+  text-align: center;
+  background: #670b0b;
+  color: #fff;
+  -webkit-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
+  h1 {
+    font-weight: normal;
+    font-size: 4.2em;
+    text-shadow: 0 0 20px black;
+  }
+  p {
+    font-size: 1.3em;
+    text-shadow: 0 0 10px black;    
+  }
+}
+
+#container {
+  margin-left: 13em;
+}
+
+div.signature {
+  font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
+  background-color: #efefef;
+  padding: .4em;
+  margin: 1em 0;
+  .name {
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+}
+
+pre {
+  background: #fdf6e3;
+}
+
+#sidebar {
+  float: left;
+  width: 12em;
+  padding-left: .5em;
+  clear: both;
+  background: #fff;
+  clear: both;
+  ul {
+    line-height: 1.4em;
+    list-style: none;
+    margin: .3em 0;
+    margin-left: .5em;
+    padding-left: .5em;
+    border-left: 1px solid #eee;
+  }
+  & > ul {
+    margin-left: 0em;
+    padding-left: .5m;
+  }
+}
+
+#sidebar.fixed {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  padding-top: 1em;
+}
+
+.thing {
+  box-sizing: border-box;
+  content: "";
+  display: table;
+  clear: both;
+  padding: 1em;
+  width: 100%;
+}
+
+.clearfix:after { 
+   content: "."; 
+   visibility: hidden; 
+   display: block; 
+   height: 0; 
+   clear: both;
+}

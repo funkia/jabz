@@ -1,0 +1,56 @@
+doctype html
+html(lang="en")
+  head
+    title Jabz
+    link(href='./style.css', rel='stylesheet')
+    link(href='./solarized-light.css', rel='stylesheet')
+    script(src='./script.js')
+    script(src='http://localhost:35729/livereload.js')
+  body
+    header
+      h1 Jabz
+      p powerful and practical abstractions for JavaScript
+    div.thing
+      include sidebar.pug
+      div#container.col
+        h1#monoid Monoid
+        | Import with.
+        pre
+          code.typescript.
+            import * as Monoid from "jabz/monoid";
+        h1#functor Functor
+        | Import with.
+        pre
+          code.typescript.
+            import * as Functor from "jabz/functor";
+        div
+          div.signature
+            span.name map
+            span.signature
+              = ': <F extends Functor, A, B>(f: (a: A) => B, a: F<A>) => F<B>'
+          div.description
+            | Performs a right fold over a foldable.
+
+        h1#foldable Applicative
+        | Import with.
+        pre
+          code.typescript.
+            import * as Applicative from "jabz/applicative";
+        h1#foldable Foldable
+        | Import with.
+        pre
+          code.typescript.
+            import * as Foldable from "jabz/foldable";
+
+        h1#foldable Monad
+        | Import with.
+        pre
+          code.typescript.
+            import * as Monad from "jabz/monad";
+        div
+          div.signature
+            span.name fold
+            span.signature
+              = ': <A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A>) => B'
+          div.description
+            | Performs a right fold over a foldable.
