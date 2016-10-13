@@ -1,3 +1,8 @@
+mixin method(name, signature)
+  div.method
+    span.name= name
+    span.signature : #{signature}
+
 doctype html
 html(lang="en")
   head
@@ -13,12 +18,29 @@ html(lang="en")
     div.thing
       include sidebar.pug
       div#container.col
-        h1#monoid Monoid
+        h2 Specification
+        h3 Semigroup
+        h4 Description
+        p A semigroup represents things that can be merged. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
+        p Examples are many. For instance numbers can be merged by adding them together, lists can be merged by concatenating them and images can be merged by overlaying them.
+        h4 Methods
+        +method('merge', '(a: A) => A')
+
+        h3 Monoid
+        h4 Description
+        p Monoid extends semigroups with an identity element.
+        h4 Methods
+        +method('identity', '() => A')
+        h4 Laws
+        | `m.merge(m.identity()) === m.identity().merge(m) === m
+
+        h2 Functions
+        h3#monoid Monoid
         | Import with.
         pre
           code.typescript.
             import * as Monoid from "jabz/monoid";
-        h1#functor Functor
+        h3#functor Functor
         | Import with.
         pre
           code.typescript.
@@ -31,18 +53,18 @@ html(lang="en")
           div.description
             | Performs a right fold over a foldable.
 
-        h1#foldable Applicative
+        h3#foldable Applicative
         | Import with.
         pre
           code.typescript.
             import * as Applicative from "jabz/applicative";
-        h1#foldable Foldable
+        h3#foldable Foldable
         | Import with.
         pre
           code.typescript.
             import * as Foldable from "jabz/foldable";
 
-        h1#foldable Monad
+        h3#foldable Monad
         | Import with.
         pre
           code.typescript.
@@ -54,3 +76,4 @@ html(lang="en")
               = ': <A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A>) => B'
           div.description
             | Performs a right fold over a foldable.
+        h3 Instances

@@ -228,20 +228,21 @@ header {
   color: #fff;
   -webkit-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
-  box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
+  box-shadow: inset 0px 0px 80px 0px rgba(0,0,0,0.75);
   h1 {
     font-weight: normal;
     font-size: 4.2em;
-    text-shadow: 0 0 20px black;
+    text-shadow: 0 0 10px black, 0 0 30px black;
   }
   p {
     font-size: 1.3em;
-    text-shadow: 0 0 10px black;    
+    text-shadow: 0 0 8px black, 0 0 14px black;
   }
 }
 
 #container {
   margin-left: 13em;
+  max-width: 40em;
 }
 
 div.signature {
@@ -255,8 +256,19 @@ div.signature {
   }
 }
 
+div.method {
+  font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
+  background-color: #efefef;
+  padding: .4em;
+  margin: 1em 0;
+  .name {
+    font-weight: bold;
+  }
+}
+
 pre {
-  background: #fdf6e3;
+  padding: .4em;
+  background: #efefef;
 }
 
 #sidebar {
@@ -264,7 +276,6 @@ pre {
   width: 12em;
   padding-left: .5em;
   clear: both;
-  background: #fff;
   clear: both;
   ul {
     line-height: 1.4em;
