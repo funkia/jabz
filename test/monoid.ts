@@ -1,11 +1,12 @@
+import "mocha";
 import {assert} from "chai";
 
 import {Monoid, merge, identity} from "../src/monoid";
-import {Sum} from "../src/monoids/sum";
+import Sum from "../src/monoids/sum";
 
 describe("monoid", () => {
   it("can merge and id", () => {
-    merge(Sum(12), Sum(1)).identity();
+    merge(Sum.create(12), Sum.create(1)).identity();
   });
 });
 

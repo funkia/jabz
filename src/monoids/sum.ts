@@ -1,25 +1,22 @@
 import {Monoid, MonoidConstructor} from "../monoid";
 
-export type Sum = ImplSum;
-
-export class ImplSum implements Monoid<Sum> {
-  constructor(public n: number) {};
-  identity(): Sum { return sumId; }
+export default class Sum implements Monoid<Sum> {
+  constructor(private n: number) {};
+  static identity(): Sum {
+    return sumId;
+  }
+  identity(): Sum {
+    return sumId;
+  }
   merge(s: Sum): Sum {
-    return new ImplSum(this.n + s.n);
+    return new Sum(this.n + s.n);
+  }
+  static toNumber(s: Sum): number {
+    return s.n;
+  }
+  static create(n: number): Sum {
+    return new Sum(n);
   }
 }
 
-export const sumId = new ImplSum(0);
-
-export function toNumber(s: Sum): number {
-  return s.n;
-}
-
-export const Sum: MonoidConstructor<number, Sum> = (() => {
-  let t: any = function(n: number): Sum {
-    return new ImplSum(n);
-  };
-  t.identity = () => sumId;
-  return t;
-})();
+const sumId = new Sum(0);

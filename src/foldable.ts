@@ -5,7 +5,7 @@
  */
 
 import {Monoid, MonoidConstructor} from "./monoid";
-import {Endo, toFunction} from "./monoids/endo";
+import Endo from "./monoids/endo";
 
 /**
  * A Foldable is any structure that supports a fold operation that
@@ -42,7 +42,7 @@ function incr<A>(_: A, acc: number): number {
 export abstract class AbstractFoldable<A> implements Foldable<A> {
   abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;
   fold<B>(f: (a: A, b: B) => B, acc: B): B {
-    return toFunction(this.foldMapId(Endo.identity(), (a: A) => Endo(part(f, a))))(acc);
+    return Endo.toFunction(this.foldMapId(Endo.identity(), (a: A) => Endo.create(part(f, a))))(acc);
   }
   size(): number {
     return this.fold<number>(incr, 0);
@@ -63,7 +63,7 @@ export function foldMapId<A, M extends Monoid<M>>(id: M, f: (a: A) => M, a: Fold
  * Similair to [foldMapId]{@link module:Foldable~foldMapId}.
  */
 export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A>): M {
-  return a.foldMapId(f.identity(), f);
+  return a.foldMapId(f.identity(), f.create);
 }
 
 /**

@@ -3,7 +3,7 @@ import {assert} from "chai";
 import {go} from "../src/monad";
 
 import {List, fromArray} from "../src/list";
-import {Sum, toNumber} from "../src/monoids/sum";
+import Sum from "../src/monoids/sum";
 
 // describe("List", () => {
 //   describe("Foldable", () => {

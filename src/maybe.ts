@@ -115,7 +115,7 @@ class Just<A> extends Maybe<A> {
     return f(this.val);
   }
   foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
-    return f(this.val);
+    return f.create(this.val);
   }
   fold<B>(f: (a: A, b: B) => B, acc: B): B {
     return f(this.val, acc);

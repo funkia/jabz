@@ -9,7 +9,7 @@ export interface MonoidDictionary<M extends Monoid<M>> {
 }
 
 export interface MonoidConstructor<A, M extends Monoid<M>> {
-  (a: A): M;
+  create(a: A): M;
   identity: () => M;
 }
 

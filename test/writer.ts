@@ -2,7 +2,7 @@ import {assert} from "chai";
 
 import {createWriter, runWriter} from "../src/writer";
 
-import {Sum} from "../src/monoids/sum";
+import Sum from "../src/monoids/sum";
 
 import {go, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
@@ -13,23 +13,23 @@ describe("Writer", () => {
     const {tell, listen, of} = SumWriter;
     it("works with Sum monoid", () => {
       const writer = go(function*() {
-        yield tell(Sum(3));
-        yield tell(Sum(2));
-        const [_, cur] = yield listen(tell(Sum(7)));
-        assert.deepEqual(cur, Sum(7));
-        const next = yield of(Sum(3));
+        yield tell(Sum.create(3));
+        yield tell(Sum.create(2));
+        const [_, cur] = yield listen(tell(Sum.create(7)));
+        assert.deepEqual(cur, Sum.create(7));
+        const next = yield of(Sum.create(3));
         yield tell(next);
         return of("Hello");
       });
       assert.deepEqual(
         runWriter(writer),
-        [Sum(15), "Hello"]
+        [Sum.create(15), "Hello"]
       );
     });
     it("gives identity", () => {
       assert.deepEqual(
         runWriter(of("Hello Writer!")),
-        [Sum(0), "Hello Writer!"]
+        [Sum.create(0), "Hello Writer!"]
       );
     });
   });
