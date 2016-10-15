@@ -1,3 +1,4 @@
+import "mocha";
 import {assert} from "chai";
 
 import {Either, left, right} from "../src/either";
@@ -26,6 +27,28 @@ describe("Either", () => {
       assert.deepEqual(right(12), Either.of(12));
       assert.deepEqual(right(12), right(2).of(12));
       assert.deepEqual(right(12), left(2).of(12));
+    });
+    describe("ap", () => {
+      it("applies function on two rights", () => {
+        assert.deepEqual(
+          right(12).ap(right((n: number) => n * n)),
+          right(144)
+        );
+      });
+      it("when both left it returns first", () => {
+        assert.deepEqual(
+          left<string, number>("not his one")
+            .ap(left<string, (n: number) => number>("fail")),
+          left("fail")
+        );
+      });
+      it("when last left it returns last left", () => {
+        assert.deepEqual(
+          left<string, number>("fail")
+            .ap(right<string, (n: number) => number>((n: number) => n * n)),
+          left("fail")
+        );
+      });
     });
     it("applies function to rights", () => {
       assert.deepEqual(

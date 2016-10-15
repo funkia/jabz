@@ -1,3 +1,4 @@
+import "mocha";
 import {assert} from "chai";
 
 import {mixin} from "../src/utils";
@@ -20,6 +21,7 @@ class List<A> implements Monad<A> {
     }
     return new List(newArr);
   }
+  ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
   flatten: <B>(m: Monad<Monad<B>>) => Monad<B>;
   map: <B>(f: (a: A) => B) => Monad<B>;
   mapTo: <B>(b: B) => Monad<B>;
@@ -55,6 +57,12 @@ describe("Monad", () => {
       assert.deepEqual(
         new List([1, 2, 3, 4, 5, 6]),
         flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))
+      );
+    });
+    it("ap works", () => {
+      assert.deepEqual(
+        (new List([1, 2, 3])).ap(new List([(x: number) => x * x, (x: number) => x + 2])),
+        (new List([1, 4, 9, 3, 4, 5]))
       );
     });
     it("lift works", () => {

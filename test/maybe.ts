@@ -1,3 +1,4 @@
+import "mocha";
 import {assert} from "chai";
 
 import {Maybe, just, nothing} from "../src/maybe";
@@ -46,26 +47,39 @@ describe("Maybe", () => {
   it("works with mapTo", () => {
     assert.deepEqual(just(1), mapTo(1, just(2)));
   });
-  it("lifts function of one argument", () => {
-    const {lift} = nothing();
-    assert.deepEqual(
-      just(8),
-      lift((x: number) => x * 2, just(4))
-    );
-  });
-  it("lifts function of two arguments", () => {
-    const {lift} = nothing();
-    assert.deepEqual(
-      just(13),
-      lift((x: number, y: number) => x * 2 + y, just(4), just(5))
-    );
-  });
-  it("lifts function of three arguments", () => {
-    const {lift} = nothing();
-    assert.deepEqual(
-      just(10),
-      lift((x: number, y: number, z: number) => x + y + z, just(4), just(5), just(1))
-    );
+  describe("applicative", () => {
+    describe("ap", () => {
+      function add2(n: number) {
+        return n + 2;
+      }
+      it("gives nothing", () => {
+        assert.deepEqual(nothing().ap(just(add2)), nothing());
+      });
+      it("gives just of result", () => {
+        assert.deepEqual(just(3).ap(just(add2)), just(5));
+      });
+    });
+    it("lifts function of one argument", () => {
+      const {lift} = nothing();
+      assert.deepEqual(
+        just(8),
+        lift((x: number) => x * 2, just(4))
+      );
+    });
+    it("lifts function of two arguments", () => {
+      const {lift} = nothing();
+      assert.deepEqual(
+        just(13),
+        lift((x: number, y: number) => x * 2 + y, just(4), just(5))
+      );
+    });
+    it("lifts function of three arguments", () => {
+      const {lift} = nothing();
+      assert.deepEqual(
+        just(10),
+        lift((x: number, y: number, z: number) => x + y + z, just(4), just(5), just(1))
+      );
+    });
   });
   describe("Traversable", () => {
     it("gives empty in applicative", () => {

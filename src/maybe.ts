@@ -15,6 +15,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract flatten<B>(m: Monad<Monad<B>>): Monad<B>;
   abstract map<B>(f: (a: A) => B): Maybe<B>;
   abstract mapTo<B>(b: B): Maybe<B>;
+  abstract ap<B>(a: Applicative<(a: A) => B>): Applicative<B>;
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Maybe<T1>, m2: Maybe<T2>): Maybe<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Maybe<T1>, m2: Maybe<T2>, m3: Maybe<T3>): Maybe<R>;
@@ -70,6 +71,9 @@ class Nothing<A> extends Maybe<A> {
   mapTo<B>(b: B): Maybe<B> {
     return new Nothing<B>();
   }
+  ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
+    return new Nothing<B>();
+  }
   foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
     return id;
   }
@@ -110,6 +114,12 @@ class Just<A> extends Maybe<A> {
   }
   mapTo<B>(b: B): Maybe<B> {
     return new Just<B>(b);
+  }
+  ap<B>(m: Maybe<(a: A) => B>): Maybe<B> {
+    return m.match({
+      nothing: nothing,
+      just: (f) => new Just(f(this.val))
+    });
   }
   foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
     return f(this.val);
