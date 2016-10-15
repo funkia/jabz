@@ -7,24 +7,16 @@ Traversables and all that jazz.
 
 [![Build Status](https://travis-ci.org/Funkia/jabz.svg?branch=master)](https://travis-ci.org/Funkia/jabz)
 [![codecov](https://codecov.io/gh/Funkia/jabz/branch/master/graph/badge.svg)](https://codecov.io/gh/Funkia/jabz)
+[![Gitter chat](https://badges.gitter.im/Join_Chat.svg)](https://gitter.im/funkia/General?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Goals
+## Goals and features
 
-* Be simple and convenient as possible in usage
+* Be as simple and convenient as possible in usage
 * Allow for performant implementations
 * Support TypeScript to the extent possible
 * Provide implementations of often used instances
 * Provide commonly used derived functions
-
-## Features
-
 * Do-notation
-* Structures
-  * Monoid
-  * Applicative
-  * Monad
-* Implementations
-  * Maybe
 * [Seamless instances](#seamless-instances)
 
 ## Differences from fantasy-land
@@ -33,6 +25,7 @@ Traversables and all that jazz.
   for efficient specialized implementation.
 * Static `lift` instead of `ap` in applicative. This allows for more
   performant implementation. Also can be typed with TypeScript.
+* And more.
 
 ## Rough spec
 
