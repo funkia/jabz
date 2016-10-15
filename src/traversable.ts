@@ -3,7 +3,14 @@ import {Foldable} from "./foldable";
 import {Applicative, ApplicativeDictionary} from "./applicative";
 
 export interface Traversable<A> extends Functor<A>, Foldable<A> {
-  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>>;
+  traverse<B>(
+    a: ApplicativeDictionary,
+    f: (a: A) => Applicative<B>
+  ): Applicative<Traversable<B>>;
+  sequence<A>(
+    a: ApplicativeDictionary,
+    t: Traversable<Applicative<A>>
+  ): Applicative<Traversable<A>>;
 }
 
 export function traverse<A, B>(

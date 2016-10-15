@@ -43,6 +43,15 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M;
   abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
   abstract size(): number;  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>>;
+  sequence<A>(
+    a: ApplicativeDictionary,
+    m: Maybe<Applicative<A>>
+  ): Applicative<Traversable<A>> {
+    return m.match({
+      nothing: () => a.of(nothing()),
+      just: (v) => v.map(just)
+    });
+  }
 }
 
 function of<V>(v: V): Maybe<V> {

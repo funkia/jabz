@@ -5,7 +5,7 @@ import {Maybe, just, nothing} from "../src/maybe";
 import {go, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 import testFunctor from "./functor";
-import {Either, right} from "../src/either";
+import {Either, right, left} from "../src/either";
 
 describe("Maybe", () => {
   it("gives just on `of`", () => {
@@ -82,17 +82,38 @@ describe("Maybe", () => {
     });
   });
   describe("Traversable", () => {
-    it("gives empty in applicative", () => {
-      assert.deepEqual(
-        nothing<number>().traverse(Either, n => right(n * 2)),
-        right(nothing())
-      );
+    describe("traverse", () => {
+      it("gives empty in applicative", () => {
+        assert.deepEqual(
+          nothing<number>().traverse(Either, n => right(n * 2)),
+          right(nothing())
+        );
+      });
+      it("gives just from just", () => {
+        assert.deepEqual(
+          just(12).traverse(Either, (n => right(n * 2))),
+          right(just(24))
+        );
+      });
     });
-    it("gives just from just", () => {
-      assert.deepEqual(
-        just(12).traverse(Either, (n => right(n * 2))),
-        right(just(24))
-      );
+    describe("sequence", () => {
+      const sequence = nothing().sequence;
+      it("gives applicative of nothing when nothing", () => {
+        assert.deepEqual(
+          sequence(Either, nothing()),
+          right(nothing())
+        )
+      });
+      it("returns applicative of just when just", () => {
+        assert.deepEqual(
+          sequence(Either, just(right(12))),
+          right(just(12))
+        );
+        assert.deepEqual(
+          sequence(Either, just(left(12))),
+          left(12)
+        );
+      });
     });
   });
 });
