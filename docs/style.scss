@@ -226,17 +226,23 @@ header {
   text-align: center;
   background: #670b0b;
   color: #fff;
-  -webkit-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: inset 0px 0px 83px 0px rgba(0,0,0,0.75);
-  box-shadow: inset 0px 0px 80px 0px rgba(0,0,0,0.75);
+  .title-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    width: 12em;
+    height: 12em;
+  }
   h1 {
     font-weight: normal;
     font-size: 4.2em;
-    text-shadow: 0 0 10px black, 0 0 30px black;
+    line-height: 1em;
   }
   p {
     font-size: 1.3em;
-    text-shadow: 0 0 8px black, 0 0 14px black;
   }
 }
 
