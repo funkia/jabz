@@ -1,7 +1,7 @@
 mixin method(name, signature)
   div.method
     span.name= name
-    span.signature : #{signature}
+    span : #{signature}
 
 doctype html
 html(lang="en")
@@ -20,22 +20,34 @@ html(lang="en")
       include sidebar.pug
       div#container.col
         h2 Specification
+
         h3 Semigroup
-        h4 Description
-        p A semigroup represents things that can be merged. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
-        p Examples are many. For instance numbers can be merged by adding them together, lists can be merged by concatenating them and images can be merged by overlaying them.
-        h4 Methods
-        +method('merge', '(a: A) => A')
+        table.spec-table
+          tr
+            td Description
+            td
+              p A semigroup represents things that can be merged. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
+              p Examples are many. For instance numbers can be merged by adding them together, lists can be merged by concatenating them and images can be merged by overlaying them.
+          tr
+            td Methods
+            td
+              +method('merge', '(a: A) => A')
 
         h3 Monoid
-        h4 Description
-        p Monoid extends semigroups with an identity element.
-        h4 Methods
-        +method('identity', '() => A')
-        h4 Laws
-        | `m.merge(m.identity()) === m.identity().merge(m) === m
+        table.spec-table
+          tr
+            td Description
+            td Monoid extends semigroups with an identity element.
+          tr
+            td Methods
+            td
+              +method('identity', '() => A')
+          tr
+            td Laws
+            td.method m.merge(m.identity()) === m.identity().merge(m) === m
 
         h2 Functions
+
         h3#monoid Monoid
         | Import with.
         pre

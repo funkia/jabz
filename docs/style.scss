@@ -209,6 +209,7 @@ body {
   font-size: 18px;
   font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
   background-color: #fffff8;
+  line-height: 1.5em;
 }
 
 html, body {
@@ -248,7 +249,7 @@ header {
 
 #container {
   margin-left: 13em;
-  max-width: 40em;
+  max-width: 45em;
 }
 
 div.signature {
@@ -262,11 +263,9 @@ div.signature {
   }
 }
 
-div.method {
+.method {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
   background-color: #efefef;
-  padding: .4em;
-  margin: 1em 0;
   .name {
     font-weight: bold;
   }
@@ -319,4 +318,20 @@ pre {
    display: block; 
    height: 0; 
    clear: both;
+}
+
+.spec-table {
+  width: 100%;
+  border-spacing: 1em;
+  td {
+    vertical-align: top;
+    > :first-child {
+      margin-top: 0;
+    }
+  }
+  tr td:nth-child(1) {
+    font-weight: bold;
+    width: 6em;
+    text-align: right;
+  }
 }
