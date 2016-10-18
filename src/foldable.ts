@@ -4,7 +4,7 @@
  * @module Foldable
  */
 
-import {Monoid, MonoidConstructor} from "./monoid";
+import {Monoid, MonoidConstructor, merge} from "./monoid";
 import Endo from "./monoids/endo";
 
 /**
@@ -49,21 +49,32 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
   }
 }
 
+function arrayFoldMapId<A, M extends Monoid<M>>(acc: M, f: (a: A) => M, as: A[]): M {
+  for (const a of as) {
+    acc = merge(acc, f(a));
+  }
+  return acc;
+}
+
 /**
  * M must be a monoid. From an initial monoid an a function that
  * converts each element in the foldable to monoid this function
  * applies the function and combiners the result to a single M with
  * the monoids merge operation.
  */
-export function foldMapId<A, M extends Monoid<M>>(id: M, f: (a: A) => M, a: Foldable<A>): M {
-  return a.foldMapId(id , f);
+export function foldMapId<A, M extends Monoid<M>>(id: M, f: (a: A) => M, a: Foldable<A> | A[]): M {
+  if (a instanceof Array) {
+    return arrayFoldMapId(id, f, a);
+  } else {
+    return a.foldMapId(id , f);
+  }
 }
 
 /**
  * Similair to [foldMapId]{@link module:Foldable~foldMapId}.
  */
-export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A>): M {
-  return a.foldMapId(f.identity(), f.create);
+export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A> | A[]): M {
+  return foldMapId(f.identity(), f.create, a);
 }
 
 /**
@@ -73,8 +84,15 @@ export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: F
  * @param {module:Foldable~Foldable} foldable
  * @return {B} size
  */
-export function fold<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A>): B {
-  return a.fold(f, acc);
+export function fold<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
+  if (a instanceof Array) {
+    for (const elm of a) {
+      acc = f(elm, acc);
+    }
+    return acc;
+  } else {
+    return a.fold(f, acc);
+  }
 }
 
 /**
@@ -82,6 +100,10 @@ export function fold<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A>): B {
  * @param {Foldable<any>} foldable
  * @return {number} size
  */
-export function size(a: Foldable<any>): number {
-  return a.size();
+export function size(a: Foldable<any> | any[]): number {
+  if (a instanceof Array) {
+    return a.length;
+  } else {
+    return a.size();
+  }
 }
