@@ -48,6 +48,7 @@ describe("Maybe", () => {
     assert.deepEqual(just(1), mapTo(1, just(2)));
   });
   describe("applicative", () => {
+    const {lift} = nothing();
     describe("ap", () => {
       function add2(n: number) {
         return n + 2;
@@ -60,24 +61,33 @@ describe("Maybe", () => {
       });
     });
     it("lifts function of one argument", () => {
-      const {lift} = nothing();
       assert.deepEqual(
         just(8),
         lift((x: number) => x * 2, just(4))
       );
+      assert.deepEqual(
+        nothing(),
+        lift((x: number) => x * 2, nothing())
+      );
     });
     it("lifts function of two arguments", () => {
-      const {lift} = nothing();
       assert.deepEqual(
         just(13),
         lift((x: number, y: number) => x * 2 + y, just(4), just(5))
       );
+      assert.deepEqual(
+        nothing(),
+        lift((x: number, y: number) => x * 2 + y, just(4), nothing())
+      );
     });
     it("lifts function of three arguments", () => {
-      const {lift} = nothing();
       assert.deepEqual(
         just(10),
         lift((x: number, y: number, z: number) => x + y + z, just(4), just(5), just(1))
+      );
+      assert.deepEqual(
+        nothing(),
+        lift((x: number, y: number, z: number) => x + y + z, nothing(), just(5), just(1))
       );
     });
   });

@@ -11,6 +11,7 @@ export type MaybeMatch<T, K> = {
 export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract match<K>(m: MaybeMatch<any, K>): K;
   of: <B>(v: B) => Maybe<B> = of;
+  static of: <B>(v: B) => Maybe<B> = of;
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
   abstract flatten<B>(m: Monad<Monad<B>>): Monad<B>;
   abstract map<B>(f: (a: A) => B): Maybe<B>;
@@ -20,23 +21,16 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Maybe<T1>, m2: Maybe<T2>): Maybe<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Maybe<T1>, m2: Maybe<T2>, m3: Maybe<T3>): Maybe<R>;
   lift(f: Function, ...args: any[]): any {
+    for (const m of args) {
+      if (isNothing(m)) { return _nothing; }
+    }
     switch (f.length) {
     case 1:
-      return args[0].val !== undefined ? just(f(args[0].val)) : nothing;
+      return just(f(args[0].val));
     case 2:
-      if (args[0].val !== undefined && args[1].val !== undefined) {
-        return just(f(args[0].val, args[1].val));
-      } else {
-        return nothing;
-      }
+      return just(f(args[0].val, args[1].val));
     case 3:
-      if (args[0].val !== undefined &&
-          args[1].val !== undefined &&
-          args[2].val !== undefined) {
-        return just(f(args[0].val, args[1].val, args[2].val));
-      } else {
-        return nothing;
-      }
+      return just(f(args[0].val, args[1].val, args[2].val));
     }
   }
   abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;
@@ -155,4 +149,8 @@ const _nothing = new Nothing();
 
 export function nothing<V>(): Maybe<V> {
   return _nothing;
+}
+
+export function isNothing(m: Maybe<any>): boolean {
+  return m === _nothing;
 }
