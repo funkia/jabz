@@ -15,14 +15,17 @@ export default function<M extends Monoid<M>>(name: string, monoid: M): void {
     it("has identity element", () => {
       assert.deepEqual(monoid.identity().merge(monoid),
                        monoid.merge(monoid.identity()));
-    });
-  });
-  describe("string monoid", () => {
-    it("has empty string as identity", () => {
-      assert.deepEqual(identity(String), "");
-    });
-    it("concatenates strings", () => {
-      assert.deepEqual(merge("hello ", "world"), "hello world");
+      assert.deepEqual(identity(monoid).merge(monoid),
+                       monoid.merge(monoid.identity()));
     });
   });
 };
+
+describe("string monoid", () => {
+  it("has empty string as identity", () => {
+    assert.deepEqual(identity(String), "");
+  });
+  it("concatenates strings", () => {
+    assert.deepEqual(merge("hello ", "world"), "hello world");
+  });
+});

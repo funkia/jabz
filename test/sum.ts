@@ -3,6 +3,7 @@ import {assert} from "chai";
 
 import Sum from "../src/monoids/sum";
 import {merge} from "../src/monoid";
+import monoidTest from "./monoid";
 
 describe("sum", () => {
   it("has identity", () => {
@@ -15,4 +16,5 @@ describe("sum", () => {
       merge(Sum.identity(), Sum.create(3))
     );
   });
+  monoidTest<Sum>("Sum", new Sum(4));
 });
