@@ -3,10 +3,25 @@ import {assert} from "chai";
 
 import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
+import {map, mapTo} from "../src/functor";
 import {size, fold, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
 describe("Native list", () => {
+  describe("functor", () => {
+    it("map", () => {
+      assert.deepEqual(
+        [1, 4, 9, 16],
+        map((n) => n * n, [1, 2, 3, 4])
+      );
+    });
+    it("mapTo", () => {
+      assert.deepEqual(
+        [7, 7, 7],
+        mapTo(7, [1, 2, 3])
+      );
+    });
+  });
   describe("foldable", () => {
     it("foldMap", () => {
       assert.deepEqual(foldMap(Sum, [1, 2, 3, 4]), Sum.create(10));
