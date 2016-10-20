@@ -3,11 +3,16 @@ import {assert} from "chai";
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, AbstractMonad, deriveMonad, fgo} from "../src/monad";
+import {Monad, AbstractMonad, deriveMonad, go, fgo} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 
 class List<A> implements Monad<A> {
   constructor(public arr: A[]) {};
+  static multi = true;
+  multi = true;
+  static of<B>(b: B): List<B> {
+    return new List([b]);
+  };
   of<B>(b: B): List<B> {
     return new List([b]);
   };
@@ -49,7 +54,7 @@ describe("Monad", () => {
     it("mapTo works", () => {
       assert.deepEqual(
         new List([4, 4, 4]),
-        (new List([1, 2, 3]).map((x: number) => 4))
+        (new List([1, 2, 3])).mapTo(4)
       );
     });
     it("flatten works", () => {
@@ -73,9 +78,19 @@ describe("Monad", () => {
       );
     });
   });
-});
-
-describe("fgo", () => {
+  describe("go-notation", () => {
+    it("go works with multi-monad", () => {
+      const result = go(function* ({of}) {
+        const n = yield new List([1, 2, 3]);
+        const m = yield new List([10, 100]);
+        return of(n * m);
+      }, List);
+      assert.deepEqual(
+        new List([10, 100, 20, 200, 30, 300]),
+        result
+      );
+    });
+  });
   it("fgo works with Maybe", () => {
     const fgoMaybe: (x: number, y: number, z: number) => Maybe<number> = fgo(function*(x, y, z) {
       const a = yield just(x);

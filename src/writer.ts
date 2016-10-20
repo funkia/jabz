@@ -12,6 +12,7 @@ export class Writer<W extends Monoid<W>, A> extends AbstractMonad<A> {
     const {state, value} = f(this.value);
     return new Writer(this.c, this.state.merge(state), value);
   }
+  multi: boolean = true;
 }
 
 export function runWriter<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A] {
@@ -22,6 +23,7 @@ export function createWriter<W extends Monoid<W>>(mc: MonoidDictionary<W>): {
   tell<A>(w: W): Writer<W, {}>;
   listen<A>(w: Writer<W, A>): Writer<W, [A, W]>;
   of<A>(a: A): Writer<W, A>;
+  multi: boolean
 } {
   return {
     tell(w: W): Writer<W, {}> {
@@ -33,6 +35,7 @@ export function createWriter<W extends Monoid<W>>(mc: MonoidDictionary<W>): {
     },
     of<A>(a: A): Writer<W, A> {
       return new Writer(mc, mc.identity(), a);
-    }
+    },
+    multi: false
   };
 }

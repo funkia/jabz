@@ -1,4 +1,4 @@
-import {Applicative} from "./applicative";
+import {Applicative, ApplicativeDictionary} from "./applicative";
 import {mixin} from "./utils";
 
 function id<A>(a: A) {
@@ -6,11 +6,17 @@ function id<A>(a: A) {
 }
 
 export interface Monad<A> extends Applicative<A> {
+  multi: boolean;
   chain<B>(f: (a: A) => Monad<B>): Monad<B>;
   flatten<B>(m: Monad<Monad<B>>): Monad<B>;
 }
 
+export interface MonadDictionary extends ApplicativeDictionary {
+  multi: boolean;
+}
+
 export abstract class AbstractMonad<A> implements Monad<A> {
+  abstract multi: boolean;
   abstract of<B>(b: B): Monad<B>;
   abstract chain<B>(f: (a: A) => Monad<B>): Monad<B>;
   flatten<B>(m: Monad<Monad<B>>): Monad<B> {
@@ -45,8 +51,8 @@ export function join<A>(m: Monad<Monad<A>>): Monad<A> {
   return m.chain(id);
 }
 
-export function go(gen: () => Iterator<Monad<any>>) {
-  const doing = gen();
+function singleGo(gen: (m: MonadDictionary) => Iterator<Monad<any>>, m: MonadDictionary) {
+  const doing = gen(m);
   function doRec(v: any): any {
     const a = doing.next(v);
     if (a.done === true) {
@@ -59,6 +65,24 @@ export function go(gen: () => Iterator<Monad<any>>) {
   }
   return doRec(undefined);
 };
+
+function multiGo<M extends Monad<any>>(gen: (m: MonadDictionary) => Iterator<M>, m: MonadDictionary) {
+  var doRec = function(v: any, stateSoFar: any): any {
+    var doing = gen(m);
+    stateSoFar.forEach(function(it: any) {doing.next(it)});
+    var a = doing.next(v);
+    if (a.done === true) {
+      return a.value;
+    } else {
+      return a.value.chain(function(vv){return doRec(vv, stateSoFar.concat(v));})
+    }
+  };
+  return doRec(null, []);
+};
+
+export function go<M extends Monad<any>>(gen: (m: M) => Iterator<M>, m: MonadDictionary) {
+  return m.multi === true ? multiGo(gen, m) : singleGo(gen, m);
+}
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
   return function(...args: any[]) {

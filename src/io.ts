@@ -30,6 +30,8 @@ export class IO<A> extends AbstractMonad<A> {
   chain<B>(f: (a: A) => IO<B>): IO<B> {
     return new IO(() => this.comp().then(r => f(r).comp()));
   }
+  static multi: boolean = true;
+  multi: boolean = true;
 }
 
 export function of<B>(k: B): IO<B> {
