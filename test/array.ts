@@ -4,6 +4,7 @@ import {assert} from "chai";
 import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
+import {lift} from "../src/applicative";
 import {size, fold, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
@@ -19,6 +20,14 @@ describe("Native list", () => {
       assert.deepEqual(
         [7, 7, 7],
         mapTo(7, [1, 2, 3])
+      );
+    });
+  });
+  describe("applicative", () => {
+    it("lift", () => {
+      assert.deepEqual(
+        [[1, 3, 8], [1, 3, 0], [1, 3, 7], [2, 3, 8], [2, 3, 0], [2, 3, 7]],
+        lift((a, b, c) => [a, b, c], [1, 2], [3], [8, 0, 7])
       );
     });
   });
