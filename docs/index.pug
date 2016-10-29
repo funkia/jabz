@@ -26,12 +26,12 @@ html(lang="en")
           tr
             td Description
             td
-              p A semigroup represents things that can be merged. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
-              p Examples are many. For instance numbers can be merged by adding them together, lists can be merged by concatenating them and images can be merged by overlaying them.
+              p A semigroup represents things that can be combined. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
+              p Examples are many. For instance numbers can be combined by adding them together, lists can be combined by concatenating them and images can be combined by overlaying them.
           tr
             td Methods
             td
-              +method('merge', '(a: A) => A')
+              +method('combine', '(a: A) => A')
 
         h3 Monoid
         table.spec-table
@@ -44,7 +44,7 @@ html(lang="en")
               +method('identity', '() => A')
           tr
             td Laws
-            td.method m.merge(m.identity()) === m.identity().merge(m) === m
+            td.method m.combine*(m.identity()) === m.identity().combine(m) === m
 
         h2 Functions
 

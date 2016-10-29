@@ -10,7 +10,7 @@ export class Writer<W extends Monoid<W>, A> extends AbstractMonad<A> {
   }
   chain<B>(f: (a: A) => Writer<W, B>): Writer<W, B> {
     const {state, value} = f(this.value);
-    return new Writer(this.c, this.state.merge(state), value);
+    return new Writer(this.c, this.state.combine(state), value);
   }
   multi: boolean = true;
 }

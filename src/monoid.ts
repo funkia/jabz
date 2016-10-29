@@ -1,4 +1,4 @@
-import {Semigroup, merge} from "./semigroup";
+import {Semigroup, combine} from "./semigroup";
 
 export interface Monoid<A> extends Semigroup<A> {
   identity: () => A;
@@ -23,4 +23,4 @@ export function identity<M extends Monoid<M>>(m: any): any {
   }
 }
 
-export {merge};
+export {combine};

@@ -12,7 +12,7 @@ export default class Endo<A> implements Monoid<Endo<A>> {
   identity(): Endo<A> {
     return endoId;
   };
-  merge(e: Endo<A>): Endo<A> {
+  combine(e: Endo<A>): Endo<A> {
     return new Endo(endoComp(this.fn, e.fn));
   }
   static create<A>(f: (a: A) => A): Endo<A> {

@@ -4,7 +4,7 @@
  * @module Foldable
  */
 
-import {Monoid, MonoidConstructor, merge} from "./monoid";
+import {Monoid, MonoidConstructor, combine} from "./monoid";
 import Endo from "./monoids/endo";
 
 /**
@@ -51,7 +51,7 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
 
 function arrayFoldMapId<A, M extends Monoid<M>>(acc: M, f: (a: A) => M, as: A[]): M {
   for (const a of as) {
-    acc = merge(acc, f(a));
+    acc = combine(acc, f(a));
   }
   return acc;
 }
@@ -60,7 +60,7 @@ function arrayFoldMapId<A, M extends Monoid<M>>(acc: M, f: (a: A) => M, as: A[])
  * M must be a monoid. From an initial monoid an a function that
  * converts each element in the foldable to monoid this function
  * applies the function and combiners the result to a single M with
- * the monoids merge operation.
+ * the monoids combine operation.
  */
 export function foldMapId<A, M extends Monoid<M>>(id: M, f: (a: A) => M, a: Foldable<A> | A[]): M {
   if (a instanceof Array) {

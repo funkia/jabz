@@ -9,7 +9,7 @@ export class ListImpl<A> extends AbstractFoldable<A> {
   };
   foldMapId<M extends Monoid<M>>(m: M, f: (a: A) => M): M {
     for (let i = 0; i < this.arr.length; ++i) {
-      m = m.merge(f(this.arr[i]));
+      m = m.combine(f(this.arr[i]));
     }
     return m;
   }

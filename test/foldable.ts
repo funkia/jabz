@@ -13,7 +13,7 @@ class List<A> extends AbstractFoldable<A> {
   };
   foldMapId<M extends Monoid<M>>(acc: M, f: (a: A) => M): M {
     for (let i = 0; i < this.arr.length; ++i) {
-      acc = acc.merge(f(this.arr[i]));
+      acc = acc.combine(f(this.arr[i]));
     }
     return acc;
   }

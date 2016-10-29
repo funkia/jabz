@@ -8,7 +8,7 @@ export default class Sum implements Monoid<Sum> {
   identity(): Sum {
     return sumId;
   }
-  merge(s: Sum): Sum {
+  combine(s: Sum): Sum {
     return new Sum(this.n + s.n);
   }
   static toNumber(s: Sum): number {
