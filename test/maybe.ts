@@ -4,6 +4,7 @@ import {assert} from "chai";
 import {Maybe, just, nothing} from "../src/maybe";
 import {go, join} from "../src/monad";
 import {map, mapTo} from "../src/functor";
+import {of} from "../src/applicative";
 import testFunctor from "./functor";
 import {Either, right, left} from "../src/either";
 
@@ -49,6 +50,9 @@ describe("Maybe", () => {
   });
   describe("applicative", () => {
     const {lift} = nothing();
+    it("of", () => {
+      assert.deepEqual(of(Maybe, 12), just(12));
+    });
     describe("ap", () => {
       function add2(n: number) {
         return n + 2;

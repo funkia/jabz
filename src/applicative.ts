@@ -14,6 +14,20 @@ export interface Applicative<A> extends Functor<A> {
   map<B>(f: (a: A) => B): Applicative<B>;
 }
 
+function isArrayConstructor(a: any): a is ArrayConstructor {
+  return a === Array;
+}
+
+export function of<A>(d: ArrayConstructor, a: A): A[];
+export function of<A>(d: ApplicativeDictionary, a: A): any;
+export function of<A>(d: ApplicativeDictionary | ArrayConstructor, a: A): any {
+  if (isArrayConstructor(d)) {
+    return [a];
+  } else {
+    return d.of(a);
+  }
+}
+
 function arrayLift(f: Function, args: any[][], indices: number[]): any[] {
   if (args.length === indices.length) {
     let values: any[] = [];
