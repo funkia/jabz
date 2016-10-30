@@ -18,6 +18,17 @@ export interface Functor<A> {
   mapTo<B>(b: B): Functor<B>;
 }
 
+export function functor(constructor: Function): void {
+  if (!("map" in constructor.prototype)) {
+    throw new TypeError("Can't derive functor. `map` method missing.");
+  }
+  if (!("mapTo" in constructor.prototype)) {
+    constructor.prototype.mapTo = function mapTo<A>(a: A) {
+      return this.map((_: any) => a);
+    }
+  }
+}
+
 export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
 export function map<A, B, C>(f: (b: B) => C, functor: Either<A, B>): Either<A, C>;
 export function map<A, B>(f: (a: A) => B, functor: Functor<A>): Functor<B>;

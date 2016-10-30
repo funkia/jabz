@@ -1,10 +1,32 @@
 import {assert} from "chai";
 
-import {Functor} from "../src/functor";
+import {Functor, functor} from "../src/functor";
 
 function id<A>(a: A) {
   return a;
 }
+
+describe("deriving", () => {
+  it("derives `mapTo`", () => {
+    @functor
+    class Container<A> {
+      constructor(private val: A) {};
+      map<B>(f: (a: A) => B): Container<B> {
+        return new Container(f(this.val));
+      }
+      mapTo: <B>(b: B) => Container<B>;
+    }
+    assert.deepEqual(new Container(3), (new Container(1)).mapTo(3));
+  });
+  it("throws if `map` is missing", () => {
+    assert.throws(() => {
+      @functor
+      class NotAFunctor {
+        constructor() {};
+      }
+    });
+  });
+});
 
 export default function<A>(name: string, functor: Functor<number>) {
   describe(name + "'s functor instance", () => {
