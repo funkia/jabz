@@ -5,7 +5,7 @@ import {createWriter, runWriter} from "../src/writer";
 
 import Sum from "../src/monoids/sum";
 
-import {go, join} from "../src/monad";
+import {go} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 
 describe("Writer", () => {

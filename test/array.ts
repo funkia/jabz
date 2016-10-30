@@ -5,6 +5,7 @@ import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
+import {chain, flatten} from "../src/monad";
 import {size, fold, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
@@ -32,6 +33,20 @@ describe("Native list", () => {
       assert.deepEqual(
         [[1, 3, 8], [1, 3, 0], [1, 3, 7], [2, 3, 8], [2, 3, 0], [2, 3, 7]],
         lift((a, b, c) => [a, b, c], [1, 2], [3], [8, 0, 7])
+      );
+    });
+  });
+  describe("monad", () => {
+    it("flatten", () => {
+      assert.deepEqual(
+        [1, 2, 3, 4, 5],
+        flatten([[1, 2], [3], [4, 5]])
+      );
+    });
+    it("chain", () => {
+      assert.deepEqual(
+        [2, 3, 5, 6, 10, 11],
+        chain((n: number) => [n + 1, n + 2], [1, 4, 9])
       );
     });
   });

@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {Maybe, just, nothing} from "../src/maybe";
-import {go, join} from "../src/monad";
+import {go, flatten} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 import {of} from "../src/applicative";
 import testFunctor from "./functor";
@@ -38,7 +38,7 @@ describe("Maybe", () => {
     assert.deepEqual(res, nothing());
   });
   it("is joined correctly", () => {
-    assert.deepEqual(join<number>(just(just(12))), just(12));
+    assert.deepEqual(flatten<number>(just(just(12))), just(12));
   });
   testFunctor("Maybe", just(12));
   it("is still a maybe after map", () => {

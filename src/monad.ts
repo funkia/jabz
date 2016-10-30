@@ -47,8 +47,45 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   }
 }
 
-export function join<A>(m: Monad<Monad<A>>): Monad<A> {
-  return m.chain(id);
+function arrayFlatten<A>(m: A[][]): A[] {
+  let result: A[] = [];
+  for (let i = 0; i < m.length; ++i) {
+    for (let j = 0; j < m[i].length; ++j) {
+      result.push(m[i][j]);
+    }
+  }
+  return result;
+}
+
+export function flatten<A>(m: A[][]): A[];
+export function flatten<A>(m: Monad<Monad<A>>): Monad<A>;
+export function flatten<A>(m: Monad<Monad<A>> | A[][]): Monad<A> | A[] {
+  if (Array.isArray(m)) {
+    return arrayFlatten(m);
+  } else {
+    return m.flatten(m);
+  }
+}
+
+function arrayChain<A, B>(f: (a: A) => B[], m: A[]): B[] {
+  let result: B[] = [];
+  for (let i = 0; i < m.length; ++i) {
+    const added = f(m[i]);
+    for (let j = 0; j < added.length; ++j) {
+      result.push(added[j]);
+    }
+  }
+  return result;
+}
+
+export function chain<A, B>(f: (a: A) => B[], m: A[]): B[];
+export function chain<A, B>(f: (a: A) => Monad<B>, m: Monad<A>): Monad<B>;
+export function chain<A, B>(f: any, m: Monad<Monad<A>> | A[]): Monad<B> | B[] {
+  if (Array.isArray(m)) {
+    return arrayChain<A, B>(f, m);
+  } else {
+    return m.chain(f);
+  }
 }
 
 function singleGo(gen: (m: MonadDictionary) => Iterator<Monad<any>>, m: MonadDictionary) {
