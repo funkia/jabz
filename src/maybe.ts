@@ -20,17 +20,18 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Maybe<T1>, m2: Maybe<T2>): Maybe<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Maybe<T1>, m2: Maybe<T2>, m3: Maybe<T3>): Maybe<R>;
-  lift(f: Function, ...args: any[]): any {
-    for (const m of args) {
-      if (isNothing(m)) { return _nothing; }
+  lift(/* arguments */): any {
+    const f = arguments[0];
+    for (let i = 1; i < arguments.length; ++i) {
+      if (isNothing(arguments[i])) { return _nothing; }
     }
-    switch (f.length) {
+    switch (arguments.length - 1) {
     case 1:
-      return just(f(args[0].val));
+      return just(f(arguments[1].val));
     case 2:
-      return just(f(args[0].val, args[1].val));
+      return just(f(arguments[1].val, arguments[2].val));
     case 3:
-      return just(f(args[0].val, args[1].val, args[2].val));
+      return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
   abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;

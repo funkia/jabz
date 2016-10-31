@@ -1,0 +1,16 @@
+{
+  "name": "jabz-benchmark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "benchmark": "^2.1.2",
+    "ramda": "^0.22.1",
+    "ramda-fantasy": "^0.7.0"
+  }
+}
