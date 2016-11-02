@@ -1,5 +1,6 @@
-import {Functor} from "./functor";
+import {Functor, functor} from "./functor";
 import {Either} from "./either";
+import {curry2, curry3} from "./curry";
 
 export interface ApplicativeDictionary {
   of: <B>(b: B) => Applicative<B>;
@@ -12,6 +13,42 @@ export interface Applicative<A> extends Functor<A> {
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Applicative<T1>, m2: Applicative<T2>): Applicative<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Applicative<T1>, m2: Applicative<T2>, m3: Applicative<T3>): Applicative<R>;
   map<B>(f: (a: A) => B): Applicative<B>;
+}
+
+type A<A> = Applicative<A>;
+
+function derivedMap<A, B>(f: (a: A) => B): any {
+  return this.ap(this.of(f));
+}
+
+function derivedLift(/* arguments */): any {
+  const f = arguments[0];
+  switch (arguments.length - 1) {
+  case 1:
+    return arguments[1].map(f);
+  case 2:
+    return arguments[2].ap(arguments[1].map(curry2(f)));
+  case 3:
+    return arguments[3].ap(arguments[2].ap(arguments[1].map(curry3(f))));
+  }
+}
+
+export function applicative(constructor: Function): void {
+  const prototype = constructor.prototype;
+  if (!("of" in prototype)) {
+    throw new TypeError("Can't derive applicative. `of` method missing.");
+  }
+  if (!("map" in prototype)) {
+    prototype.map = derivedMap;
+  }
+  functor(constructor);
+  if ("ap" in prototype) {
+    prototype.lift = derivedLift;
+  // } else if ("lift" in prototype) {
+    // FIXME: derive `ap`
+  } else {
+    throw new TypeError("Can't derive applicative. Either `lift` or `ap` method must be defined.");
+  }
 }
 
 function isArrayConstructor(a: any): a is ArrayConstructor {
@@ -44,12 +81,19 @@ function arrayLift(f: Function, args: any[][], indices: number[]): any[] {
   }
 }
 
+
+export function lift<T1, R>(f: (t: T1) => R, m: Applicative<T1>): any;
+export function lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Applicative<T1>, m2: Applicative<T2>): any;
+export function lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Applicative<T1>, m2: Applicative<T2>, m3: Applicative<T3>): any;
+// Either
 export function lift<A, T1, R>(f: (t: T1) => R, m: Either<A, T1>): Either<A, R>;
 export function lift<A, T1, T2, R>(f: (t: T1, u: T2) => R, m1: Either<A, T1>, m2: Either<A, T2>): Either<A, R>;
 export function lift<A, T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Either<A, T1>, m2: Either<A, T2>, m3: Either<A, T3>): Either<A, R>;
+// Native array
 export function lift<A, R>(f: (t: A) => R, a: A[]): R[];
 export function lift<A, B, R>(f: (a: A, b: B) => R, a: A[], b: B[]): R[];
 export function lift<A, B, C, R>(f: (a: A, b: B, c: B) => R, a: A[], b: B[], c: C[]): R[];
+// implementation
 export function lift(f: Function, ...args: any[]): any {
   if (Array.isArray(args[0])) {
     return arrayLift(f, args, []);
