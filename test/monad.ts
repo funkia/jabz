@@ -3,9 +3,10 @@ import {assert} from "chai";
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, AbstractMonad, deriveMonad, go, fgo} from "../src/monad";
+import {Monad, monad, AbstractMonad, go, fgo} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 
+@monad
 class List<A> implements Monad<A> {
   constructor(public arr: A[]) {};
   static multi = true;
@@ -33,8 +34,6 @@ class List<A> implements Monad<A> {
   lift: (f: Function, ...ms: any[]) => Monad<any>;
 }
 
-deriveMonad(List);
-
 describe("Monad", () => {
   it("has correct chain", () => {
     assert.deepEqual(
@@ -42,7 +41,7 @@ describe("Monad", () => {
       (new List([0, 3])).chain((x: number) => new List([x, x + 1, x + 2]))
     );
   });
-  describe("mixin", () => {
+  describe("deriving", () => {
     // test that the monad mixin implements all derived methods
     // correctly for a simple non-determinism monad
     it("map works", () => {

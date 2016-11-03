@@ -138,6 +138,13 @@ export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
   };
 }
 
-export function deriveMonad(obj: any): void {
-  mixin(obj, [AbstractMonad]);
+export function monad(constructor: Function): void {
+  const prototype = constructor.prototype;
+  if (!("of" in prototype)) {
+    throw new TypeError("Can't derive monad. `of` method missing.");
+  }
+  if (!("chain" in prototype) && !("flatten" in prototype)) {
+    throw new TypeError("Can't derive monad. Either `chain` or `flatten` method must be defined.");
+  }
+  mixin(constructor, [AbstractMonad]);
 }
