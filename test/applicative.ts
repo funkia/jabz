@@ -2,6 +2,28 @@ import {assert} from "chai";
 
 import {map, mapTo} from "../src/functor";
 import {Applicative, lift, applicative} from "../src/applicative";
+import {testFunctor} from "./functor";
+
+export function testApplicative<A>(app: Applicative<number>) {
+  const of = app.of;
+  it("has `ap` method", () => {
+    assert.deepEqual(
+      of(6).ap(of((n: number) => 2 * n)),
+      of(12)
+    );
+  });
+  it("has `lift` function", () => {
+    assert.deepEqual(lift((n) => n * 2, of(7)), of(14));
+    assert.deepEqual(
+      lift((n, m) => n + m, of(1), of(2)),
+      of(3)
+    );
+    assert.deepEqual(
+      lift((n, m, o) => n + m + o, of(1), of(2), of(4)),
+      of(7)
+    );
+  });
+}
 
 describe("applicative", () => {
   describe("deriving", () => {
@@ -39,27 +61,8 @@ describe("applicative", () => {
         lift: <R>(...args: any[]) => Container<R>;
       }
       const c = <A>(c: A) => new Container(c);
-      it("is functor", () => {
-        assert.deepEqual(map((n) => n * 2, c(7)), c(14));
-        assert.deepEqual(mapTo(12, c(3)), c(12));
-      });
-      it("has `ap` method", () => {
-        assert.deepEqual(
-          c(6).ap(c((n: number) => 2 * n)),
-          c(12)
-        );
-      });
-      it("has `lift` function", () => {
-        assert.deepEqual(lift((n) => n * 2, c(7)), c(14));
-        assert.deepEqual(
-          lift((n, m) => n + m, c(1), c(2)),
-          c(3)
-        );
-        assert.deepEqual(
-          lift((n, m, o) => n + m + o, c(1), c(2), c(4)),
-          c(7)
-        );
-      });
+      testFunctor("Container", new Container(0));
+      testApplicative(new Container(0));
     });
     describe("with `of` and `lift`", () => {
       @applicative
@@ -75,28 +78,8 @@ describe("applicative", () => {
           return new Container(f.apply(undefined, args.map((x) => x.val)));
         }
       }
-      const c = <A>(c: A) => new Container(c);
-      it("is functor", () => {
-        assert.deepEqual(map((n) => n * 2, c(7)), c(14));
-        assert.deepEqual(mapTo(12, c(3)), c(12));
-      });
-      it("has `ap` method", () => {
-        assert.deepEqual(
-          c(6).ap(c((n: number) => 2 * n)),
-          c(12)
-        );
-      });
-      it("has `lift` function", () => {
-        assert.deepEqual(lift((n) => n * 2, c(7)), c(14));
-        assert.deepEqual(
-          lift((n, m) => n + m, c(1), c(2)),
-          c(3)
-        );
-        assert.deepEqual(
-          lift((n, m, o) => n + m + o, c(1), c(2), c(4)),
-          c(7)
-        );
-      });
+      testFunctor("Container", new Container(0));
+      testApplicative(new Container(0));
     });
   });
 });

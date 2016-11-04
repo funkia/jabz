@@ -6,6 +6,22 @@ function id<A>(a: A) {
   return a;
 }
 
+export function testFunctor<A>(name: string, functor: Functor<number>) {
+  describe(name + "'s functor instance", () => {
+    it("satisfies identity", () => {
+      assert.deepEqual(functor.map(id), functor);
+    });
+    it("satisfies composition", () => {
+      const f = (n: number) => n * n;
+      const g = (n: number) => n - 4;
+      assert.deepEqual(functor.map(f).map(g), functor.map(n => g(f(n))));
+    });
+    it("has `mapTo`", () => {
+      assert.deepEqual(functor.mapTo(9), functor.map((_) => 9));
+    });
+  });
+};
+
 describe("deriving", () => {
   it("derives `mapTo`", () => {
     @functor
@@ -16,7 +32,7 @@ describe("deriving", () => {
       }
       mapTo: <B>(b: B) => Container<B>;
     }
-    assert.deepEqual(new Container(3), (new Container(1)).mapTo(3));
+    testFunctor("Container", new Container(12));
   });
   it("throws if `map` is missing", () => {
     assert.throws(() => {
@@ -27,17 +43,3 @@ describe("deriving", () => {
     });
   });
 });
-
-export default function<A>(name: string, functor: Functor<number>) {
-  describe(name + "'s functor instance", () => {
-    it("satisfies identity", () => {
-      assert.deepEqual(functor.map(id), functor);
-    });
-    it("satisfies composition", () => {
-      const f = (n: number) => n * n;
-      const g = (n: number) => n - 4;
-      assert.deepEqual(functor.map(f).map(g),
-                       functor.map(n => g(f(n))));
-    });
-  });
-};

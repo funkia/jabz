@@ -3,7 +3,7 @@ import {assert} from "chai";
 
 import {Either, left, right} from "../src/either";
 import {map} from "../src/functor";
-import testFunctor from "./functor";  
+import {testFunctor} from "./functor";
 import {lift} from "../src/applicative";
 
 describe("Either", () => {
