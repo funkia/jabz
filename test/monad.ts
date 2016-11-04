@@ -3,8 +3,10 @@ import {assert} from "chai";
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, monad, AbstractMonad, go, fgo} from "../src/monad";
+import {Monad, monad, arrayFlatten, AbstractMonad, go, fgo} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
+import {testFunctor} from "./functor";
+import {testApplicative} from "./applicative";
 
 @monad
 class List<A> implements Monad<A> {
@@ -35,25 +37,13 @@ class List<A> implements Monad<A> {
 }
 
 describe("Monad", () => {
-  it("has correct chain", () => {
-    assert.deepEqual(
-      new List([0, 1, 2, 3, 4, 5]),
-      (new List([0, 3])).chain((x: number) => new List([x, x + 1, x + 2]))
-    );
-  });
-  describe("deriving", () => {
-    // test that the monad mixin implements all derived methods
-    // correctly for a simple non-determinism monad
-    it("map works", () => {
+  describe("deriving with `of` and `chain`", () => {
+    testFunctor("List", new List([1, 2]));
+    testApplicative(new List([1, 2]));
+    it("has correct chain", () => {
       assert.deepEqual(
-        new List([1, 4, 9]),
-        (new List([1, 2, 3]).map((x: number) => x * x))
-      );
-    });
-    it("mapTo works", () => {
-      assert.deepEqual(
-        new List([4, 4, 4]),
-        (new List([1, 2, 3])).mapTo(4)
+        new List([0, 1, 2, 3, 4, 5]),
+        (new List([0, 3])).chain((x: number) => new List([x, x + 1, x + 2]))
       );
     });
     it("flatten works", () => {
@@ -63,17 +53,43 @@ describe("Monad", () => {
         flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))
       );
     });
-    it("ap works", () => {
+  });
+  describe("deriving with `of` and `flatten`", () => {
+    @monad
+    class List<A> implements Monad<A> {
+      constructor(public arr: A[]) {};
+      static multi = true;
+      multi = true;
+      static of<B>(b: B): List<B> {
+        return new List([b]);
+      };
+      of<B>(b: B): List<B> {
+        return new List([b]);
+      };
+      chain: <B>(f: (a: A) => List<B>) => List<B>;
+      ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
+      flatten<B>(m: List<List<B>>): List<B> {
+        return new List(arrayFlatten(m.arr.map(l => l.arr)));
+      }
+      map<B>(f: (a: A) => B): Monad<B> {
+        return new List(this.arr.map(f));
+      }
+      mapTo: <B>(b: B) => Monad<B>;
+      lift: (f: Function, ...ms: any[]) => Monad<any>;
+    }
+    testFunctor("List", new List([1, 2]));
+    testApplicative(new List([1, 2]));
+    it("has correct chain", () => {
       assert.deepEqual(
-        (new List([1, 2, 3])).ap(new List([(x: number) => x * x, (x: number) => x + 2])),
-        (new List([1, 4, 9, 3, 4, 5]))
+        new List([0, 1, 2, 3, 4, 5]),
+        (new List([0, 3])).chain((x: number) => new List([x, x + 1, x + 2]))
       );
     });
-    it("lift works", () => {
-      const {lift} = new List([1]);
+    it("flatten works", () => {
+      const {flatten} = new List([1]);
       assert.deepEqual(
-        new List([-2, -1, 0, -1, 0, 1]),
-        lift((x: number, y: number, z: number) => x + y - z, new List([1, 2]), new List([3, 4, 5]), new List([6]))
+        new List([1, 2, 3, 4, 5, 6]),
+        flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))
       );
     });
   });

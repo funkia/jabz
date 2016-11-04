@@ -18,7 +18,9 @@ export interface MonadDictionary extends ApplicativeDictionary {
 export abstract class AbstractMonad<A> implements Monad<A> {
   abstract multi: boolean;
   abstract of<B>(b: B): Monad<B>;
-  abstract chain<B>(f: (a: A) => Monad<B>): Monad<B>;
+  chain<B>(f: (a: A) => Monad<B>): Monad<B> {
+    return this.flatten(this.map(f));
+  }
   flatten<B>(m: Monad<Monad<B>>): Monad<B> {
     return m.chain(id);
   }
@@ -47,7 +49,7 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   }
 }
 
-function arrayFlatten<A>(m: A[][]): A[] {
+export function arrayFlatten<A>(m: A[][]): A[] {
   let result: A[] = [];
   for (let i = 0; i < m.length; ++i) {
     for (let j = 0; j < m[i].length; ++j) {
@@ -139,11 +141,11 @@ export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
 }
 
 export function monad(constructor: Function): void {
-  const prototype = constructor.prototype;
-  if (!("of" in prototype)) {
+  const p = constructor.prototype;
+  if (!("of" in p)) {
     throw new TypeError("Can't derive monad. `of` method missing.");
   }
-  if (!("chain" in prototype) && !("flatten" in prototype)) {
+  if (!("chain" in p) && !("flatten" in p && "map" in p)) {
     throw new TypeError("Can't derive monad. Either `chain` or `flatten` method must be defined.");
   }
   mixin(constructor, [AbstractMonad]);
