@@ -1,5 +1,6 @@
 import {Maybe} from "./maybe";
 import {Either} from "./either";
+import {mixin} from "./utils";
 
 function arrayMap<A, B>(f: (a: A) => B, as: A[]): B[] {
   let newArr: B[] = [];
@@ -18,15 +19,18 @@ export interface Functor<A> {
   mapTo<B>(b: B): Functor<B>;
 }
 
+export abstract class AbstractFunctor<A> implements Functor<A> {
+  abstract map<B>(f: (a: A) => B): Functor<B>;
+  mapTo<B>(b: B): Functor<B> {
+    return this.map((_: A) => b);
+  }
+}
+
 export function functor(constructor: Function): void {
   if (!("map" in constructor.prototype)) {
     throw new TypeError("Can't derive functor. `map` method missing.");
   }
-  if (!("mapTo" in constructor.prototype)) {
-    constructor.prototype.mapTo = function mapTo<A>(a: A) {
-      return this.map((_: any) => a);
-    }
-  }
+  mixin(constructor, [AbstractFunctor]);
 }
 
 export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
