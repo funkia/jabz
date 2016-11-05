@@ -2,25 +2,25 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, AbstractFoldable, foldMap, fold, size
+  Foldable, foldable, foldMap, fold, size
 } from "../src/foldable";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import Sum from "../src/monoids/sum";
 
-class List<A> extends AbstractFoldable<A> {
-  constructor(private arr: A[]) {
-    super();
-  };
+@foldable
+class List<A> implements Foldable<A> {
+  constructor(private arr: A[]) {};
   fold<B>(f: (a: A, b: B) => B, acc: B): B {
     for (let i = 0; i < this.arr.length; ++i) {
       acc = f(this.arr[i], acc);
     }
     return acc;
   }
+  size: () => number;
 }
 
 describe("Foldable", () => {
-  describe("simple list implementation", () => {
+  describe("derived foldable implementation", () => {
     it("has foldMap", () => {
       assert.deepEqual(foldMap(Sum, new List([1, 2, 3, 4, 5])), Sum.create(15));
     });

@@ -6,6 +6,7 @@
 
 import {Monoid, MonoidConstructor, combine} from "./monoid";
 import Endo from "./monoids/endo";
+import {mixin} from "./utils";
 
 /**
  * A Foldable is any structure that supports a fold operation that
@@ -43,6 +44,14 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
   size(): number {
     return this.fold<number>(incr, 0);
   }
+}
+
+export function foldable(constructor: Function): void {
+  const p = constructor.prototype;
+  if (!("fold" in p)) {
+    throw new TypeError("Can't derive foldable. `foldable` method missing.");
+  }
+  mixin(constructor, [AbstractFoldable]);
 }
 
 export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A> | A[]): M {
