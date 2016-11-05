@@ -1,12 +1,14 @@
 import "mocha";
 import {assert} from "chai";
 
+import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
-import {go, flatten} from "../src/monad";
 import {map, mapTo} from "../src/functor";
+import {go, flatten} from "../src/monad";
+import {size, fold, foldMap} from "../src/foldable";
+import {Either, right, left} from "../src/either";
 import {of} from "../src/applicative";
 import {testFunctor} from "./functor";
-import {Either, right, left} from "../src/either";
 
 describe("Maybe", () => {
   it("gives just on `of`", () => {
@@ -38,8 +40,10 @@ describe("Maybe", () => {
     assert.deepEqual(res, nothing());
   });
   it("is joined correctly", () => {
-    assert.deepEqual(flatten<number>(just(just(12))), just(12));
+    assert.deepEqual(nothing(), flatten<number>(nothing()));
+    assert.deepEqual(just(12), flatten<number>(just(just(12))));
   });
+  testFunctor("Maybe", nothing());
   testFunctor("Maybe", just(12));
   it("is still a maybe after map", () => {
     // this should not throw a type error
@@ -95,7 +99,21 @@ describe("Maybe", () => {
       );
     });
   });
-  describe("Traversable", () => {
+  describe("foldable", () => {
+    it("has size", () => {
+      assert.strictEqual(size(just("hello")), 1);
+      assert.strictEqual(size(nothing()), 0);
+    });
+    it("can be folded", () => {
+      assert.strictEqual(5, fold((n, m) => n + m, 5, nothing<number>()));
+      assert.strictEqual(8, fold((n, m) => n + m, 5, just(3)));
+    });
+    it("has `foldMap`", () => {
+      assert.deepEqual(new Sum(0), foldMap(Sum, nothing()));
+      assert.deepEqual(new Sum(3), foldMap(Sum, just(3)));
+    });
+  });
+  describe("traversable", () => {
     describe("traverse", () => {
       it("gives empty in applicative", () => {
         assert.deepEqual(

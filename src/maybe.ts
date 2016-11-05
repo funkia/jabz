@@ -14,8 +14,12 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   of: <B>(v: B) => Maybe<B> = of;
   static of: <B>(v: B) => Maybe<B> = of;
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
-  abstract flatten<B>(m: Monad<Monad<B>>): Monad<B>;
-  abstract map<B>(f: (a: A) => B): Maybe<B>;
+  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
+    return m.match({
+      nothing: () => nothing(),
+      just: (m) => m
+    });
+  }  abstract map<B>(f: (a: A) => B): Maybe<B>;
   abstract mapTo<B>(b: B): Maybe<B>;
   abstract ap<B>(a: Applicative<(a: A) => B>): Applicative<B>;
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
@@ -35,7 +39,6 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
-  abstract foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M;
   abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
   maximum: () => number;
   minimum: () => number;
@@ -69,12 +72,6 @@ class Nothing<A> extends Maybe<A> {
   chain<B>(f: (a: A) => Maybe<B>): Maybe<A> {
     return this;
   }
-  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
-    return m.match({
-      nothing: () => nothing(),
-      just: (m) => m
-    });
-  }
   map<B>(f: (a: A) => B): Maybe<B> {
     return new Nothing<B>();
   }
@@ -83,9 +80,6 @@ class Nothing<A> extends Maybe<A> {
   }
   ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
     return new Nothing<B>();
-  }
-  foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
-    return f.identity();
   }
   fold<B>(f: (a: A, b: B) => B, acc: B): B {
     return acc;
@@ -111,12 +105,6 @@ class Just<A> extends Maybe<A> {
   chain<B>(f: (v: A) => Maybe<B>): Maybe<B> {
     return f(this.val);
   }
-  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
-    return m.match({
-      nothing: () => nothing(),
-      just: (m) => m
-    });
-  }
   map<B>(f: (a: A) => B): Maybe<B> {
     return new Just(f(this.val));;
   }
@@ -128,9 +116,6 @@ class Just<A> extends Maybe<A> {
       nothing: nothing,
       just: (f) => new Just(f(this.val))
     });
-  }
-  foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
-    return f.create(this.val);
   }
   fold<B>(f: (a: A, b: B) => B, acc: B): B {
     return f(this.val, acc);
