@@ -1,5 +1,6 @@
 import {Monoid, MonoidConstructor} from "./monoid";
 import {Applicative, ApplicativeDictionary} from "./applicative";
+import {foldable} from "./foldable";
 import {Traversable} from "./traversable";
 import {Monad} from "./monad";
 
@@ -34,9 +35,11 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
-  abstract foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M;
   abstract foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M;
   abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
+  maximum: () => number;
+  minimum: () => number;
+  sum: () => number;
   abstract size(): number;  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>>;
   sequence<A>(
     a: ApplicativeDictionary,
@@ -55,6 +58,7 @@ function of<V>(v: V): Maybe<V> {
   return new Just(v);
 }
 
+@foldable
 class Nothing<A> extends Maybe<A> {
   constructor() {
     super();
@@ -80,9 +84,6 @@ class Nothing<A> extends Maybe<A> {
   ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
     return new Nothing<B>();
   }
-  foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
-    return id;
-  }
   foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
     return f.identity();
   }
@@ -97,6 +98,7 @@ class Nothing<A> extends Maybe<A> {
   }
 }
 
+@foldable
 class Just<A> extends Maybe<A> {
   val: A;
   constructor(val: A) {
@@ -126,9 +128,6 @@ class Just<A> extends Maybe<A> {
       nothing: nothing,
       just: (f) => new Just(f(this.val))
     });
-  }
-  foldMapId<M extends Monoid<M>>(id: M, f: (a: A) => M): M {
-    return f(this.val);
   }
   foldMap<M extends Monoid<M>>(f: MonoidConstructor<A, M>): M {
     return f.create(this.val);

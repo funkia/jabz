@@ -49,6 +49,17 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   }
 }
 
+export function monad(constructor: Function): void {
+  const p = constructor.prototype;
+  if (!("of" in p)) {
+    throw new TypeError("Can't derive monad. `of` method missing.");
+  }
+  if (!("chain" in p) && !("flatten" in p && "map" in p)) {
+    throw new TypeError("Can't derive monad. Either `chain` or `flatten` method must be defined.");
+  }
+  mixin(constructor, [AbstractMonad]);
+}
+
 export function arrayFlatten<A>(m: A[][]): A[] {
   let result: A[] = [];
   for (let i = 0; i < m.length; ++i) {
@@ -138,15 +149,4 @@ export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
     }
     return doRec(undefined);
   };
-}
-
-export function monad(constructor: Function): void {
-  const p = constructor.prototype;
-  if (!("of" in p)) {
-    throw new TypeError("Can't derive monad. `of` method missing.");
-  }
-  if (!("chain" in p) && !("flatten" in p && "map" in p)) {
-    throw new TypeError("Can't derive monad. Either `chain` or `flatten` method must be defined.");
-  }
-  mixin(constructor, [AbstractMonad]);
 }

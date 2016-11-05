@@ -5,8 +5,9 @@
  */
 
 import {Monoid, MonoidConstructor, combine} from "./monoid";
+import {just, nothing} from "./maybe";
 import Endo from "./monoids/endo";
-import {mixin} from "./utils";
+import {mixin, add} from "./utils";
 
 /**
  * A Foldable is any structure that supports a fold operation that
@@ -24,15 +25,12 @@ import {mixin} from "./utils";
  * @param {A} initial - In the first invocation of the function this is passed as the first argument.
  * @return {number} size
  */
-42; // Magic number to preserve JSDoc above
-
 export interface Foldable<A> {
   fold<B>(f: (a: A, b: B) => B, acc: B): B;
   size(): number;
-}
-
-function part<A, B>(f: (a: A, b: B) => B, a: A): (b: B) => B {
-  return (b: B) => f(a, b);
+  maximum(): number;
+  minimum(): number;
+  sum(): number;
 }
 
 function incr<A>(_: A, acc: number): number {
@@ -44,12 +42,21 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
   size(): number {
     return this.fold<number>(incr, 0);
   }
+  maximum(): number {
+    return (<Foldable<number>><any>this).fold(Math.max, -Infinity);
+  }
+  minimum(): number {
+    return (<Foldable<number>><any>this).fold(Math.min, Infinity);
+  }
+  sum(): number {
+    return (<Foldable<number>><any>this).fold(add, 0);
+  }
 }
 
 export function foldable(constructor: Function): void {
   const p = constructor.prototype;
   if (!("fold" in p)) {
-    throw new TypeError("Can't derive foldable. `foldable` method missing.");
+    throw new TypeError("Can't derive foldable. `fold` method missing.");
   }
   mixin(constructor, [AbstractFoldable]);
 }
@@ -87,4 +94,16 @@ export function size(a: Foldable<any> | any[]): number {
   } else {
     return a.size();
   }
+}
+
+export function maximum(t: Foldable<number>): number {
+  return t.maximum();
+}
+
+export function minimum(t: Foldable<number>) {
+  return t.minimum();
+}
+
+export function sum(t: Foldable<number>) {
+  return t.sum();
 }

@@ -7,3 +7,7 @@ export function mixin(derivedCtor: any, baseCtors: any[]) {
     });
   });
 }
+
+export function add(n: number, m: number): number {
+  return n + m;
+}
