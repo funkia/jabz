@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, AbstractFoldable, foldMapId, foldMap, fold, size
+  Foldable, AbstractFoldable, foldMap, fold, size
 } from "../src/foldable";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import Sum from "../src/monoids/sum";
@@ -11,9 +11,9 @@ class List<A> extends AbstractFoldable<A> {
   constructor(private arr: A[]) {
     super();
   };
-  foldMapId<M extends Monoid<M>>(acc: M, f: (a: A) => M): M {
+  fold<B>(f: (a: A, b: B) => B, acc: B): B {
     for (let i = 0; i < this.arr.length; ++i) {
-      acc = acc.combine(f(this.arr[i]));
+      acc = f(this.arr[i], acc);
     }
     return acc;
   }
