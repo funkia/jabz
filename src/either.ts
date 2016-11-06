@@ -82,10 +82,22 @@ export class Right<A, B> extends Either<A, B> {
   }
 }
 
-export function left<A, B>(a: A): Either<A, B> {
+export function left<A>(a: A): Either<A, any> {
   return new Left(a);
 }
 
-export function right<A, B>(b: B): Either<A, B> {
+export function right<B>(b: B): Either<any, B> {
   return new Right(b);
+}
+
+export function isLeft<A, B>(a: Either<A, B>): boolean {
+  return a.tag === EitherTag.Left;
+}
+
+export function isRight<A, B>(a: Either<A, B>): boolean {
+  return a.tag === EitherTag.Right;
+}
+
+export function fromEither<A, B>(e: Either<A, B>): A | B {
+  return e.val;
 }

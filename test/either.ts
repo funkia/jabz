@@ -1,7 +1,7 @@
 import "mocha";
 import {assert} from "chai";
 
-import {Either, left, right} from "../src/either";
+import {Either, left, right, isLeft, isRight} from "../src/either";
 import {map} from "../src/functor";
 import {testFunctor} from "./functor";
 import {lift} from "../src/applicative";
@@ -21,6 +21,12 @@ describe("Either", () => {
         right: (): {} => ({})
       });
     });
+    it("can check for left or right", () => {
+      assert.strictEqual(true, isLeft(left(3)));
+      assert.strictEqual(true, isRight(right(3)));
+      assert.strictEqual(false, isLeft(right(3)));
+      assert.strictEqual(false, isRight(left(3)));
+    });
   });
   describe("Applicative", () => {
     it("creates right in `of`", () => {
@@ -37,15 +43,13 @@ describe("Either", () => {
       });
       it("when both left it returns first", () => {
         assert.deepEqual(
-          left<string, number>("not his one")
-            .ap(left<string, (n: number) => number>("fail")),
+          left("not his one").ap(left("fail")),
           left("fail")
         );
       });
       it("when last left it returns last left", () => {
         assert.deepEqual(
-          left<string, number>("fail")
-            .ap(right<string, (n: number) => number>((n: number) => n * n)),
+          left("fail").ap(right((n: number) => n * n)),
           left("fail")
         );
       });
