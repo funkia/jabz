@@ -2,8 +2,9 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, fold, size, maximum, minimum, sum
+  Foldable, foldable, foldMap, fold, size, maximum, minimum, sum, find
 } from "../src/foldable";
+import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import Sum from "../src/monoids/sum";
@@ -70,6 +71,16 @@ describe("Foldable", () => {
     });
     it("can get `sum`", () => {
       assert.deepEqual(sum((new List([1, 2, 3, 4]))), 10);
+    });
+    it("can find element", () => {
+      assert.deepEqual(
+        just(3),
+        find((n) => n === 3, list([1, 2, 3, 4, 5]))
+      );
+      assert.deepEqual(
+        nothing(),
+        find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
+      );
     });
   });
 });

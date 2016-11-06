@@ -5,7 +5,7 @@
  */
 
 import {Monoid, MonoidConstructor, combine} from "./monoid";
-import {just, nothing} from "./maybe";
+import {Maybe, just, nothing} from "./maybe";
 import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
 import {mixin, add} from "./utils";
@@ -113,4 +113,10 @@ export function minimum(t: Foldable<number>) {
 
 export function sum(t: Foldable<number>) {
   return t.sum();
+}
+
+export function find<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
+  return t.shortFoldr(
+    (a, acc) => f(a) ? left(just(a)) : right(nothing()), nothing()
+  );
 }

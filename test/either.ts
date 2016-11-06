@@ -57,13 +57,13 @@ describe("Either", () => {
     it("applies function to rights", () => {
       assert.deepEqual(
         right(11),
-        lift((x: number, y: number, z: number) => x * y - z, right(4), right(3), right(1))
+        lift((x, y, z) => x * y - z, right(4), right(3), right(1))
       );
     });
     it("bails on left", () => {
       assert.deepEqual(
         left(0),
-        lift((x: number, y: number, z: number) => x * y - z, right(4), left(0), right(1))
+        lift((x, y, z) => x * y - z, right(4), left(0), right(1))
       );
     });
   });
