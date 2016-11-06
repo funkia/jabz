@@ -117,6 +117,6 @@ export function sum(t: Foldable<number>) {
 
 export function find<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldr(
-    (a, acc) => f(a) ? left(just(a)) : right(nothing()), nothing()
+    (a, acc) => f(a) ? left(just(a)) : right(nothing), nothing
   );
 }

@@ -17,7 +17,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
   flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
     return m.match({
-      nothing: () => nothing(),
+      nothing: () => nothing,
       just: (m) => m
     });
   }  abstract map<B>(f: (a: A) => B): Maybe<B>;
@@ -29,7 +29,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   lift(/* arguments */): any {
     const f = arguments[0];
     for (let i = 1; i < arguments.length; ++i) {
-      if (isNothing(arguments[i])) { return _nothing; }
+      if (isNothing(arguments[i])) { return nothing; }
     }
     switch (arguments.length - 1) {
     case 1:
@@ -51,7 +51,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
     m: Maybe<Applicative<A>>
   ): Applicative<Traversable<A>> {
     return m.match({
-      nothing: () => a.of(nothing()),
+      nothing: () => a.of(nothing),
       just: (v) => v.map(just)
     });
   }
@@ -90,7 +90,7 @@ class Nothing<A> extends Maybe<A> {
     return 0;
   }
   traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>> {
-    return a.of(_nothing);
+    return a.of(nothing);
   }
 }
 
@@ -115,7 +115,7 @@ class Just<A> extends Maybe<A> {
   }
   ap<B>(m: Maybe<(a: A) => B>): Maybe<B> {
     return m.match({
-      nothing: nothing,
+      nothing: () => nothing,
       just: (f) => new Just(f(this.val))
     });
   }
@@ -134,12 +134,8 @@ export function just<V>(v: V): Maybe<V> {
   return new Just(v);
 }
 
-const _nothing = new Nothing();
-
-export function nothing<V>(): Maybe<V> {
-  return _nothing;
-}
+export const nothing: Maybe<any> = new Nothing();
 
 export function isNothing(m: Maybe<any>): boolean {
-  return m === _nothing;
+  return m === nothing;
 }

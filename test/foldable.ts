@@ -78,7 +78,7 @@ describe("Foldable", () => {
         find((n) => n === 3, list([1, 2, 3, 4, 5]))
       );
       assert.deepEqual(
-        nothing(),
+        nothing,
         find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
       );
     });

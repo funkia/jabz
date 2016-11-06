@@ -71,21 +71,21 @@ describe("Native list", () => {
         just([1, 2, 3])
       );
       assert.deepEqual(
-        sequence(Maybe, [just(1), nothing(), just(3)]),
-        nothing()
+        sequence(Maybe, [just(1), nothing, just(3)]),
+        nothing
       );
     });
     it("traverse", () => {
       function safeParseInt(s: string): Maybe<number> {
         const n = parseInt(s, 10);
-        return isNaN(n) === true ? nothing() : just(n);
+        return isNaN(n) === true ? nothing : just(n);
       }
       assert.deepEqual(
         just([1, 2, 3]),
         traverse(Maybe, safeParseInt, ["1", "2", "3"])
       );
       assert.deepEqual(
-        nothing(),
+        nothing,
         traverse(Maybe, safeParseInt, ["1", "two", "3"])
       );
     });
