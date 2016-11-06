@@ -5,7 +5,7 @@ import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
-import {chain, flatten} from "../src/monad";
+import {chain, flatten, go} from "../src/monad";
 import {size, fold, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 

@@ -3,6 +3,7 @@ import {Applicative, ApplicativeDictionary} from "./applicative";
 import {foldable} from "./foldable";
 import {Traversable} from "./traversable";
 import {Monad} from "./monad";
+import {Either} from "./either";
 
 export type MaybeMatch<T, K> = {
   nothing: () => K,
@@ -40,6 +41,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
     }
   }
   abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
+  shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   maximum: () => number;
   minimum: () => number;
   sum: () => number;

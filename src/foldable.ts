@@ -6,6 +6,7 @@
 
 import {Monoid, MonoidConstructor, combine} from "./monoid";
 import {just, nothing} from "./maybe";
+import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
 import {mixin, add} from "./utils";
 
@@ -27,6 +28,7 @@ import {mixin, add} from "./utils";
  */
 export interface Foldable<A> {
   fold<B>(f: (a: A, b: B) => B, acc: B): B;
+  shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B;
   size(): number;
   maximum(): number;
   minimum(): number;
@@ -39,6 +41,11 @@ function incr<A>(_: A, acc: number): number {
 
 export abstract class AbstractFoldable<A> implements Foldable<A> {
   abstract fold<B>(f: (a: A, b: B) => B, acc: B): B;
+  shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B {
+    return fromEither(this.fold(
+      (a, eb) => isRight(eb) ? f(a, fromEither(eb)) : eb, right(acc)
+    ));
+  }
   size(): number {
     return this.fold<number>(incr, 0);
   }

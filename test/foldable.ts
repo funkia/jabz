@@ -4,6 +4,7 @@ import {assert} from "chai";
 import {
   Foldable, foldable, foldMap, fold, size, maximum, minimum, sum
 } from "../src/foldable";
+import {Either, left, right} from "../src/either";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import Sum from "../src/monoids/sum";
 
@@ -16,11 +17,14 @@ class List<A> implements Foldable<A> {
     }
     return acc;
   }
+  shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   size: () => number;
   maximum: () => number;
   minimum: () => number;
   sum: () => number;
 }
+
+const list = <A>(arr: A[]) => new List(arr)
 
 describe("Foldable", () => {
   describe("derived foldable implementation", () => {
@@ -44,6 +48,15 @@ describe("Foldable", () => {
       );
       assert.deepEqual(
         fold((n, m) => n + m, 0, new List([1, 2, 3, 4, 5])), 15
+      );
+    });
+    it("has short-circuiting fold", () => {
+      assert.deepEqual(
+        list([1, 2, 3, 4, 5]).shortFoldr((n, m) => right(n + m), 0), 15
+      );
+      assert.deepEqual(
+        list([1, 2, 3, 4, 5])
+          .shortFoldr((n, m) => n === 4 ? left(m) : right(n + m), 0), 6
       );
     });
     it("has size", () => {
