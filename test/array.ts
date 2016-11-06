@@ -6,7 +6,7 @@ import {Maybe, just, nothing} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
 import {chain, flatten, go} from "../src/monad";
-import {size, fold, foldMap} from "../src/foldable";
+import {size, foldr, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
 describe("Native list", () => {
@@ -56,7 +56,7 @@ describe("Native list", () => {
     });
     it("fold", () => {
       assert.deepEqual(
-        fold((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]),
+        foldr((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]),
         [1, 2, 3, 4]
       );
     });

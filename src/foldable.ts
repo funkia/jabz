@@ -27,7 +27,7 @@ import {mixin, add} from "./utils";
  * @return {number} size
  */
 export interface Foldable<A> {
-  fold<B>(f: (a: A, b: B) => B, acc: B): B;
+  foldr<B>(f: (a: A, b: B) => B, acc: B): B;
   shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B;
   size(): number;
   maximum(): number;
@@ -40,36 +40,36 @@ function incr<A>(_: A, acc: number): number {
 }
 
 export abstract class AbstractFoldable<A> implements Foldable<A> {
-  abstract fold<B>(f: (a: A, b: B) => B, acc: B): B;
+  abstract foldr<B>(f: (a: A, b: B) => B, acc: B): B;
   shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B {
-    return fromEither(this.fold(
+    return fromEither(this.foldr(
       (a, eb) => isRight(eb) ? f(a, fromEither(eb)) : eb, right(acc)
     ));
   }
   size(): number {
-    return this.fold<number>(incr, 0);
+    return this.foldr<number>(incr, 0);
   }
   maximum(): number {
-    return (<Foldable<number>><any>this).fold(Math.max, -Infinity);
+    return (<Foldable<number>><any>this).foldr(Math.max, -Infinity);
   }
   minimum(): number {
-    return (<Foldable<number>><any>this).fold(Math.min, Infinity);
+    return (<Foldable<number>><any>this).foldr(Math.min, Infinity);
   }
   sum(): number {
-    return (<Foldable<number>><any>this).fold(add, 0);
+    return (<Foldable<number>><any>this).foldr(add, 0);
   }
 }
 
 export function foldable(constructor: Function): void {
   const p = constructor.prototype;
-  if (!("fold" in p)) {
-    throw new TypeError("Can't derive foldable. `fold` method missing.");
+  if (!("foldr" in p)) {
+    throw new TypeError("Can't derive foldable. `foldr` method missing.");
   }
   mixin(constructor, [AbstractFoldable]);
 }
 
 export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A> | A[]): M {
-  return fold((a, b) => b.combine(f.create(a)), f.identity(), a);
+  return foldr((a, b) => b.combine(f.create(a)), f.identity(), a);
 }
 
 /**
@@ -79,14 +79,14 @@ export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: F
  * @param {module:Foldable~Foldable} foldable
  * @return {B} size
  */
-export function fold<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
+export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
   if (a instanceof Array) {
     for (const elm of a) {
       acc = f(elm, acc);
     }
     return acc;
   } else {
-    return a.fold(f, acc);
+    return a.foldr(f, acc);
   }
 }
 

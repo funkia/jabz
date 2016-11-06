@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, fold, size, maximum, minimum, sum, find
+  Foldable, foldable, foldMap, foldr, size, maximum, minimum, sum, find
 } from "../src/foldable";
 import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -12,7 +12,7 @@ import Sum from "../src/monoids/sum";
 @foldable
 class List<A> implements Foldable<A> {
   constructor(private arr: A[]) {};
-  fold<B>(f: (a: A, b: B) => B, acc: B): B {
+  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     for (let i = 0; i < this.arr.length; ++i) {
       acc = f(this.arr[i], acc);
     }
@@ -45,10 +45,10 @@ describe("Foldable", () => {
     });
     it("has fold", () => {
       assert.deepEqual(
-        (new List([1, 2, 3, 4, 5])).fold((n, m) => n + m, 0), 15
+        (new List([1, 2, 3, 4, 5])).foldr((n, m) => n + m, 0), 15
       );
       assert.deepEqual(
-        fold((n, m) => n + m, 0, new List([1, 2, 3, 4, 5])), 15
+        foldr((n, m) => n + m, 0, new List([1, 2, 3, 4, 5])), 15
       );
     });
     it("has short-circuiting fold", () => {

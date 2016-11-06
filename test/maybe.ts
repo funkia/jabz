@@ -5,7 +5,7 @@ import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
 import {go, flatten} from "../src/monad";
-import {size, fold, foldMap} from "../src/foldable";
+import {size, foldr, foldMap} from "../src/foldable";
 import {Either, right, left} from "../src/either";
 import {of} from "../src/applicative";
 import {testFunctor} from "./functor";
@@ -105,8 +105,8 @@ describe("Maybe", () => {
       assert.strictEqual(size(nothing), 0);
     });
     it("can be folded", () => {
-      assert.strictEqual(5, fold((n, m) => n + m, 5, nothing));
-      assert.strictEqual(8, fold((n, m) => n + m, 5, just(3)));
+      assert.strictEqual(5, foldr((n, m) => n + m, 5, nothing));
+      assert.strictEqual(8, foldr((n, m) => n + m, 5, just(3)));
     });
     it("has `foldMap`", () => {
       assert.deepEqual(new Sum(0), foldMap(Sum, nothing));

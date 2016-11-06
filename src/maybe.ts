@@ -20,7 +20,8 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       nothing: () => nothing,
       just: (m) => m
     });
-  }  abstract map<B>(f: (a: A) => B): Maybe<B>;
+  }
+  abstract map<B>(f: (a: A) => B): Maybe<B>;
   abstract mapTo<B>(b: B): Maybe<B>;
   abstract ap<B>(a: Applicative<(a: A) => B>): Applicative<B>;
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
@@ -40,7 +41,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
-  abstract fold<B>(acc: B, f: (a: A, b: B) => B): B;
+  abstract foldr<B>(acc: B, f: (a: A, b: B) => B): B;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   maximum: () => number;
   minimum: () => number;
@@ -83,7 +84,7 @@ class Nothing<A> extends Maybe<A> {
   ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
     return new Nothing<B>();
   }
-  fold<B>(f: (a: A, b: B) => B, acc: B): B {
+  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     return acc;
   }
   size(): number {
@@ -119,7 +120,7 @@ class Just<A> extends Maybe<A> {
       just: (f) => new Just(f(this.val))
     });
   }
-  fold<B>(f: (a: A, b: B) => B, acc: B): B {
+  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     return f(this.val, acc);
   }
   size(): number {
