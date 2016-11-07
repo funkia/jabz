@@ -3,7 +3,7 @@ import {assert} from "chai";
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, monad, arrayFlatten, AbstractMonad, go, fgo} from "../src/monad";
+import {Monad, monad, arrayFlatten, go, fgo, flatten} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
@@ -30,7 +30,7 @@ class List<A> implements Monad<A> {
     return new List(newArr);
   }
   ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
-  flatten: <B>(m: Monad<Monad<B>>) => Monad<B>;
+  flatten: <B>() => Monad<B>;
   map: <B>(f: (a: A) => B) => Monad<B>;
   mapTo: <B>(b: B) => Monad<B>;
   lift: (f: Function, ...ms: any[]) => Monad<any>;
@@ -47,7 +47,6 @@ describe("Monad", () => {
       );
     });
     it("flatten works", () => {
-      const {flatten} = new List([1]);
       assert.deepEqual(
         new List([1, 2, 3, 4, 5, 6]),
         flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))
@@ -68,8 +67,8 @@ describe("Monad", () => {
       };
       chain: <B>(f: (a: A) => List<B>) => List<B>;
       ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
-      flatten<B>(m: List<List<B>>): List<B> {
-        return new List(arrayFlatten(m.arr.map(l => l.arr)));
+      flatten<B>(): List<B> {
+        return new List(arrayFlatten(this.arr.map(l => (<List<B>><any>l).arr)));
       }
       map<B>(f: (a: A) => B): Monad<B> {
         return new List(this.arr.map(f));
@@ -86,7 +85,6 @@ describe("Monad", () => {
       );
     });
     it("flatten works", () => {
-      const {flatten} = new List([1]);
       assert.deepEqual(
         new List([1, 2, 3, 4, 5, 6]),
         flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))

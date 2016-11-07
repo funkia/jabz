@@ -8,7 +8,7 @@ function id<A>(a: A) {
 export interface Monad<A> extends Applicative<A> {
   multi: boolean;
   chain<B>(f: (a: A) => Monad<B>): Monad<B>;
-  flatten<B>(m: Monad<Monad<B>>): Monad<B>;
+  flatten<B>(): Monad<B>;
 }
 
 export interface MonadDictionary extends ApplicativeDictionary {
@@ -19,10 +19,10 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   abstract multi: boolean;
   abstract of<B>(b: B): Monad<B>;
   chain<B>(f: (a: A) => Monad<B>): Monad<B> {
-    return this.flatten(this.map(f));
+    return this.map(f).flatten();
   }
-  flatten<B>(m: Monad<Monad<B>>): Monad<B> {
-    return m.chain(id);
+  flatten<B>(): Monad<B> {
+    return this.chain(id);
   }
   map<B>(f: (a: A) => B): Monad<B> {
     return this.chain((a: A) => this.of(f(a)));
@@ -76,7 +76,7 @@ export function flatten<A>(m: Monad<Monad<A>> | A[][]): Monad<A> | A[] {
   if (Array.isArray(m)) {
     return arrayFlatten(m);
   } else {
-    return m.flatten(m);
+    return m.flatten();
   }
 }
 

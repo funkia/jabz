@@ -4,6 +4,7 @@ import {foldable} from "./foldable";
 import {Traversable} from "./traversable";
 import {Monad} from "./monad";
 import {Either} from "./either";
+import {id} from "./utils";
 
 export type MaybeMatch<T, K> = {
   nothing: () => K,
@@ -15,10 +16,10 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   of: <B>(v: B) => Maybe<B> = of;
   static of: <B>(v: B) => Maybe<B> = of;
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
-  flatten<B>(m: Maybe<Maybe<B>>): Maybe<B> {
-    return m.match({
+  flatten<B>(): Maybe<B> {
+    return this.match({
       nothing: () => nothing,
-      just: (m) => m
+      just: id
     });
   }
   abstract map<B>(f: (a: A) => B): Maybe<B>;
