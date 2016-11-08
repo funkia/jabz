@@ -1,6 +1,8 @@
 import {Functor} from "./functor";
-import {Foldable} from "./foldable";
+import {Foldable, AbstractFoldable} from "./foldable";
 import {Applicative, ApplicativeDictionary} from "./applicative";
+import Identity from "./identity";
+import {id, mixin} from "./utils";
 
 export interface Traversable<A> extends Functor<A>, Foldable<A> {
   traverse<B>(
@@ -11,6 +13,35 @@ export interface Traversable<A> extends Functor<A>, Foldable<A> {
     a: ApplicativeDictionary,
     t: Traversable<Applicative<A>>
   ): Applicative<Traversable<A>>;
+}
+
+export abstract class AbstractTraversable<A> extends AbstractFoldable<A> implements Traversable<A> {
+  map<B>(f: (a: A) => B): Traversable<B> {
+    return (<any>this.traverse(Identity, (a: A) => Identity.of(f(a)))).extract();
+  }
+  mapTo<B>(b: B): Functor<B> {
+    return this.map((_: A) => b);
+  }
+  traverse<B>(
+    a: ApplicativeDictionary,
+    f: (a: A) => Applicative<B>
+  ): Applicative<Traversable<B>> {
+    return this.sequence(a, this.map(f));
+  }
+  sequence<A>(
+    a: ApplicativeDictionary,
+    t: Traversable<Applicative<A>>
+  ): Applicative<Traversable<A>> {
+    return t.traverse(a, id);
+  }
+}
+
+export function traversable(constructor: Function): void {
+  const p = constructor.prototype;
+  if (!("map" in p && "sequence" in p) && !("traverse" in p)) {
+    throw new TypeError("Can't derive traversable. Either `traverse` or `map` and `sequence` must be defined.");
+  }
+  mixin(constructor, [AbstractTraversable]);
 }
 
 function push<A>(a: A, as: A[]): A[] {
@@ -43,6 +74,8 @@ function arrayTraverse<A, B>(
   return result;
 }
 
+export function sequence<A>(a: ApplicativeDictionary, t: Applicative<A>[]): Applicative<A[]>;
+export function sequence<A>(a: ApplicativeDictionary, t: Traversable<Applicative<A>>): Applicative<Traversable<A>>;
 export function sequence<A>(
   a: ApplicativeDictionary,
   t: Traversable<Applicative<A>> | Applicative<A>[]
@@ -54,7 +87,8 @@ export function sequence<A>(
   }
 }
 
-// Fixme: Use overload instead
+export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: A[]): Applicative<B[]>;
+export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: Traversable<A>): Applicative<Traversable<B>>;
 export function traverse<A, B>(
   a: ApplicativeDictionary,
   f: (a: A) => Applicative<B>,
