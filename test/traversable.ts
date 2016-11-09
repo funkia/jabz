@@ -8,6 +8,7 @@ import {Either} from "../src/either";
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
 import {Traversable, traversable, traverse, sequence} from "../src/traversable";
+import {testFoldable} from "./foldable";
 
 export function testTraversable(list: <A>(l: A[]) => Traversable<A>) {
   it("can sequence", () => {
@@ -47,6 +48,7 @@ describe("Traversable", () => {
     }
     const list = <A>(as: A[]) => new List(as);
     testFunctor("List", new List([1, 2, 3]));
+    testFoldable(list);
     testTraversable(list);
   });
   describe("deriving with `sequence`", () => {

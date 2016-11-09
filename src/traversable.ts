@@ -2,6 +2,8 @@ import {Functor} from "./functor";
 import {Foldable, AbstractFoldable} from "./foldable";
 import {Applicative, ApplicativeDictionary} from "./applicative";
 import Identity from "./identity";
+import Endo from "./monoids/endo";
+import {ConstEndo} from "./const";
 import {id, mixin} from "./utils";
 
 export interface Traversable<A> extends Functor<A>, Foldable<A> {
@@ -34,6 +36,10 @@ export abstract class AbstractTraversable<A> extends AbstractFoldable<A> impleme
   ): Applicative<Traversable<A>> {
     return t.traverse(a, id);
   }
+  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
+    const f2 = (a: A) => new ConstEndo<B, B>(new Endo((b: B) => f(a, b)));
+    return Endo.toFunction((<ConstEndo<B, B>><any>this.traverse(ConstEndo, f2)).get())(acc);
+  }
 }
 
 export function traversable(constructor: Function): void {
@@ -41,7 +47,7 @@ export function traversable(constructor: Function): void {
   if (!("map" in p && "sequence" in p) && !("traverse" in p)) {
     throw new TypeError("Can't derive traversable. Either `traverse` or `map` and `sequence` must be defined.");
   }
-  mixin(constructor, [AbstractTraversable]);
+  mixin(constructor, [AbstractTraversable, AbstractFoldable]);
 }
 
 function push<A>(a: A, as: A[]): A[] {

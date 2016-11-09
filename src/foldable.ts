@@ -1,4 +1,3 @@
-
 /**
  * Module containing Foldable
  * @module Foldable
