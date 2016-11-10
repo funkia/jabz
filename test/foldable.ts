@@ -36,10 +36,7 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
     );
     assert.deepEqual(
       list([1, 2, 3, 4, 5])
-        .shortFoldr((n, m) => {
-          console.log(n, m);
-          return n === 3 ? left(m) : right(n + m);
-        }, 0), 9
+        .shortFoldr((n, m) => n === 3 ? left(m) : right(n + m), 0), 9
     );
   });
   it("has size", () => {

@@ -3,6 +3,7 @@ import {assert} from "chai";
 
 import Sum from "../src/monoids/sum";
 import {Maybe, just, nothing} from "../src/maybe";
+import {identity, combine} from "../src/monoid";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
 import {chain, flatten, go} from "../src/monad";
@@ -10,6 +11,14 @@ import {size, foldr, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
 describe("Native list", () => {
+  describe("monoid", () => {
+    it("has empty array as identity", () => {
+      assert.deepEqual(identity(Array), []);
+    });
+    it("concatenates arrays", () => {
+      assert.deepEqual(combine([1, 2, 3], [4, 5]), [1, 2, 3, 4, 5]);
+    });
+  });
   describe("functor", () => {
     it("map", () => {
       assert.deepEqual(

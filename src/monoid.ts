@@ -13,10 +13,13 @@ export interface MonoidConstructor<A, M extends Monoid<M>> {
   identity: () => M;
 }
 
+export function identity(m: ArrayConstructor): any[];
 export function identity(m: StringConstructor): string;
 export function identity<M extends Monoid<M>>(m: MonoidDictionary<M>): M;
 export function identity<M extends Monoid<M>>(m: any): any {
-  if (m === String) {
+  if (m === Array) {
+    return [];
+  } else if (m === String) {
     return "";
   } else {
     return m.identity();
