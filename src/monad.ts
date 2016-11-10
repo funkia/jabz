@@ -55,7 +55,13 @@ export function monad(constructor: Function): void {
     throw new TypeError("Can't derive monad. `of` method missing.");
   }
   if (!("chain" in p) && !("flatten" in p && "map" in p)) {
-    throw new TypeError("Can't derive monad. Either `chain` or `flatten` method must be defined.");
+    throw new TypeError("Can't derive monad. Either `chain` or `flatten` and `map` method must be defined.");
+  }
+  if (!("multi" in p)) {
+    p.multi = false;
+  }
+  if (!("multi" in constructor)) {
+    (<any>constructor).multi = false;
   }
   mixin(constructor, [AbstractMonad]);
 }
