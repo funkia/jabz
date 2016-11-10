@@ -1,9 +1,5 @@
 import {Applicative, ApplicativeDictionary} from "./applicative";
-import {mixin} from "./utils";
-
-function id<A>(a: A) {
-  return a;
-}
+import {mixin, id} from "./utils";
 
 export interface Monad<A> extends Applicative<A> {
   multi: boolean;
@@ -122,26 +118,26 @@ function singleGo(gen: (m: MonadDictionary) => Iterator<Monad<any>>, m: MonadDic
   return doRec(undefined);
 };
 
-function multiGo<M extends Monad<any>>(gen: (m: MonadDictionary) => Iterator<M>, m: MonadDictionary) {
-  var doRec = function(v: any, stateSoFar: any): any {
-    var doing = gen(m);
-    stateSoFar.forEach(function(it: any) {doing.next(it)});
-    var a = doing.next(v);
+function multiGo<M extends Monad<any>>(gen: (m: MonadDictionary) => Iterator<M>, m: MonadDictionary): M {
+  const doRec = function(v: any, stateSoFar: any): any {
+    const doing = gen(m);
+    stateSoFar.forEach((it: any) => doing.next(it));
+    const a = doing.next(v);
     if (a.done === true) {
       return a.value;
     } else {
-      return a.value.chain(function(vv){return doRec(vv, stateSoFar.concat(v));})
+      return a.value.chain((vv) => doRec(vv, stateSoFar.concat(v)));
     }
   };
-  return doRec(null, []);
+  return doRec(undefined, []);
 };
 
-export function go<M extends Monad<any>>(gen: (m: M) => Iterator<M>, m: MonadDictionary) {
+export function go<M extends Monad<any>>(gen: (m: M) => Iterator<M>, m: MonadDictionary): M {
   return m.multi === true ? multiGo(gen, m) : singleGo(gen, m);
 }
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
-  return function(...args: any[]) {
+  return (...args: any[]) => {
     const doing = gen(...args);
     function doRec(v: any): any {
       const a = doing.next(v);
