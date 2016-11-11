@@ -15,7 +15,7 @@ export class ConstEndo<M, N> extends AbstractApplicative<N> {
     return new ConstEndo(Endo.identity());
   }
   ap<B>(a: ConstEndo<M, (a: N) => B>): ConstEndo<M, B> {
-    return new ConstEndo(this.m.combine((<any>a).m));
+    return new ConstEndo(a.m.combine(this.m));
   }
   get(): Endo<M> {
     return this.m;

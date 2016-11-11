@@ -38,7 +38,9 @@ export abstract class AbstractTraversable<A> extends AbstractFoldable<A> impleme
   }
   foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     const f2 = (a: A) => new ConstEndo<B, B>(new Endo((b: B) => f(a, b)));
-    return Endo.toFunction((<ConstEndo<B, B>><any>this.traverse(ConstEndo, f2)).get())(acc);
+    return Endo.toFunction(
+      (<ConstEndo<B, B>><any>this.traverse(ConstEndo, f2)).get()
+    )(acc);
   }
 }
 
@@ -50,9 +52,8 @@ export function traversable(constructor: Function): void {
   mixin(constructor, [AbstractTraversable, AbstractFoldable]);
 }
 
-function push<A>(a: A, as: A[]): A[] {
-  as.push(a);
-  return as;
+function cons<A>(a: A, as: A[]): A[] {
+  return [a].concat(as);
 }
 
 function arraySequence<A>(
@@ -61,8 +62,8 @@ function arraySequence<A>(
 ): Applicative<A[]> {
   let result = a.of<A[]>([]);
   const lift = result.lift;
-  for (const elm of t) {
-    result = lift(push, elm, result)
+  for (let i = t.length - 1; i >= 0; --i) {
+    result = lift(cons, t[i], result);
   }
   return result;
 }
@@ -74,8 +75,8 @@ function arrayTraverse<A, B>(
 ): Applicative<B[]> {
   let result = a.of<B[]>([]);
   const lift = result.lift;
-  for (const elm of t) {
-    result = lift(push, f(elm), result)
+  for (let i = t.length - 1; i >= 0; --i) {
+    result = lift(cons, f(t[i]), result)
   }
   return result;
 }
