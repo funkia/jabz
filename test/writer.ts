@@ -21,7 +21,7 @@ describe("Writer", () => {
         const next = yield of(Sum.create(3));
         yield tell(next);
         return of("Hello");
-      }, SumWriter);
+      });
       assert.deepEqual(
         runWriter(writer),
         [Sum.create(15), "Hello"]

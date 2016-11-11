@@ -12,7 +12,7 @@ export class Writer<W extends Monoid<W>, A> extends AbstractMonad<A> {
     const {state, value} = f(this.value);
     return new Writer(this.c, this.state.combine(state), value);
   }
-  multi: boolean = true;
+  multi: boolean = false;
 }
 
 export function runWriter<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A] {

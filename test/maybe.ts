@@ -27,7 +27,7 @@ describe("Maybe", () => {
       const b = yield just(3);
       const c = yield just(2);
       return just(a + b + c);
-    }, Maybe);
+    });
     assert.deepEqual(res, just(6));
   });
   it("bails on nothing", () => {
@@ -36,7 +36,7 @@ describe("Maybe", () => {
       const b = yield nothing;
       const c = yield just(2);
       return just(a + b + c);
-    }, Maybe);
+    });
     assert.deepEqual(res, nothing);
   });
   it("is joined correctly", () => {

@@ -23,7 +23,7 @@ describe("effects", () => {
       const b = yield f1(3);
       const sum = yield f2(a, b);
       return of(sum);
-    }, IO);
+    });
     return runIO(comp).then((res) => {
       assert.equal(10, res);
     });

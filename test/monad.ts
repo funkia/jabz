@@ -93,11 +93,11 @@ describe("Monad", () => {
   });
   describe("go-notation", () => {
     it("go works with multi-monad", () => {
-      const result = go(function* ({of}) {
+      const result = go(function*() {
         const n = yield new List([1, 2, 3]);
         const m = yield new List([10, 100]);
-        return of(n * m);
-      }, List);
+        return List.of(n * m);
+      });
       assert.deepEqual(
         new List([10, 100, 20, 200, 30, 300]),
         result

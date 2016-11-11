@@ -103,8 +103,7 @@ export function chain<A, B>(f: any, m: Monad<Monad<A>> | A[]): Monad<B> | B[] {
   }
 }
 
-function singleGo(gen: (m: MonadDictionary) => Iterator<Monad<any>>, m: MonadDictionary) {
-  const doing = gen(m);
+function singleGo(doing: Iterator<Monad<any>>, m: Monad<any>): Monad<any> {
   function doRec(v: any): any {
     const a = doing.next(v);
     if (a.done === true) {
@@ -115,12 +114,12 @@ function singleGo(gen: (m: MonadDictionary) => Iterator<Monad<any>>, m: MonadDic
       throw new Error("Expected monad value");
     }
   }
-  return doRec(undefined);
+  return m.chain(doRec);
 };
 
-function multiGo<M extends Monad<any>>(gen: (m: MonadDictionary) => Iterator<M>, m: MonadDictionary): M {
+function multiGo<M extends Monad<any>>(gen: () => Iterator<M>, m: MonadDictionary): M {
   const doRec = function(v: any, stateSoFar: any): any {
-    const doing = gen(m);
+    const doing = gen();
     stateSoFar.forEach((it: any) => doing.next(it));
     const a = doing.next(v);
     if (a.done === true) {
@@ -132,8 +131,10 @@ function multiGo<M extends Monad<any>>(gen: (m: MonadDictionary) => Iterator<M>,
   return doRec(undefined, []);
 };
 
-export function go<M extends Monad<any>>(gen: (m: M) => Iterator<M>, m: MonadDictionary): M {
-  return m.multi === true ? multiGo(gen, m) : singleGo(gen, m);
+export function go<M extends Monad<any>>(gen: () => Iterator<M>): M {
+  const iterator = gen();
+  const m = iterator.next().value;
+  return <any>(m.multi === true ? multiGo(gen, m) : singleGo(iterator, m));
 }
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
