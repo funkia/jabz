@@ -21,27 +21,21 @@ describe("cons list", () => {
     of<B>(b: B): Cons<B> {
       return cons(b, nil);
     }
-    map<B>(f: (a: A) => B): Cons<B> {
-      return this === nil ? nil : cons(f(this.val), this.tail.map(f));
+    chain<B>(f: (a: A) => Cons<B>): Cons<B> {
+      return this === nil ? nil : f(this.val).concat(this.tail.chain(f));
     }
-    flatten(): Cons<A> {
-      const l = (<Cons<Cons<A>>><any>this);
-      return l === nil ? nil : l.val.concat(<any>l.tail.flatten());
-    }
-    sequence<A>(
-      a: ApplicativeDictionary,
-      t: Cons<Applicative<A>>
-    ): Applicative<Traversable<A>> {
-      return t === nil ? a.of(nil) : lift(cons, t.val, this.sequence(a, t.tail));
+    traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Cons<B>> {
+      return this === nil ? a.of(nil) : lift(cons, f(this.val), this.tail.traverse(a, f));
     }
     // To make TypeScript pleased
-    mapTo: <B>(b: B) => Monad<B>;
-    ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
-    lift: (f: Function, ...ms: any[]) => Monad<any>;
+    map: <B>(f: (a: A) => B) => Cons<B>;
+    mapTo: <B>(b: B) => Cons<B>;
+    ap: <B>(a: Monad<(a: A) => B>) => Cons<B>;
+    lift: (f: Function, ...ms: any[]) => Cons<any>;
     multi: boolean;
-    chain: <B>(f: (a: A) => Monad<B>) => Monad<B>;
+    flatten: () => Cons<A>;
     foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
-    traverse: <B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>) => Applicative<Cons<B>>;
+    sequence: <A>(a: ApplicativeDictionary, t: Cons<Applicative<A>>) => Applicative<Traversable<A>>;
     shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
     size: () => number;
     maximum: () => number;
