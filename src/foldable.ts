@@ -68,7 +68,7 @@ export function foldable(constructor: Function): void {
 }
 
 export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: Foldable<A> | A[]): M {
-  return foldr((a, b) => b.combine(f.create(a)), f.identity(), a);
+  return foldr((a, b) => f.create(a).combine(b), f.identity(), a);
 }
 
 /**
@@ -115,7 +115,5 @@ export function sum(t: Foldable<number>) {
 }
 
 export function find<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
-  return t.shortFoldr(
-    (a, acc) => f(a) ? left(just(a)) : right(nothing), nothing
-  );
+  return t.foldr((a, acc) => f(a) ? just(a) : acc, nothing);
 }

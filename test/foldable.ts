@@ -57,6 +57,10 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
       find((n) => n === 3, list([1, 2, 3, 4, 5]))
     );
     assert.deepEqual(
+      just(8),
+      find((n) => n > 6, list([1, 8, 3, 7, 5]))
+    );
+    assert.deepEqual(
       nothing,
       find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
     );
