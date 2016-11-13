@@ -27,6 +27,90 @@ Traversables and all that jazz.
   performant implementation. Also can be typed with TypeScript.
 * And more.
 
+## Example
+
+This example demonstrates some of what Jabz can do by implementing a
+simple singly linked list aka. a cons list. 
+
+```js
+@monad @traversable
+class Cons {
+  constructor(v, t) {
+    this.val = v;
+    this.tail = t;
+  }
+  concat(c) {
+    return this === nil ? c : cons(this.val, this.tail.concat(c));
+  }
+  of(b: B) {
+    return cons(b, nil);
+  }
+  chain<B>(f) {
+    return this === nil ? nil : f(this.val).concat(this.tail.chain(f));
+  }
+  traverse<B>(a, f) {
+    return this === nil ? a.of(nil) : lift(cons, f(this.val), this.tail.traverse(a, f));
+  }
+}
+const nil = new Cons(undefined, undefined);
+function cons(a: A, as) {
+  return new Cons(a, as);
+}
+function fromArray(as) {
+  return as.length === 0 ? nil : cons(as[0], fromArray(as.slice(1)));
+}
+```
+
+Since `Cons` contains the methods `of` and `chain` it can
+implement monad. This is done with the `@monad` decorator. JavaScript
+decorators are just plain old functions so they can also be used
+without the decorator syntax
+
+```js
+monad(Cons);
+```
+
+The function allows implementations flexibility in what methods they
+choose to provide. For instance monad can also be implemented by
+defining a `of`, a `map` and a `chain` method.
+
+Similar to Monad, Traversable is implemented by defining the
+`traverse` method and using the `traversable` decorator.
+
+When we implement Monad Jabz automatically derives implementations for
+Functor and Applicative. Likewise when we implement Traversable it
+derives Foldable. Thus, Jabz can give us a lot of things for free just
+from the few methods the `Cons` class defines.
+
+Map functions over elements in the list.
+```js
+mapTo((n) => n * n, fromArray([1, 2, 3, 4])); //=> [1, 4, 9, 16]
+```
+
+Change each element in the list to a constant.
+
+```js
+mapTo(8, fromArray([1, 2, 3, 4])); //=> [8, 8, 8, 8]
+```
+
+Apply a list of functions to a list of values.
+
+```js
+ap(fromArray([(n) => n * 2, (n) => n * n]), fromArray(1, 2, 3)); //=> [2, 4, 6, 1, 4, 9]
+```
+
+Folding.
+
+```js
+foldr((n, m) => n + m, 3, fromArray([1, 2, 3, 4, 5])); //=> 18
+```
+
+Find an element satisfying a predicate.
+
+```js
+find((n) => n > 6, fromArray([1, 8, 3, 7, 5])); //=> 8
+```
+
 ## Rough spec
 
 ### Semigroup
@@ -110,7 +194,8 @@ applicative in sequence.
 Seamless instances means that certain native JavaScript types can be
 used as if they implemented the abstractions relevant for them.
 
-* `string`, the primitive, implements setoid, monoid.
+* `string`, the primitive, implements setoid and monoid.
+* `array`, implements setoid, monoid and functor.
 
 ## Instances
 
