@@ -7,7 +7,7 @@ import {Maybe, just, nothing} from "../src/maybe";
 import {Either} from "../src/either";
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
-import {Traversable, traversable, traverse, sequence} from "../src/traversable";
+import {Traversable, traversable, traverse, sequence, mapAccumR} from "../src/traversable";
 import {testFoldable} from "./foldable";
 
 export function testTraversable(list: <A>(l: A[]) => Traversable<A>) {
@@ -50,6 +50,16 @@ describe("Traversable", () => {
     testFunctor("List", new List([1, 2, 3]));
     testFoldable(list);
     testTraversable(list);
+    it("has mapAccumR", () => {
+      assert.deepEqual(
+        mapAccumR((a, b) => [a + b, b * 2], 0, list([1, 2, 3, 4])),
+        [10, list([2, 4, 6, 8])]
+      );
+      assert.deepEqual(
+        mapAccumR((a, b) => [a + b, b * 2 + a], 0, list([1, 2, 3, 4])),
+        [10, list([11, 11, 10, 8])]
+      );
+    });
   });
   describe("deriving with `sequence`", () => {
     @traversable

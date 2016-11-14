@@ -1,6 +1,6 @@
 import {Functor} from "./functor";
 import {Foldable, AbstractFoldable} from "./foldable";
-import {Applicative, ApplicativeDictionary} from "./applicative";
+import {Applicative, AbstractApplicative, ApplicativeDictionary} from "./applicative";
 import Identity from "./identity";
 import Endo from "./monoids/endo";
 import {ConstEndo} from "./const";
@@ -106,4 +106,32 @@ export function traverse<A, B>(
   } else {
     return t.traverse(a, f);
   }
+}
+
+class AnApplicative<A, B> extends AbstractApplicative<B> {
+  constructor(private f: (a: A) => [A, B]) {
+    super();
+  }
+  of<B>(b: B): AnApplicative<any, any> {
+    return new AnApplicative((a: any) => [a, b]);
+  }
+  static of<B>(b: B): AnApplicative<any, any> {
+    return new AnApplicative((a: any) => [a, b]);
+  }
+  ap<C>(fa: AnApplicative<A, (b: B) => C>): AnApplicative<A, C> {
+    return new AnApplicative((a: A) => {
+      const [a1, b] = this.f(a);
+      const [a2, f] = fa.f(a1);
+      return [a2, f(b)];
+    });
+  }
+  run(a: A): [A, B] {
+    return this.f(a);
+  }
+}
+
+export function mapAccumR<A, B, C>(
+  f: (acc: C, a: A) => [C, B], init: C, t: Traversable<A>
+): [C, Traversable<B>] {
+  return (<any>t.traverse(AnApplicative, (a: A) => new AnApplicative((c: C) => f(c, a)))).run(init);
 }
