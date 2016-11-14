@@ -1,8 +1,5 @@
 import {Monoid, MonoidConstructor} from "../monoid";
-
-function endoComp<A>(f1: (a: A) => A, f2: (a: A) => A): (a: A) => A {
-  return (a: A) => f1(f2(a));
-}
+import {compose} from "../utils";
 
 export default class Endo<A> implements Monoid<Endo<A>> {
   constructor(public fn: (a: A) => A) {};
@@ -13,7 +10,7 @@ export default class Endo<A> implements Monoid<Endo<A>> {
     return endoId;
   };
   combine(e: Endo<A>): Endo<A> {
-    return new Endo(endoComp(this.fn, e.fn));
+    return new Endo(compose(this.fn, e.fn));
   }
   static create<A>(f: (a: A) => A): Endo<A> {
     return new Endo(f);

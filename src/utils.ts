@@ -15,3 +15,7 @@ export function mixin(derivedCtor: any, baseCtors: any[]) {
 export function add(n: number, m: number): number {
   return n + m;
 }
+
+export function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C {
+  return (a: A) => f(g(a));
+}
