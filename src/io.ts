@@ -30,38 +30,32 @@ export class IO<A> extends AbstractMonad<A> {
   chain<B>(f: (a: A) => IO<B>): IO<B> {
     return new IO(() => this.comp().then(r => f(r).comp()));
   }
-  static multi: boolean = true;
-  multi: boolean = true;
-}
-
-export function of<B>(k: B): IO<B> {
-  return new IO(() => Promise.resolve(k));
+  static multi: boolean = false;
+  multi: boolean = false;
 }
 
 export function runIO<A>(e: IO<A>): Promise<A> {
   return e.comp();
 }
 
-export function thunk<A>(t: () => IO<A>): IO<A> {
-  return new IO(() => t().comp());
-}
-
-export function wrapEffects<A>(f: () => A): IO<A> {
-  return new IO(() => Promise.resolve(f()));
-}
-
 // takes an impure function an converts it to a computation
 // in the IO monad
+export function withEffects<A, Z>(f: F1<A, Z>): (a: A) => IO<Z>;
+export function withEffects<A, B, Z>(f: F2<A, B, Z>): (a: A, b: B) => IO<Z>;
+export function withEffects<A, B, C, Z>(f: F3<A, B, C, Z>): (a: A, b: B, c: C) => IO<Z>;
+export function withEffects<A, B, C, D, Z>(f: F4<A, B, C, D, Z>): (a: A, b: B, c: C, d: D) => IO<Z>;
+export function withEffects<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Z>): (a: A, b: B, c: C, d: D, e: E) => IO<Z>;
 export function withEffects<A>(fn: any): (...as: any[]) => IO<A> {
   return (...args: any[]) => new IO(() => Promise.resolve(fn(...args)));
 }
 
-export function withEffectsP<A>(fn: (...as: any[]) => Promise<A>): (...a: any[]) => IO<A> {
-  return (...args: any[]) => new IO(() => fn(...args));
-}
-
-export function fromPromise<A>(p: Promise<A>): IO<A> {
-  return new IO(() => p);
+export function withEffectsP<A, Z>(f: F1<A, Promise<Z>>): (a: A) => IO<Either<any, Z>>;
+export function withEffectsP<A, B, Z>(f: F2<A, B, Promise<Z>>): (a: A, b: B) => IO<Either<any, Z>>;
+export function withEffectsP<A, B, C, Z>(f: F3<A, B, C, Promise<Z>>): (a: A, b: B, c: C) => IO<Either<any, Z>>;
+export function withEffectsP<A, B, C, D, Z>(f: F4<A, B, C, D, Promise<Z>>): (a: A, b: B, c: C, d: D) => IO<Either<any, Z>>;
+export function withEffectsP<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Promise<Z>>): (a: A, b: B, c: C, d: D, e: E) => IO<Either<any, Z>>;
+export function withEffectsP<A>(fn: (...as: any[]) => Promise<A>): (...a: any[]) => IO<Either<any, A>> {
+  return (...args: any[]) => new IO(() => fn(...args).then(right).catch(left));
 }
 
 export function call<A, Z>(f: F1<A, Z>, a: A): IO<Z>;
