@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, size, maximum, minimum, sum, find
+  Foldable, foldable, foldMap, foldr, size, maximum, minimum, sum, find, toArray
 } from "../src/foldable";
 import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -85,6 +85,12 @@ describe("Foldable", () => {
       sum: () => number;
     }
     testFoldable(<A>(arr: A[]) => new List(arr));
+    it("can convert to array", () => {
+      assert.deepEqual(
+        toArray(new List([1, 2, 3, 4])),
+        [1, 2, 3, 4]
+      )
+    });
     it("can't derive without `fold` method", () => {
       assert.throws(() => {
         @foldable
