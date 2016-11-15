@@ -1,10 +1,11 @@
 import {assert} from "chai";
 
-import {IO, of, runIO, withEffects, ap, call, callP} from "../src/io";
+import {IO, of, runIO, withEffects, call, callP} from "../src/io";
+import {ap} from "../src/applicative";
 import {go, Monad} from "../src/monad";
 import {right, left} from "../src/either";
 
-describe("effects", () => {
+describe("IO", () => {
   it("gives pure computaion", () => {
     return runIO(of(12)).then((res) => {
       assert.equal(12, res);

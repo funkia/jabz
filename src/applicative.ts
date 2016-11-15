@@ -85,6 +85,9 @@ function arrayLift(f: Function, args: any[][], indices: number[]): any[] {
   }
 }
 
+export function ap<A, B>(fa: Applicative<(a: A) => B>, ba: Applicative<A>): any {
+  return ba.ap(fa);
+}
 
 export function lift<T1, R>(f: (t: T1) => R, m: Applicative<T1>): any;
 export function lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Applicative<T1>, m2: Applicative<T2>): any;

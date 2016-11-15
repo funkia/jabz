@@ -1,14 +1,14 @@
 import {assert} from "chai";
 
 import {map, mapTo} from "../src/functor";
-import {Applicative, lift, applicative} from "../src/applicative";
+import {Applicative, lift, ap, applicative} from "../src/applicative";
 import {testFunctor} from "./functor";
 
 export function testApplicative<A>(app: Applicative<number>) {
   const of = app.of;
   it("has `ap` method", () => {
     assert.deepEqual(
-      of(6).ap(of((n: number) => 2 * n)),
+      ap(of((n: number) => 2 * n), of(6)),
       of(12)
     );
   });

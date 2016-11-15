@@ -64,10 +64,6 @@ export function fromPromise<A>(p: Promise<A>): IO<A> {
   return new IO(() => p);
 }
 
-export function ap<A, B>(fe: IO<(a: A) => B>, ve: IO<A>): IO<B> {
-  return fe.chain(f => ve.chain(v => of(f(v))));
-}
-
 export function call<A, Z>(f: F1<A, Z>, a: A): IO<Z>;
 export function call<A, B, Z>(f: F2<A, B, Z>, a: A, b: B): IO<Z>;
 export function call<A, B, C, Z>(f: F3<A, B, C, Z>, a: A, b: B, c: C): IO<Z>;
