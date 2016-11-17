@@ -66,11 +66,17 @@ describe("Native list", () => {
     it("fold", () => {
       assert.deepEqual(
         foldr((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]),
-        [1, 2, 3, 4]
+        [4, 3, 2, 1]
       );
     });
     it("size", () => {
       assert.strictEqual(size([1, 2, 3, 4]), 4);
+    });
+    it("folds in right direction", () => {
+      assert.deepEqual(
+        foldr((n, m) => (console.log(n,m), n - m), 1, [12, 3, 4]),
+        (12 - (3 - (4 - 1)))
+      );
     });
   });
   describe("traversable", () => {

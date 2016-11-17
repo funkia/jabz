@@ -26,8 +26,8 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
   });
   it("folds in right direction", () => {
     assert.deepEqual(
-      (12 - (3 - (4 - 1))),
-      foldr((n, m) => n - m, 1, list([12, 3, 4]))
+      foldr((n, m) => n - m, 1, list([12, 3, 4])),
+      (12 - (3 - (4 - 1)))
     );
   });
   it("has short-circuiting fold", () => {

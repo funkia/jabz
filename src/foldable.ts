@@ -80,8 +80,8 @@ export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: F
  */
 export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
   if (a instanceof Array) {
-    for (const elm of a) {
-      acc = f(elm, acc);
+    for (let i = a.length - 1; 0 <= i; --i) {
+      acc = f(a[i], acc);
     }
     return acc;
   } else {
