@@ -1,4 +1,6 @@
 import {Applicative, ApplicativeDictionary} from "./applicative";
+import {foldr} from "./foldable";
+import {Traversable} from "./traversable";
 import {mixin, id} from "./utils";
 
 export interface Monad<A> extends Applicative<A> {
@@ -152,4 +154,8 @@ export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
     }
     return doRec(undefined);
   };
+}
+
+export function foldrM<A, B>(f: (a: A, b: B) => Monad<B>, mb: Monad<B>, t: Traversable<A> | A[]): Monad<B> {
+  return foldr((a, mb) => mb.chain((b) => f(a, b)), mb, t);
 }
