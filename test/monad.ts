@@ -99,7 +99,7 @@ describe("Monad", () => {
         just(9)
       );
       assert.deepEqual(
-        foldrM((a, b) => (console.log(a, b), b === a ? nothing : just(b + a)), just(2), fromArray([5, 3])),
+        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), fromArray([5, 3])),
         nothing
       );
     });
@@ -109,7 +109,7 @@ describe("Monad", () => {
         just(9)
       );
       assert.deepEqual(
-        foldrM((a, b) => (console.log(a, b), b === a ? nothing : just(b + a)), just(2), [5, 3]),
+        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [5, 3]),
         nothing
       );
     });

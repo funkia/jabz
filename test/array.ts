@@ -7,7 +7,7 @@ import {identity, combine} from "../src/monoid";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
 import {chain, flatten, go} from "../src/monad";
-import {size, foldr, foldMap} from "../src/foldable";
+import {size, foldr, foldl, foldMap} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 
 describe("Native list", () => {
@@ -63,7 +63,7 @@ describe("Native list", () => {
     it("foldMap", () => {
       assert.deepEqual(foldMap(Sum, [1, 2, 3, 4]), Sum.create(10));
     });
-    it("fold", () => {
+    it("foldr", () => {
       assert.deepEqual(
         foldr((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]),
         [4, 3, 2, 1]
@@ -74,8 +74,14 @@ describe("Native list", () => {
     });
     it("folds in right direction", () => {
       assert.deepEqual(
-        foldr((n, m) => (console.log(n,m), n - m), 1, [12, 3, 4]),
+        foldr((n, m) => n - m, 1, [12, 3, 4]),
         (12 - (3 - (4 - 1)))
+      );
+    });
+    it("foldl", () => {
+      assert.deepEqual(
+        foldl((acc, n) => acc - n, 1, [16, 12, 9, 6, 3]),
+        ((((1 - 16) - 12) - 9) - 6) - 3
       );
     });
   });

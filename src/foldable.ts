@@ -95,7 +95,9 @@ export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]):
 
 export function foldl<A, B>(f: (acc: B, a: A) => B, init: B, a: Foldable<A> | A[]): B {
   if (a instanceof Array) {
-    // FIXME
+    for (let i = 0; i < a.length; ++i) {
+      init = f(init, a[i]);
+    }
     return init;
   } else {
     return a.foldl(f, init);
