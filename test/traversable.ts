@@ -40,6 +40,7 @@ describe("Traversable", () => {
       map: <B>(f: (a: A) => B) => List<B>;
       mapTo: <B>(b: B) => List<B>;
       foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
+      foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
       shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
       size: () => number;
       maximum: () => number;
@@ -77,6 +78,7 @@ describe("Traversable", () => {
       }
       mapTo: <B>(b: B) => List<B>;
       foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
+      foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
       shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
       size: () => number;
       maximum: () => number;

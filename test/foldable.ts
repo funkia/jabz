@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, size, maximum, minimum, sum, find, toArray
+  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum, sum, find, toArray
 } from "../src/foldable";
 import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -78,6 +78,7 @@ describe("Foldable", () => {
         }
         return acc;
       }
+      foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
       shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
       size: () => number;
       maximum: () => number;
@@ -90,6 +91,12 @@ describe("Foldable", () => {
         toArray(new List([1, 2, 3, 4])),
         [1, 2, 3, 4]
       )
+    });
+    it("has left fold", () => {
+      assert.deepEqual(
+        foldl((acc, n) => acc - n, 1, new List([16, 12, 9, 6, 3])),
+        ((((1 - 16) - 12) - 9) - 6) - 3
+      );
     });
     it("can't derive without `fold` method", () => {
       assert.throws(() => {

@@ -43,6 +43,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
     }
   }
   abstract foldr<B>(acc: B, f: (a: A, b: B) => B): B;
+  abstract foldl<B>(f: (acc: B, a: A) => B, init: B): B;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   maximum: () => number;
   minimum: () => number;
@@ -88,6 +89,9 @@ class Nothing<A> extends Maybe<A> {
   foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     return acc;
   }
+  foldl<B>(f: (a: A, b: B) => B, acc: B): B {
+    return acc;
+  }
   size(): number {
     return 0;
   }
@@ -121,8 +125,11 @@ class Just<A> extends Maybe<A> {
       just: (f) => new Just(f(this.val))
     });
   }
-  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
-    return f(this.val, acc);
+  foldr<B>(f: (a: A, b: B) => B, init: B): B {
+    return f(this.val, init);
+  }
+  foldl<B>(f: (acc: B, a: A) => B, init: B): B {
+    return f(init, this.val);
   }
   size(): number {
     return 1;

@@ -7,7 +7,7 @@ import {Monoid, MonoidConstructor, combine} from "./monoid";
 import {Maybe, just, nothing} from "./maybe";
 import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
-import {mixin, add} from "./utils";
+import {mixin, add, id} from "./utils";
 
 /**
  * A Foldable is any structure that supports a fold operation that
@@ -27,6 +27,7 @@ import {mixin, add} from "./utils";
  */
 export interface Foldable<A> {
   foldr<B>(f: (a: A, b: B) => B, acc: B): B;
+  foldl<B>(f: (acc: B, a: A) => B, init: B): B;
   shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B;
   size(): number;
   maximum(): number;
@@ -39,7 +40,10 @@ function incr<A>(_: A, acc: number): number {
 }
 
 export abstract class AbstractFoldable<A> implements Foldable<A> {
-  abstract foldr<B>(f: (a: A, b: B) => B, acc: B): B;
+  abstract foldr<B>(f: (a: A, acc: B) => B, init: B): B;
+  foldl<B>(f: (acc: B, a: A) => B, init: B): B {
+    return this.foldr((a, r) => (acc: B) => r(f(acc, a)), id)(init);
+  }
   shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B {
     return fromEither(this.foldr(
       (a, eb) => isRight(eb) ? f(a, fromEither(eb)) : eb, right(acc)
@@ -86,6 +90,15 @@ export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]):
     return acc;
   } else {
     return a.foldr(f, acc);
+  }
+}
+
+export function foldl<A, B>(f: (acc: B, a: A) => B, init: B, a: Foldable<A> | A[]): B {
+  if (a instanceof Array) {
+    // FIXME
+    return init;
+  } else {
+    return a.foldl(f, init);
   }
 }
 
