@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum, sum, find, toArray
+  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum, sum, find, findLast, toArray
 } from "../src/foldable";
 import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -95,7 +95,7 @@ describe("Foldable", () => {
         [1, 2, 3, 4]
       )
     });
-    it("can find element", () => {
+    it("can find first element", () => {
       assert.deepEqual(
         just(3),
         find((n) => n === 3, list([1, 2, 3, 4, 5]))
@@ -107,6 +107,20 @@ describe("Foldable", () => {
       assert.deepEqual(
         nothing,
         find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
+      );
+    });
+    it("can find last element", () => {
+      assert.deepEqual(
+        just(3),
+        findLast((n) => n === 3, list([1, 2, 3, 4, 5]))
+      );
+      assert.deepEqual(
+        just(7),
+        findLast((n) => n > 6, list([1, 8, 3, 7, 5]))
+      );
+      assert.deepEqual(
+        nothing,
+        findLast((n) => n === 3.5, list([1, 2, 3, 4, 5]))
       );
     });
     it("can't derive without `fold` method", () => {

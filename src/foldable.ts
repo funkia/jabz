@@ -139,6 +139,10 @@ export function find<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldl((acc, a) => f(a) ? left(just(a)) : right(acc), nothing);
 }
 
+export function findLast<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
+  return t.shortFoldr((a, acc) => f(a) ? left(just(a)) : right(acc), nothing);
+}
+
 export function toArray<A>(t: Foldable<A>): A[] {
   // TODO: Use a left fold
   return t.foldr((a, as) => (as.unshift(a), as), []);
