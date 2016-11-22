@@ -89,11 +89,19 @@ describe("Foldable", () => {
     }
     const list = (arr: any[]) => new List(arr);
     testFoldable(list);
-    it("can convert to array", () => {
-      assert.deepEqual(
-        toArray(new List([1, 2, 3, 4])),
-        [1, 2, 3, 4]
-      )
+    describe("toArray", () => {
+      it("can convert foldable to array", () => {
+        assert.deepEqual(
+          toArray(list([1, 2, 3, 4])),
+          [1, 2, 3, 4]
+        );
+      });
+      it("doesn't touch array", () => {
+        assert.deepEqual(
+          toArray([1, 2, 3, 4]),
+          [1, 2, 3, 4]
+        );        
+      });
     });
     it("can find first element", () => {
       assert.deepEqual(

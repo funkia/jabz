@@ -19,3 +19,8 @@ export function add(n: number, m: number): number {
 export function compose<A, B, C>(f: (b: B) => C, g: (a: A) => B): (a: A) => C {
   return (a: A) => f(g(a));
 }
+
+export function impurePush<A>(arr: A[], a: A): A[] {
+  arr.push(a);
+  return arr;
+}

@@ -7,7 +7,7 @@ import {Monoid, MonoidConstructor, combine} from "./monoid";
 import {Maybe, just, nothing} from "./maybe";
 import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
-import {mixin, add, id} from "./utils";
+import {mixin, add, id, impurePush} from "./utils";
 
 /**
  * A Foldable is any structure that supports a fold operation that
@@ -143,7 +143,10 @@ export function findLast<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldr((a, acc) => f(a) ? left(just(a)) : right(acc), nothing);
 }
 
-export function toArray<A>(t: Foldable<A>): A[] {
-  // TODO: Use a left fold
-  return t.foldr((a, as) => (as.unshift(a), as), []);
+export function toArray<A>(t: Foldable<A> | A[]): A[] {
+  if (Array.isArray(t)) {
+    return t;
+  } else {
+    return t.foldl<A[]>(impurePush, []);
+  }
 }
