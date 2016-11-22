@@ -4,7 +4,7 @@ import {Applicative, AbstractApplicative, ApplicativeDictionary} from "./applica
 import Identity from "./identity";
 import Endo from "./monoids/endo";
 import {ConstEndo} from "./const";
-import {id, mixin} from "./utils";
+import {id, mixin, cons} from "./utils";
 
 export interface Traversable<A> extends Functor<A>, Foldable<A> {
   traverse<B>(
@@ -50,10 +50,6 @@ export function traversable(constructor: Function): void {
     throw new TypeError("Can't derive traversable. Either `traverse` or `map` and `sequence` must be defined.");
   }
   mixin(constructor, [AbstractTraversable, AbstractFoldable]);
-}
-
-function cons<A>(a: A, as: A[]): A[] {
-  return [a].concat(as);
 }
 
 function arraySequence<A>(

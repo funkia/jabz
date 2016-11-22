@@ -1,7 +1,6 @@
 import {Functor, AbstractFunctor} from "./functor";
 import {Either} from "./either";
-import {curry2, curry3} from "./curry";
-import {mixin} from "./utils";
+import {mixin, curry2, curry3} from "./utils";
 
 function apply<A, B>(f: (a: A) => B, a: A): B {
   return f(a);
