@@ -66,20 +66,6 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
   it("can get `sum`", () => {
     assert.deepEqual(sum((list([1, 2, 3, 4]))), 10);
   });
-  it("can find element", () => {
-    assert.deepEqual(
-      just(3),
-      find((n) => n === 3, list([1, 2, 3, 4, 5]))
-    );
-    assert.deepEqual(
-      just(8),
-      find((n) => n > 6, list([1, 8, 3, 7, 5]))
-    );
-    assert.deepEqual(
-      nothing,
-      find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
-    );
-  });
 }
 
 describe("Foldable", () => {
@@ -108,6 +94,20 @@ describe("Foldable", () => {
         toArray(new List([1, 2, 3, 4])),
         [1, 2, 3, 4]
       )
+    });
+    it("can find element", () => {
+      assert.deepEqual(
+        just(3),
+        find((n) => n === 3, list([1, 2, 3, 4, 5]))
+      );
+      assert.deepEqual(
+        just(8),
+        find((n) => n > 6, list([1, 8, 3, 7, 5]))
+      );
+      assert.deepEqual(
+        nothing,
+        find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
+      );
     });
     it("can't derive without `fold` method", () => {
       assert.throws(() => {
