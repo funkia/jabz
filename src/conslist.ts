@@ -29,6 +29,7 @@ export class Cons<A> implements Monad<A>, Traversable<A> {
   foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
   sequence: <A>(a: ApplicativeDictionary, t: Cons<Applicative<A>>) => Applicative<Traversable<A>>;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
+  shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
   size: () => number;
   maximum: () => number;
   minimum: () => number;

@@ -30,13 +30,28 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
       (12 - (3 - (4 - 1)))
     );
   });
-  it("has short-circuiting fold", () => {
+  it("has left fold", () => {
+    assert.deepEqual(
+      foldl((acc, n) => acc - n, 1, list([16, 12, 9, 6, 3])),
+      ((((1 - 16) - 12) - 9) - 6) - 3
+    );
+  });
+  it("has short-circuiting foldr", () => {
     assert.deepEqual(
       list([1, 2, 3, 4, 5]).shortFoldr((n, m) => right(n + m), 0), 15
     );
     assert.deepEqual(
       list([1, 2, 3, 4, 5])
         .shortFoldr((n, m) => n === 3 ? left(m) : right(n + m), 0), 9
+    );
+  });
+  it("has short-circuiting foldl", () => {
+    assert.deepEqual(
+      list([1, 2, 3, 4, 5]).shortFoldl((n, m) => right(n + m), 0), 15
+    );
+    assert.deepEqual(
+      list([4, 4, 2, 3, 3])
+        .shortFoldl((m, n) => n === 2 ? left(m) : right(n + m), 0), 8
     );
   });
   it("has size", () => {
@@ -79,24 +94,20 @@ describe("Foldable", () => {
         return acc;
       }
       foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
-      shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
+      shortFoldr: <B>(f: (a: A, acc: B) => Either<B, B>, init: B) => B;
+      shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, init: B) => B;
       size: () => number;
       maximum: () => number;
       minimum: () => number;
       sum: () => number;
     }
-    testFoldable(<A>(arr: A[]) => new List(arr));
+    const list = (arr: any[]) => new List(arr);
+    testFoldable(list);
     it("can convert to array", () => {
       assert.deepEqual(
         toArray(new List([1, 2, 3, 4])),
         [1, 2, 3, 4]
       )
-    });
-    it("has left fold", () => {
-      assert.deepEqual(
-        foldl((acc, n) => acc - n, 1, new List([16, 12, 9, 6, 3])),
-        ((((1 - 16) - 12) - 9) - 6) - 3
-      );
     });
     it("can't derive without `fold` method", () => {
       assert.throws(() => {

@@ -45,6 +45,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   abstract foldr<B>(acc: B, f: (a: A, b: B) => B): B;
   abstract foldl<B>(f: (acc: B, a: A) => B, init: B): B;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
+  shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
   maximum: () => number;
   minimum: () => number;
   sum: () => number;

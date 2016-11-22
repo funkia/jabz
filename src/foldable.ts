@@ -26,9 +26,10 @@ import {mixin, add, id} from "./utils";
  * @return {number} size
  */
 export interface Foldable<A> {
-  foldr<B>(f: (a: A, b: B) => B, acc: B): B;
+  foldr<B>(f: (a: A, acc: B) => B, acc: B): B;
   foldl<B>(f: (acc: B, a: A) => B, init: B): B;
-  shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B;
+  shortFoldr<B>(f: (a: A, acc: B) => Either<B, B>, acc: B): B;
+  shortFoldl<B>(f: (acc: B, a: A) => Either<B, B>, acc: B): B;
   size(): number;
   maximum(): number;
   minimum(): number;
@@ -47,6 +48,11 @@ export abstract class AbstractFoldable<A> implements Foldable<A> {
   shortFoldr<B>(f: (a: A, b: B) => Either<B, B>, acc: B): B {
     return fromEither(this.foldr(
       (a, eb) => isRight(eb) ? f(a, fromEither(eb)) : eb, right(acc)
+    ));
+  }
+  shortFoldl<B>(f: (b: B, a: A) => Either<B, B>, acc: B): B {
+    return fromEither(this.foldl(
+      (eb, a) => isRight(eb) ? f(fromEither(eb), a) : eb, right(acc)
     ));
   }
   size(): number {

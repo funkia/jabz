@@ -42,6 +42,7 @@ describe("Traversable", () => {
       foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
       foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
       shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
+      shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
       size: () => number;
       maximum: () => number;
       minimum: () => number;
@@ -80,6 +81,7 @@ describe("Traversable", () => {
       foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
       foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
       shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
+      shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
       size: () => number;
       maximum: () => number;
       minimum: () => number;
