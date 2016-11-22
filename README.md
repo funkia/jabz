@@ -19,14 +19,6 @@ Traversables and all that jazz.
 * Do-notation
 * [Seamless instances](#seamless-instances)
 
-## Differences from fantasy-land
-
-* Several derived methods are part of the specification which allows
-  for efficient specialized implementation.
-* Static `lift` instead of `ap` in applicative. This allows for more
-  performant implementation. Also can be typed with TypeScript.
-* And more.
-
 ## Example
 
 This example demonstrates some of what Jabz can do by implementing a
@@ -108,7 +100,20 @@ foldr((n, m) => n + m, 3, fromArray([1, 2, 3, 4, 5])); //=> 18
 Find an element satisfying a predicate.
 
 ```js
-find((n) => n > 6, fromArray([1, 8, 3, 7, 5])); //=> 8
+find((n) => n > 6, fromArray([1, 8, 3, 7, 5])); //=> just(8)
+findLast((n) => n > 6, fromArray([1, 8, 3, 7, 5])); //=> just(7)
+```
+
+We can convert a cons-list to an array
+
+```js
+toArray(fromArray([1, 2, 3, 4])); //=> [1, 2, 3, 4]
+```
+
+We can flatten nested cons-lists.
+
+```js
+flatten(fromArray([fromArray([1, 2]), fromArray([3, 4, 5])])); //=> [1, 2, 3, 4, 5]
 ```
 
 ## Rough spec
