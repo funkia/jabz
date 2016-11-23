@@ -107,11 +107,11 @@ export function chain<A, B>(f: any, m: Monad<Monad<A>> | A[]): Monad<B> | B[] {
 
 function singleGo(doing: Iterator<Monad<any>>, m: Monad<any>): Monad<any> {
   function doRec(v: any): any {
-    const a = doing.next(v);
-    if (a.done === true) {
-      return a.value;
-    } else if (typeof a.value !== "undefined") {
-      return a.value.chain(doRec);
+    const result = doing.next(v);
+    if (result.done === true) {
+      return result.value;
+    } else if (typeof result.value !== "undefined") {
+      return result.value.chain(doRec);
     } else {
       throw new Error("Expected monad value");
     }
@@ -119,24 +119,34 @@ function singleGo(doing: Iterator<Monad<any>>, m: Monad<any>): Monad<any> {
   return m.chain(doRec);
 };
 
-function multiGo<M extends Monad<any>>(gen: () => Iterator<M>, m: MonadDictionary): M {
+function multiGo<M extends Monad<any>>(gen: () => Iterator<M>, m: M): Monad<any> {
   const doRec = function(v: any, stateSoFar: any): any {
     const doing = gen();
-    stateSoFar.forEach((it: any) => doing.next(it));
-    const a = doing.next(v);
-    if (a.done === true) {
-      return a.value;
+    for (const it of stateSoFar) {
+      doing.next(it);
+    }
+    const result = doing.next(v);
+    if (result.done === true) {
+      return result.value;
     } else {
-      return a.value.chain((vv) => doRec(vv, stateSoFar.concat(v)));
+      const newStateSoFar = stateSoFar.concat(v);
+      return result.value.chain((vv) => doRec(vv, newStateSoFar));
     }
   };
-  return doRec(undefined, []);
+  return m.chain((vv) => doRec(vv, [undefined]));
 };
 
-export function go<M extends Monad<any>>(gen: () => Iterator<M>): M {
+export function go<M extends Monad<any>>(gen: () => Iterator<M>): any {
   const iterator = gen();
-  const m = iterator.next().value;
-  return <any>(m.multi === true ? multiGo(gen, m) : singleGo(iterator, m));
+  const result = iterator.next();
+  const monad = result.value;
+  if (result.done === true) {
+    return monad;
+  } else if (result.value.multi === true) {
+    return multiGo(gen, monad);
+  } else {
+    return singleGo(iterator, monad);
+  }
 }
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {

@@ -92,7 +92,7 @@ describe("Monad", () => {
       );
     });
   });
-  describe("foldlM", () => {
+  describe("foldrM", () => {
     it("works over traversable", () => {
       assert.deepEqual(
         foldrM((a, b) => b === a ? nothing : just(b + a), just(2), fromArray([4, 3])),
@@ -115,6 +115,16 @@ describe("Monad", () => {
     });
   });
   describe("go-notation", () => {
+    it("handles immediate return", () => {
+      const single = go<Maybe<number>>(function*(): any {
+        return just(12);
+      });
+      assert.deepEqual(single, just(12));
+      const multi = go<List<number>>(function*(): any {
+        return List.of(12);
+      });
+      assert.deepEqual(multi, new List([12]));
+    });
     it("go works with multi-monad", () => {
       const result = go(function*() {
         const n = yield new List([1, 2, 3]);
@@ -122,9 +132,33 @@ describe("Monad", () => {
         return List.of(n * m);
       });
       assert.deepEqual(
-        new List([10, 100, 20, 200, 30, 300]),
-        result
+        result,
+        new List([10, 100, 20, 200, 30, 300])
       );
+    });
+    it("generator function is invoked correctly with multi", () => {
+      const lines = [0, 0, 0];
+      const result = go(function*() {
+        lines[0]++;
+        const n = yield new List([1, 2, 3]);
+        lines[1]++;
+        const m = yield new List([10, 100]);
+        lines[2]++;
+        return List.of(n * m);
+      });
+      assert.deepEqual(lines, [10, 9, 6]);
+    });
+    it("generator function is invoked correctly with single path", () => {
+      const lines = [0, 0, 0];
+      const result = go(function*() {
+        lines[0]++;
+        const n = yield just(1);
+        lines[1]++;
+        const m = yield just(2);
+        lines[2]++;
+        return just(n * m);
+      });
+      assert.deepEqual(lines, [1, 1, 1]);
     });
   });
   it("fgo works with Maybe", () => {

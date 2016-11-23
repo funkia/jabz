@@ -59,8 +59,8 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       just: (v) => v.map(just)
     });
   }
-  static multi: boolean = true;
-  multi: boolean = true;
+  static multi: boolean = false;
+  multi: boolean = false;
 }
 
 function of<V>(v: V): Maybe<V> {
