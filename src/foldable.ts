@@ -1,30 +1,13 @@
-/**
- * Module containing Foldable
- * @module Foldable
- */
-
 import {Monoid, MonoidConstructor, combine} from "./monoid";
 import {Maybe, just, nothing} from "./maybe";
 import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
 import {mixin, add, id, impurePush} from "./utils";
 
-/**
- * A Foldable is any structure that supports a fold operation that
- * reduces the structure to a single value by applying an accumulator.
- *
- * @interface Foldable
- */
+export interface Thunk<A> {
+  force(): A;
+}
 
-/**
- * Fold a foldable.
- *
- * @function
- * @name module:Foldable~Foldable#fold
- * @param {reducer} accumulator
- * @param {A} initial - In the first invocation of the function this is passed as the first argument.
- * @return {number} size
- */
 export interface Foldable<A> {
   foldr<B>(f: (a: A, acc: B) => B, acc: B): B;
   foldl<B>(f: (acc: B, a: A) => B, init: B): B;
@@ -81,13 +64,6 @@ export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: F
   return foldr((a, b) => f.create(a).combine(b), f.identity(), a);
 }
 
-/**
- * Performs a right fold over a foldable.
- * @param {reducer} accumulator
- * @param {A} initial - In the first invocation of the function this is passed as the first argument.
- * @param {module:Foldable~Foldable} foldable
- * @return {B} size
- */
 export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
   if (a instanceof Array) {
     for (let i = a.length - 1; 0 <= i; --i) {
@@ -110,11 +86,6 @@ export function foldl<A, B>(f: (acc: B, a: A) => B, init: B, a: Foldable<A> | A[
   }
 }
 
-/**
- * Return the size of a foldable.
- * @param {Foldable<any>} foldable
- * @return {number} size
- */
 export function size(a: Foldable<any> | any[]): number {
   if (a instanceof Array) {
     return a.length;
