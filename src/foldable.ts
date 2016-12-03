@@ -4,10 +4,6 @@ import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
 import {mixin, add, id, impurePush} from "./utils";
 
-export interface Thunk<A> {
-  force(): A;
-}
-
 export interface Foldable<A> {
   foldr<B>(f: (a: A, acc: B) => B, acc: B): B;
   foldl<B>(f: (acc: B, a: A) => B, init: B): B;
@@ -106,12 +102,28 @@ export function sum(t: Foldable<number>) {
   return t.sum();
 }
 
+export function take<A>(n: number, t: Foldable<A>): A[] {
+  const list: A[] = [];
+  if (n === 0) {
+    return list;
+  } else {
+    return t.shortFoldl((list, a) => {
+      list.push(a);
+      return (list.length === n ? left : right)(list);
+    }, list);
+  }
+}
+
 export function find<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldl((acc, a) => f(a) ? left(just(a)) : right(acc), nothing);
 }
 
 export function findLast<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldr((a, acc) => f(a) ? left(just(a)) : right(acc), nothing);
+}
+
+export function shortFoldl<A, B>(f: (b: B, a: A) => Either<B, B>, acc: B, l: Foldable<A>): B {
+  return l.shortFoldl<B>(f, acc);
 }
 
 export function toArray<A>(t: Foldable<A> | A[]): A[] {

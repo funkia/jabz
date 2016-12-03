@@ -2,7 +2,8 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum, sum, find, findLast, toArray
+  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum,
+  sum, find, findLast, toArray, take
 } from "../src/foldable";
 import {just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -130,6 +131,11 @@ describe("Foldable", () => {
         nothing,
         findLast((n) => n === 3.5, list([1, 2, 3, 4, 5]))
       );
+    });
+    it("can take first n elements", () => {
+      const l = list([1, 2, 3, 4, 5, 6]);
+      assert.deepEqual(take(4, l), [1, 2, 3, 4]);
+      assert.deepEqual(take(0, l), []);
     });
     it("can't derive without `fold` method", () => {
       assert.throws(() => {
