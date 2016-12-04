@@ -35,7 +35,7 @@ export function functor(constructor: Function): void {
 
 export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
 export function map<A, B, C>(f: (b: B) => C, functor: Either<A, B>): Either<A, C>;
-export function map<A, B>(f: (a: A) => B, functor: Functor<A>): Functor<B>;
+export function map<A, B>(f: (a: A) => B, functor: Functor<A>): any;
 export function map<A, B>(f: (a: A) => B, functor: A[]): B[];
 export function map<A, B>(f: (a: A) => B, functor: Functor<A> | A[]): Functor<B> | B[] {
   if (Array.isArray(functor)) {

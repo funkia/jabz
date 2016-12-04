@@ -1,10 +1,6 @@
 import {Functor, AbstractFunctor} from "./functor";
 import {Either} from "./either";
-import {mixin, curry2, curry3} from "./utils";
-
-function apply<A, B>(f: (a: A) => B, a: A): B {
-  return f(a);
-}
+import {mixin, apply, curry2, curry3} from "./utils";
 
 export interface ApplicativeDictionary {
   of: <B>(b: B) => Applicative<B>;

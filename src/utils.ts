@@ -2,6 +2,10 @@ export function id<A>(a: A): A {
   return a;
 }
 
+export function apply<A, B>(f: (a: A) => B, a: A): B {
+  return f(a);
+}
+
 export function mixin(derivedCtor: any, baseCtors: any[]) {
   baseCtors.forEach(baseCtor => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
