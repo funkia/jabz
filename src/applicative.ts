@@ -1,6 +1,6 @@
-import {Functor, AbstractFunctor} from "./functor";
+import {Functor, AbstractFunctor, mapTo} from "./functor";
 import {Either} from "./either";
-import {mixin, apply, curry2, curry3} from "./utils";
+import {id, mixin, apply, curry2, curry3} from "./utils";
 
 export interface ApplicativeDictionary {
   of: <B>(b: B) => Applicative<B>;
@@ -102,4 +102,8 @@ export function lift(f: Function, ...args: any[]): any {
   } else {
     return args[0].lift(f, ...args);
   }
+}
+
+export function seq<A, F extends Applicative<A>>(a: Applicative<any>, b: F): F {
+  return ap(mapTo(id, a), b);
 }
