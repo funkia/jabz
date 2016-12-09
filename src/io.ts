@@ -1,6 +1,8 @@
 import {Monad, AbstractMonad} from "./monad";
 import {Either, left, right} from "./either";
 
+export type F0<Z> =
+  () => Z;
 export type F1<A, Z> =
   (a: A) => Z;
 export type F2<A, B, Z> =
@@ -58,6 +60,7 @@ export function withEffectsP<A>(fn: (...as: any[]) => Promise<A>): (...a: any[])
   return (...args: any[]) => new IO(() => fn(...args).then(right).catch(left));
 }
 
+export function call<Z>(f: F0<Z>): IO<Z>;
 export function call<A, Z>(f: F1<A, Z>, a: A): IO<Z>;
 export function call<A, B, Z>(f: F2<A, B, Z>, a: A, b: B): IO<Z>;
 export function call<A, B, C, Z>(f: F3<A, B, C, Z>, a: A, b: B, c: C): IO<Z>;

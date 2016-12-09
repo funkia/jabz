@@ -3,11 +3,12 @@ import {assert} from "chai";
 
 import {
   Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum,
-  sum, find, findLast, toArray, take
+  sum, find, findLast, toArray, take, sequence_
 } from "../src/foldable";
-import {just, nothing} from "../src/maybe";
+import {Maybe, just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
 import {Monoid, MonoidConstructor} from "../src/monoid";
+import {IO, call, runIO} from "../src/io";
 import Sum from "../src/monoids/sum";
 
 export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
@@ -143,6 +144,31 @@ describe("Foldable", () => {
         class NotAFoldable<A> {
           constructor(private arr: A[]) {};
         }
+      });
+    });
+    describe("sequence_", () => {
+      it("sequences justs to just", () => {
+        assert.deepEqual(
+          sequence_(Maybe, list([just(1), just(2), just(3)])),
+          just(undefined)
+        );
+      });
+      it("sequences nothing to nothing", () => {
+        assert.deepEqual(
+          sequence_(Maybe, list([just(1), nothing, just(3)])), nothing
+        );
+      });
+      it("sequences in right order", () => {
+        let results: number[] = [];
+        const l = list([
+          call(() => results.push(1)),
+          call(() => results.push(2)),
+          call(() => results.push(3))
+        ]);
+        const action = sequence_(IO, l);
+        return runIO(action).then(() => {
+          assert.deepEqual(results, [1, 2, 3]);
+        });
       });
     });
   });
