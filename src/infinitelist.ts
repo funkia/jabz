@@ -20,14 +20,14 @@ export class InfiniteList<A> implements Functor<A>, Foldable<A> {
   lift<T1, R>(f: (t: T1) => R, m: InfiniteList<T1>): InfiniteList<R>;
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: InfiniteList<T1>, m2: InfiniteList<T2>): InfiniteList<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: InfiniteList<T1>, m2: InfiniteList<T2>, m3: InfiniteList<T3>): InfiniteList<R>;
-  lift(/* arguments */): any {
+  lift(...args: any[]): any {
     return new InfiniteList((i) => {
       const vals: any[] = [];
-      for (let j = 1; j < arguments.length; ++j) {
-        vals[j - 1] = arguments[j].fn(i);
+      for (let j = 1; j < args.length; ++j) {
+        vals[j - 1] = args[j].fn(i);
       }
       console.log(vals);
-      return arguments[0].apply(undefined, vals);
+      return args[0].apply(undefined, vals);
     });
   }
   foldr<B>(f: (a: A, acc: B) => B, init: B): B {
