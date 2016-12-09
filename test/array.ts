@@ -7,8 +7,9 @@ import {identity, combine} from "../src/monoid";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
 import {chain, flatten, go} from "../src/monad";
-import {size, foldr, foldl, foldMap} from "../src/foldable";
+import {size, foldr, foldl, foldMap, sequence_} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
+import {IO, call, runIO} from "../src/io";
 
 describe("Native list", () => {
   describe("monoid", () => {
@@ -83,6 +84,31 @@ describe("Native list", () => {
         foldl((acc, n) => acc - n, 1, [16, 12, 9, 6, 3]),
         ((((1 - 16) - 12) - 9) - 6) - 3
       );
+    });
+    describe("sequence_", () => {
+      it("sequences justs to just", () => {
+        assert.deepEqual(
+          sequence_(Maybe, [just(1), just(2), just(3)]),
+          just(undefined)
+        );
+      });
+      it("sequences nothing to nothing", () => {
+        assert.deepEqual(
+          sequence_(Maybe, [just(1), nothing, just(3)]), nothing
+        );
+      });
+      it("sequences in right order", () => {
+        let results: number[] = [];
+        const l = [
+          call(() => results.push(1)),
+          call(() => results.push(2)),
+          call(() => results.push(3))
+        ];
+        const action = sequence_(IO, l);
+        return runIO(action).then(() => {
+          assert.deepEqual(results, [1, 2, 3]);
+        });
+      });
     });
   });
   describe("traversable", () => {

@@ -54,8 +54,6 @@ function isArrayConstructor(a: any): a is ArrayConstructor {
   return a === Array;
 }
 
-export function of<A>(d: ArrayConstructor, a: A): A[];
-export function of<A>(d: ApplicativeDictionary, a: A): any;
 export function of<A>(d: ApplicativeDictionary | ArrayConstructor, a: A): any {
   if (isArrayConstructor(d)) {
     return [a];
