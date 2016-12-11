@@ -4,12 +4,14 @@ const watch = require('metalsmith-watch');
 const pug = require('metalsmith-pug/lib/node6');
 const sass = require('metalsmith-sass');
 const highlight = require('metalsmith-code-highlight');
+const metalsmithPrism = require('metalsmith-prism');
 
 Metalsmith(__dirname)
   .source('./docs')
   .destination('./docs-build')
   .use(pug({pretty: true}))
   .use(highlight({}))
+  // .use(metalsmithPrism())
   .use(sass({
     outputStyle: "expanded"
   }))
