@@ -2,7 +2,7 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, foldl, size, maximum, minimum,
+  Foldable, foldable, foldMap, foldr, foldl, foldrM, size, maximum, minimum,
   sum, find, findLast, toArray, take, sequence_
 } from "../src/foldable";
 import {Maybe, just, nothing} from "../src/maybe";
@@ -169,6 +169,29 @@ describe("Foldable", () => {
         return runIO(action).then(() => {
           assert.deepEqual(results, [1, 2, 3]);
         });
+      });
+    });
+    describe("foldrM", () => {
+      it("works over foldable", () => {
+        const divide = (a: number, b: number) => a === 0 ? nothing : just(b / a);
+        assert.deepEqual(
+          foldrM(divide, just(100), list([10, 5])),
+          just(2)
+        );
+        assert.deepEqual(
+          foldrM(divide, just(100), list([5, 0])),
+          nothing
+        );
+      });
+      it("works over array", () => {
+        assert.deepEqual(
+          foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [4, 3]),
+          just(9)
+        );
+        assert.deepEqual(
+          foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [5, 3]),
+          nothing
+        );
       });
     });
   });

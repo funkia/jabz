@@ -3,7 +3,7 @@ import {assert} from "chai";
 
 import {mixin} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, monad, arrayFlatten, go, fgo, flatten, foldrM} from "../src/monad";
+import {Monad, monad, arrayFlatten, go, fgo, flatten} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
@@ -89,28 +89,6 @@ describe("Monad", () => {
       assert.deepEqual(
         new List([1, 2, 3, 4, 5, 6]),
         flatten(new List([new List([1, 2]), new List([3, 4, 5]), new List([6])]))
-      );
-    });
-  });
-  describe("foldrM", () => {
-    it("works over traversable", () => {
-      assert.deepEqual(
-        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), fromArray([4, 3])),
-        just(9)
-      );
-      assert.deepEqual(
-        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), fromArray([5, 3])),
-        nothing
-      );
-    });
-    it("works over array", () => {
-      assert.deepEqual(
-        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [4, 3]),
-        just(9)
-      );
-      assert.deepEqual(
-        foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [5, 3]),
-        nothing
       );
     });
   });

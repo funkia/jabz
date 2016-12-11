@@ -63,10 +63,6 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   multi: boolean = false;
 }
 
-function of<V>(v: V): Maybe<V> {
-  return new Just(v);
-}
-
 @foldable
 class Nothing<A> extends Maybe<A> {
   constructor() {

@@ -70,6 +70,7 @@ export function call(f: Function, ...args: any[]): IO<any> {
   return new IO(() => Promise.resolve(f(...args)));
 }
 
+export function callP<Z>(f: F0<Z>): IO<Either<any, Z>>;
 export function callP<A, Z>(f: F1<A, Promise<Z>>, a: A): IO<Either<any, Z>>;
 export function callP<A, B, Z>(f: F2<A, B, Promise<Z>>, a: A, b: B): IO<Either<any, Z>>;
 export function callP<A, B, C, Z>(f: F3<A, B, C, Promise<Z>>, a: A, b: B, c: C): IO<Either<any, Z>>;

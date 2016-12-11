@@ -1,5 +1,6 @@
 import {Monoid, MonoidConstructor, combine} from "./monoid";
 import {Applicative, ApplicativeDictionary, of, seq} from "./applicative";
+import {Monad} from "./monad";
 import {Maybe, just, nothing} from "./maybe";
 import {Either, left, right, isRight, fromEither} from "./either";
 import Endo from "./monoids/endo";
@@ -140,4 +141,8 @@ export function sequence_(
   t: Foldable<Applicative<any>> | Array<Applicative<any>>
 ): any {
     return foldr(seq, of(d, undefined), t);
+}
+
+export function foldrM<A, B>(f: (a: A, b: B) => Monad<B>, mb: Monad<B>, t: Foldable<A> | A[]): Monad<B> {
+  return foldr((a, mb) => mb.chain((b) => f(a, b)), mb, t);
 }
