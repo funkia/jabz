@@ -5,11 +5,12 @@ const pug = require('metalsmith-pug/lib/node6');
 const sass = require('metalsmith-sass');
 const highlight = require('metalsmith-code-highlight');
 const metalsmithPrism = require('metalsmith-prism');
+const markdown = require("jstransformer-markdown-it");
 
 Metalsmith(__dirname)
   .source('./docs')
   .destination('./docs-build')
-  .use(pug({pretty: true}))
+  .use(pug({pretty: true, filters: {markdown}}))
   .use(highlight({}))
   // .use(metalsmithPrism())
   .use(sass({

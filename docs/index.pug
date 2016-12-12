@@ -10,9 +10,13 @@ mixin fn(name, signature, description)
       span.type= signature
     block
 
+mixin description
+  div.description
+    :markdown-it= block
+
 mixin example
   pre
-    code.language-javascript
+    code.lang-javascript
       block
 
 doctype html
@@ -28,29 +32,65 @@ html(lang="en")
       div.title-wrap
         h1 Jabz
       p powerful and practical abstractions for JavaScript
-    div.thing
+    div.wrapper
       include sidebar.pug
       div#container.col
 
+        h2 Overview
+
+        p Jabz provides the following abstractions
+        :markdown-it
+          * [Semigroup](#semigroup)
+          * [Monoid](#monoid)
+          * [Functor](#functor)
+          * [Applicative](#applicative)
+          * [Monad](#monad)
+          * [Foldable](#foldable)
+          * [Traversable](#traversable)
+
         h2 API
 
-        h3#monoid Monoid
-        | Import with.
+        h3#semigroup Semigroup
+        p Import with.
         pre
-          code.language-javascript.
+          code.lang-javascript.
+            import {combine} from "jabz/semigroup";
+
+        +fn('combine', '<A extends Semigroup<A>>(a: A, b: A): A')
+          div.description
+            p Combines two members of the same semigroup by using their combine method.
+          pre
+            code.lang-javascript.
+              combine(sum(3), sum(5)); //=> Sum(8)
+              combine("Hello ", "there"); //=> "Hello there"
+              combine([1, 2, 3], [4, 5]); //=> [1, 2, 3, 4, 5]
+
+        h3#monoid Monoid
+        p Import with.
+        pre
+          code.lang-javascript.
             import * as Monoid from "jabz/monoid";
+
+        +fn('identity', '<M extends Monoid<M>>(m: MonoidDictionary<M>): M')
+          div.description
+            p Takes a monoid dictionary and returns the identity element of the monoid. Alternatively it takes a constructor of one of the native monoid instances.
+          pre
+            code.lang-javascript.
+              identity(Sum); //=> Sum(0)
+              identity(Array); //=> []
+              identity(String); //=> ""
+
         h3#functor Functor
         | Import with.
         pre
-          code.language-javascript.
+          code.lang-javascript.
             import * as Functor from "jabz/functor";
 
         +fn('map', '<F extends Functor, A, B>(f: (a: A) => B, a: F<A>): F<B>')
           div.description
             p Maps a function over a functor.
-          //- +example.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               map((n) => n * n, just(3)); //=> just(9)
               map((n) => n * n, [1, 2, 3]); //=> [1, 4, 9]
 
@@ -58,20 +98,40 @@ html(lang="en")
           div.description
             p Replaces each value inside the functor with b.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               mapTo(2, just(3)); //=> just(2)
               mapTo(4, [1, 2, 3]); //=> [4, 4, 4]
 
-        h3#foldable Applicative
+        h3#applicative Applicative
         | Import with.
         pre
-          code.language-javascript.
+          code.lang-javascript.
             import * as Applicative from "jabz/applicative";
+
+        h3#monad Monad
+        p Import with.
+        pre
+          code.lang-javascript.
+            import * as Monad from "jabz/monad";
+
+        +fn('flatten', '<A, M extends Monad>(m: M<M<A>): M<A>')
+          div.description
+            p Removes one level of nesting from a monad inside a monad.
+          pre
+            code.lang-javascript.
+              flatten(just(just(1))); //=> just(1)
+
+        +fn('chain', '<A, B, M extends Monad>(f: (a: A) => M<B>, m: M<A>): M<B>')
+          div.description
+            p Monadic chain.
+          pre
+            code.lang-javascript.
+              flatten(just(just(1))); //=> just(1)
 
         h3#foldable Foldable
         | Import with.
         pre
-          code.language-javascript.
+          code.lang-javascript.
             import * as Foldable from "jabz/foldable";
 
         +fn('foldr', '<A, B>(f: (a: A, b: B) => B, init: B, a: Foldable<A> | A[]): B')
@@ -90,7 +150,7 @@ html(lang="en")
           div.description
             p Returns the first element in the foldable that satisfies the predicate.
             pre
-              code.language-javascript.
+              code.lang-javascript.
                 const isEven = (n) => n % 2 === 0;
                 find(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(4)
                 find(isEven, fromArray([1, 3, 5, 7])); //=> nothing
@@ -99,7 +159,7 @@ html(lang="en")
           div.description
             p Returns the last element in the foldable that satisfies the predicate.
             pre
-              code.language-javascript.
+              code.lang-javascript.
                 findLast(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(6)
                 findLast(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(6)
 
@@ -115,30 +175,34 @@ html(lang="en")
           div.description
             p Monadic right fold. This function is similair to foldr. The difference is that the accumulator function returns a monadic value and that the final result is in the same monad.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               const divide = (a, b) => a === 0 ? nothing : just(b / a);
               foldrM(divide, just(100), list([10, 5])); //=> just(2)
               foldrM(divide, just(100), list([5, 0])); //=> nothing
 
-        h3#foldable Monad
-        p Import with.
+        h3#traversable Traversable
+        | Import with.
         pre
-          code.language-javascript.
-            import * as Monad from "jabz/monad";
+          code.lang-javascript.
+            import * as Traversable from "jabz/traversable";
 
-        +fn('flatten', '<A, M extends Monad>(m: M<M<A>): M<A>')
+        +fn('sequence', '<A, T extends Traversable, F extends Applicative>(a: ApplicativeDictionary, t: T<F<A>>): F<T<A>>')
           div.description
-            p Removes one level of nesting from a monad inside a monad.
-          pre
-            code.language-javascript.
-              flatten(just(just(1))); //=> just(1)
+            :markdown-it
+              Takes a traversable with applicatives inside and "flips" the nesting so that the applicative ends up on the outside and the traversable on the inside.
 
-        +fn('chain', '<A, B, M extends Monad>(f: (a: A) => M<B>, m: M<A>): M<B>')
-          div.description
-            p Monadic chain.
+              In the example below the applicative `Maybe` the traversable created by `fromArray`.
+              Sequence turns them inside out so that `just` floats from the inside to the outside.
           pre
-            code.language-javascript.
-              flatten(just(just(1))); //=> just(1)
+            code.lang-javascript.
+              sequence(Maybe, fromArray([just(1), just(2), just(3)])); //=> just(fromArray([1, 2, 3]))
+
+        +fn('traverse', '<A, B, T extends Traversable, F extends Applicative>(a: ApplicativeDictionary, f: (a: A) => F<B>, t: T<A>): F<T<B>>')
+          div.description
+            p Traverse.
+          pre
+            code.lang-javascript.
+              traverse(Maybe, just, fromArray([1, 2, 3])); //=> just(fromArray([1, 2, 3]))
 
         h2 Instances
 
@@ -149,28 +213,28 @@ html(lang="en")
         p Import with.
 
         pre
-          code.language-javascript.
+          code.lang-javascript.
             import {just, nothing, ...} from "jabz/maybe";
 
         +fn('just', '<A>(a: A): Maybe<A>')
           div.description
             p Creates a Maybe with just the value a.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               map(double, just(4)); //=> just(8)
 
         +fn('nothing', 'Maybe<any>')
           div.description
             p A Maybe with no value inside
           pre
-            code.language-javascript.
+            code.lang-javascript.
               map(double, nothing); //=> nothing
 
         +fn('isNothing', '(m: Maybe<any>): boolean')
           div.description
             p Returns true if m is empty.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               isNothing(nothing); //=> true
               isNothing(just(3)); //=> false
 
@@ -178,7 +242,7 @@ html(lang="en")
           div.description
             p Returns true if m is contains a value.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               isJust(nothing); //=> false
               isJust(just(3)); //=> true
 
@@ -186,15 +250,16 @@ html(lang="en")
           div.description
             p Extracts a the potential value from `m` with `a` as a fallback.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               fromMaybe(5, nothing); //=> 5
               fromMaybe(5, just(3)); //=> 3
 
         +fn('maybe', '(b: B, f: (a: A) => B, m: Maybe<A>)')
           div.description
-            p If <code>m</code> is <code>nothing</code> return <code>b</code>. Otherwise, extract the value, pass it through <code>f</code> and return it.
+            :markdown-it
+              If `m` is `nothing` return `b`. Otherwise, extract the value, pass it through `f` and return it.
           pre
-            code.language-javascript.
+            code.lang-javascript.
               maybe("--:--", (d) => d.getMinutes() + ":" + d.getSeconds, maybeTime);
 
         h2 Specification

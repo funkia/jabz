@@ -250,9 +250,49 @@ header {
   }
 }
 
-#container {
-  margin-left: 13em;
-  max-width: 45em;
+.wrapper {
+  box-sizing: border-box;
+  content: "";
+  display: table;
+  clear: both;
+  padding: 1em;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 58em;
+}
+
+#sidebar {
+  width: 12em;
+  padding-left: .5em;
+  clear: both;
+  clear: both;
+  ul {
+    line-height: 1.4em;
+    list-style: none;
+    margin: .3em 0;
+    margin-left: .5em;
+    padding-left: .5em;
+    border-left: 1px solid #eee;
+  }
+  & > ul {
+    margin-left: 0em;
+    padding-left: .5m;
+  }
+}
+
+@media (min-width: 950px) {
+  #container {
+    margin-left: 13em;
+  }
+  #sidebar {
+    float: left;
+  }
+  #sidebar.fixed {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding-top: 1em;
+  }
 }
 
 h2 {
@@ -265,7 +305,7 @@ h3 {
 
 .fn {
   border-top: 4px solid rgb(245, 245, 240);
-  padding: .5em 0;
+  padding: .2em 0;
 }
 
 div.signature {
@@ -275,7 +315,7 @@ div.signature {
   margin: 1em 0;
   .name {
     font-weight: bold;
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
   .type {
     margin-left: .5em;
@@ -303,42 +343,6 @@ pre {
 
 code {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
-}
-
-#sidebar {
-  float: left;
-  width: 12em;
-  padding-left: .5em;
-  clear: both;
-  clear: both;
-  ul {
-    line-height: 1.4em;
-    list-style: none;
-    margin: .3em 0;
-    margin-left: .5em;
-    padding-left: .5em;
-    border-left: 1px solid #eee;
-  }
-  & > ul {
-    margin-left: 0em;
-    padding-left: .5m;
-  }
-}
-
-#sidebar.fixed {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  padding-top: 1em;
-}
-
-.thing {
-  box-sizing: border-box;
-  content: "";
-  display: table;
-  clear: both;
-  padding: 1em;
-  width: 100%;
 }
 
 .clearfix:after { 

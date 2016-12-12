@@ -2,26 +2,24 @@ import "mocha";
 import {assert} from "chai";
 
 import {Applicative, ApplicativeDictionary} from "../src/applicative";
-import {Monad, monad, arrayFlatten, go, fgo, flatten} from "../src/monad";
-import {Maybe, just, nothing} from "../src/maybe";
+import {Maybe, just} from "../src/maybe";
 import {Either} from "../src/either";
 import {testFunctor} from "./functor";
-import {testApplicative} from "./applicative";
 import {Traversable, traversable, traverse, sequence, mapAccumR} from "../src/traversable";
 import {testFoldable} from "./foldable";
 
 export function testTraversable(list: <A>(l: A[]) => Traversable<A>) {
   it("can sequence", () => {
     assert.deepEqual(
-      just(list([1, 2, 3])),
-      sequence(Maybe, list([just(1), just(2), just(3)]))
+      sequence(Maybe, list([just(1), just(2), just(3)])),
+      just(list([1, 2, 3]))
     );
   });
   it("can traverse", () => {
     assert.deepEqual(
-      just(list([1, 2, 3])),
-      traverse(Maybe, just, list([1, 2, 3]))
-    );    
+      traverse(Maybe, just, list([1, 2, 3])),
+      just(list([1, 2, 3]))
+    );
   });
 }
 
@@ -96,7 +94,7 @@ describe("Traversable", () => {
       assert.throws(() => {
         @traversable
         class List<A> {
-          constructor(private list: A[]) {};          
+          constructor(private list: A[]) {};
           sequence<A>(
             a: ApplicativeDictionary,
             t: List<Applicative<A>>
