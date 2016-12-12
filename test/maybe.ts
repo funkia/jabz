@@ -2,7 +2,9 @@ import "mocha";
 import {assert} from "chai";
 
 import Sum from "../src/monoids/sum";
-import {Maybe, just, nothing} from "../src/maybe";
+import {
+  Maybe, just, nothing, isNothing, isJust, fromMaybe, maybe
+} from "../src/maybe";
 import {map, mapTo} from "../src/functor";
 import {go, flatten} from "../src/monad";
 import {size, foldr, foldMap} from "../src/foldable";
@@ -11,6 +13,21 @@ import {of} from "../src/applicative";
 import {testFunctor} from "./functor";
 
 describe("Maybe", () => {
+  it("isJust and isNothing", () => {
+    assert.strictEqual(isJust(nothing), false);
+    assert.strictEqual(isJust(just(1)), true);
+    assert.strictEqual(isNothing(nothing), true);
+    assert.strictEqual(isNothing(just(1)), false);
+  });
+  it("fromMaybe", () => {
+    assert.strictEqual(fromMaybe(5, nothing), 5);
+    assert.strictEqual(fromMaybe(5, just(3)), 3);
+  });
+  it("maybe", () => {
+    const double = (n: number) => 2 * n;
+    assert.strictEqual(maybe(5, double, nothing), 5);
+    assert.strictEqual(maybe(5, double, just(3)), 6);
+  });
   it("gives just on `of`", () => {
     const j = just(12);
     assert.deepEqual(j, j.of(12));

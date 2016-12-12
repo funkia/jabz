@@ -31,7 +31,7 @@ html(lang="en")
     div.thing
       include sidebar.pug
       div#container.col
-      
+
         h2 API
 
         h3#monoid Monoid
@@ -141,13 +141,13 @@ html(lang="en")
               flatten(just(just(1))); //=> just(1)
 
         h2 Instances
-        
+
         h3 Maybe
-        
+
         p Maybe is a container that may contain one or zero elements.
         p Maybe is an instance of the following abstractions: functor, applicative, monad, foldable and traversable.
         p Import with.
-        
+
         pre
           code.language-javascript.
             import {just, nothing, ...} from "jabz/maybe";
@@ -173,7 +173,30 @@ html(lang="en")
             code.language-javascript.
               isNothing(nothing); //=> true
               isNothing(just(3)); //=> false
-              
+
+        +fn('isJust', '(m: Maybe<any>): boolean')
+          div.description
+            p Returns true if m is contains a value.
+          pre
+            code.language-javascript.
+              isJust(nothing); //=> false
+              isJust(just(3)); //=> true
+
+        +fn('fromMaybe', '<A>(a: A, m: Maybe<A>): A')
+          div.description
+            p Extracts a the potential value from `m` with `a` as a fallback.
+          pre
+            code.language-javascript.
+              fromMaybe(5, nothing); //=> 5
+              fromMaybe(5, just(3)); //=> 3
+
+        +fn('maybe', '(b: B, f: (a: A) => B, m: Maybe<A>)')
+          div.description
+            p If <code>m</code> is <code>nothing</code> return <code>b</code>. Otherwise, extract the value, pass it through <code>f</code> and return it.
+          pre
+            code.language-javascript.
+              maybe("--:--", (d) => d.getMinutes() + ":" + d.getSeconds, maybeTime);
+
         h2 Specification
 
         h3 Semigroup
@@ -181,7 +204,7 @@ html(lang="en")
           tr
             td Description
             td
-              p A semigroup represents things that can be combined. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed. 
+              p A semigroup represents things that can be combined. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed.
               p Examples are many. For instance numbers can be combined by adding them together, lists can be combined by concatenating them and images can be combined by overlaying them.
           tr
             td Methods
