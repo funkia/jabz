@@ -1,6 +1,6 @@
 window.addEventListener('load', function(event) {
-  var sidebar = document.getElementById('sidebar');
-  var header = document.getElementsByTagName('header')[0];
+  var sidebar = document.getElementById("menu");
+  var header = document.getElementById("top-header");
   var headerHeight = header.scrollHeight;
   var fixed = undefined;
   console.log(header.scrollHeight, header.offsetHeight);

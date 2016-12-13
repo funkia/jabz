@@ -40,6 +40,7 @@
     "metalsmith-sass": "^1.3.0",
     "metalsmith-watch": "^1.0.3",
     "mocha": "^2.5.3",
+    "normalize.css": "^5.0.0",
     "nyc": "^8.3.0",
     "ts-node": "^0.8.0",
     "typescript": "^2.1.0-dev.20160928",
