@@ -4,3 +4,5 @@ node_modules
 lib
 coverage/
 docs-build/
+*.log
+.tern-port

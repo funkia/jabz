@@ -1,0 +1,15 @@
+include mixins.pug
+
+h3#infinitelist InfiniteList
+
+p A simple lazy infinite list. It can only be created based on `naturals`.
+
+p It implements functor, applicative and foldable. Since it is infinite it only works with the short circuiting foldable methods.
+
++fn('naturals', 'InfiniteList<number>')
+  :markdown-it
+    An infinite list of the natural numbers. `[0, 1, 2, ...]`.
+
++fn('repeat', '(a: A): InfiniteList<A>')
+  :markdown-it
+    An infinite list of `a`s. `[a, a, a, ...]`.

@@ -1,9 +1,11 @@
-@import "fonts.scss";
 @import "../node_modules/normalize.css/normalize.css";
+@import "fonts.scss";
 
+// Variables
 $menu-width: 8em;
 $large-screen: 1000px;
 $medium-screen: 850px;
+$space-grey: #efefef;
 
 body {
   color: #222;
@@ -40,6 +42,19 @@ pre {
 
 code {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
+}
+
+table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: scroll;
+  th, td {
+    border: 1px solid $space-grey;
+    padding: .3em .5em;
+  }
+  tbody tr:nth-child(odd) {
+    background: #f9f9f9;
+  }
 }
 
 .header-logo {
@@ -115,7 +130,7 @@ code {
 
 div.signature {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
-  background-color: #efefef;
+  background-color: $space-grey;
   padding: .4em;
   margin: 1em 0;
   overflow-x: scroll;
@@ -135,14 +150,14 @@ div.signature {
 
 .method {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
-  background-color: #efefef;
+  background-color: $space-grey;
   .name {
     font-weight: bold;
   }
 }
 
 .spec-table {
-  width: 100%;
+  overflow-x: scroll;
   border-spacing: 1em;
   td {
     vertical-align: top;

@@ -1,0 +1,33 @@
+include mixins.pug
+
+h3#either Either
+
+p Either is a container that can be either left or right.
+
+p Either implements functor and applicative.
+
++fn('left', '<A>(a: A): Either<A, any>')
+  div.description
+    :markdown-it
+      Returns an `Either` that is left and contains `a`.
+
++fn('right', '<B>(b: B): Either<any, B>')
+  div.description
+    :markdown-it
+      Returns an `Either` that is right and contains `b`.
+
++fn('isLeft', '(either: Either<any, any>): boolean')
+  div.description
+    :markdown-it
+      Return `true` is `either` is left.
+
++fn('isRight', '(either: Either<any, any>): boolean')
+  div.description
+    :markdown-it
+      Return `true` is `either` is right.
+
+
++fn('fromEither', '<A, B>(either: Either<A, B>): A | B')
+  div.description
+    :markdown-it
+      Extracts the value from an `Either`.

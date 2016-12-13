@@ -11,8 +11,8 @@ Metalsmith(__dirname)
   .source('./docs')
   .destination('./docs-build')
   .use(pug({pretty: true, filters: {markdown}}))
-  .use(highlight({}))
-  // .use(metalsmithPrism())
+  // .use(highlight({}))
+  .use(metalsmithPrism())
   .use(sass({
     outputStyle: "expanded"
   }))
