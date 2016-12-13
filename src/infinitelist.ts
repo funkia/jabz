@@ -1,9 +1,9 @@
-import {Functor} from "./functor";
 import {Foldable} from "./foldable";
+import {Applicative} from "./applicative";
 import {id, add, compose} from "./utils";
 import {Either, fromEither, right, isRight, isLeft} from "./either";
 
-export class InfiniteList<A> implements Functor<A>, Foldable<A> {
+export class InfiniteList<A> implements Applicative<A>, Foldable<A> {
   constructor(private fn: (idx: number) => A) {};
   map<B>(f: (a: A) => B): InfiniteList<B> {
     return new InfiniteList(compose(f, this.fn));

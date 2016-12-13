@@ -1,0 +1,20 @@
+mixin fn(name, signature, description)
+  div.fn
+    div.signature
+      span.name= name
+      span.type= signature
+    block
+
+mixin method(name, signature)
+  div.method
+    span.name= name
+    span : #{signature}
+
+mixin description
+  div.description
+    :markdown-it= block
+
+mixin example
+  pre
+    code.language-javascript
+      block

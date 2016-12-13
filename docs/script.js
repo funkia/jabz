@@ -4,7 +4,7 @@ window.addEventListener('load', function(event) {
   var headerHeight = header.scrollHeight;
   var fixed = undefined;
   console.log(header.scrollHeight, header.offsetHeight);
-  window.addEventListener('scroll', function(e) {
+  function updateFix(e) {
     var top  = window.pageYOffset || document.documentElement.scrollTop;
     if (top >= headerHeight && fixed !== true) {
       sidebar.classList.add('fixed');
@@ -13,5 +13,7 @@ window.addEventListener('load', function(event) {
       sidebar.classList.remove('fixed');
       fixed = false;
     }
-  });
+  }
+  updateFix();
+  window.addEventListener('scroll', updateFix);
 });

@@ -1,0 +1,16 @@
+include mixins.pug
+
+h3#conslist ConsList
+
+:markdown-it
+  A simple singly linked list. It can be useful in cases where a list is build by repeatedly prepending elements to the front of the this. The `ConsList` supports the `cons` operation in constant time which is significantly better than JavaScript arrays and many other data structures.
+
+  It implements functor, applicative, monad, foldable and traversable.
+
++fn('nil', 'Cons<any>')
+  :markdown-it
+    The sentinel value at the end of the list indicating the end. Alternatively it can be though of as the empty list.
+
++fn('cons', '<A>(a: A, as: Cons<A>)')
+  :markdown-it
+    Prepend the element `a` to the beginning of the list `as`.

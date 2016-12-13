@@ -206,6 +206,10 @@
          url('./fonts/source-code-pro/TTF/SourceCodePro-BlackIt.ttf') format('truetype');
 }
 
+// Variables
+
+$space-grey: #efefef;
+
 body {
   color: #222;
   font-size: 18px;
@@ -222,6 +226,17 @@ html, body {
 h1 {
   font-size: 2.6em;
   font-weight: normal;
+}
+
+table {
+  border-collapse: collapse;
+  th, td {
+    border: 1px solid $space-grey;
+    padding: .3em .5em;
+  }
+  tbody tr:nth-child(odd) {
+    background: #f9f9f9;
+  }
 }
 
 header {
@@ -310,7 +325,7 @@ h3 {
 
 div.signature {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
-  background-color: #efefef;
+  background-color: $space-grey;
   padding: .4em;
   margin: 1em 0;
   .name {
@@ -329,7 +344,7 @@ div.signature {
 
 .method {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
-  background-color: #efefef;
+  background-color: $space-grey;
   .name {
     font-weight: bold;
   }
@@ -445,9 +460,9 @@ pre[class*="language-"] {
 }
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
+:not(pre) > code {
+  background: $space-grey;
 	padding: .1em;
-	border-radius: .3em;
 }
 
 .token.comment,

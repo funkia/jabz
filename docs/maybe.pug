@@ -1,0 +1,57 @@
+include mixins.pug
+
+h3#maybe Maybe
+
+p Maybe is a container that may contain one or zero elements.
+p Maybe is an instance of the following abstractions: functor, applicative, monad, foldable and traversable.
+p Import with.
+
+pre
+  code.language-javascript.
+    import {just, nothing, ...} from "jabz/maybe";
+
++fn('just', '<A>(a: A): Maybe<A>')
+  div.description
+    p Creates a Maybe with just the value a.
+  pre
+    code.language-javascript.
+      map(double, just(4)); //=> just(8)
+
++fn('nothing', 'Maybe<any>')
+  div.description
+    p A Maybe with no value inside
+  pre
+    code.language-javascript.
+      map(double, nothing); //=> nothing
+
++fn('isNothing', '(m: Maybe<any>): boolean')
+  div.description
+    p Returns true if m is empty.
+  pre
+    code.language-javascript.
+      isNothing(nothing); //=> true
+      isNothing(just(3)); //=> false
+
++fn('isJust', '(m: Maybe<any>): boolean')
+  div.description
+    p Returns true if m is contains a value.
+  pre
+    code.language-javascript.
+      isJust(nothing); //=> false
+      isJust(just(3)); //=> true
+
++fn('fromMaybe', '<A>(a: A, m: Maybe<A>): A')
+  div.description
+    p Extracts a the potential value from `m` with `a` as a fallback.
+  pre
+    code.language-javascript.
+      fromMaybe(5, nothing); //=> 5
+      fromMaybe(5, just(3)); //=> 3
+
++fn('maybe', '(b: B, f: (a: A) => B, m: Maybe<A>)')
+  div.description
+    :markdown-it
+      If `m` is `nothing` return `b`. Otherwise, extract the value, pass it through `f` and return it.
+  pre
+    code.language-javascript.
+      maybe("--:--", (d) => d.getMinutes() + ":" + d.getSeconds, maybeTime);
