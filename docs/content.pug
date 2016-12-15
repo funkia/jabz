@@ -59,10 +59,38 @@ pre
       mapTo(4, [1, 2, 3]); //=> [4, 4, 4]
 
 h3#applicative Applicative
-| Import with.
+p Import with.
 pre
   code.language-javascript.
     import * as Applicative from "jabz/applicative";
+
++fn('of', '<A, F extends Applicative>(d: ApplicativeDictionary, a: A): F<A>)')
+  :markdown-it
+    Wraps a value in an applicative. This function is also known as `pure` and `return`.
+
+    ```javascript
+    of(Maybe, 12); //=> just(12)
+    of(Array, 12); //=> [12]
+    ```
+
++fn('ap', '<A, B, F extends Applicative>(fa: F<(a: A) => B>, ba: F<A>): F<B>')
+  :markdown-it
+    Applies stuff.
+
++fn('lift', '<F extends Applicative>(f: (?) => R, ...args: F<?>[]): F<A>')
+  :markdown-it
+
+    Takes a function from `n` arguments, `n` applicatives with values
+    matching the function and applies the function inside the applicatives.
+
+    ```javascript
+    lift((a, b, c) => a * b + c, just(4), just(2), just(3)); //=> just(11)
+    lift((a, b, c) => a * b + c, just(4), nothing, just(3)); //=> nothing
+    ```
+
++fn('seq', '<A, B, F extends Applicative>(a: F<A>, b: F<B>): F<B>')
+  :markdown-it
+    Sequences actions from left to right, i.e. `a` before `b`, discarding the value of `a`.
 
 h3#monad Monad
 p Import with.
@@ -83,6 +111,43 @@ pre
   pre
     code.language-javascript.
       flatten(just(just(1))); //=> just(1)
+
++fn('go', '<M extends Monad>(gen: () => Iterator<M<any>>): M<any>')
+  :markdown-it
+    Do-notation powered by generator functions.
+
+    ```javascript
+    go(function*() {
+      const a = yield just(1);
+      const b = yield just(3);
+      const c = yield just(2);
+      return just(a + b + c);
+    }); //=> just(6)
+
+    go(function*() {
+      const a = yield just(1);
+      const b = yield nothing;
+      const c = yield just(2);
+      return just(a + b + c);
+    }); //=> nothing
+    ```
+
++fn('fgo', '<M extends Monad>(gen: (..args) => Iterator<M<any>>): (..args) => M<any>')
+  :markdown-it
+
+    A nifty shortcut for creating a function that uses go-notation.
+    The arguments to the function are passed directly to the generator
+    function.
+
+    ```javascript
+    const fgoExample = fgo(function*(x, y, z) {
+      const a = yield just(x);
+      const b = yield just(y);
+      const c = yield just(z)
+      return just(a + b + c);
+    });
+    fgoExample(1, 2, 3); //=> just(6)
+    ```
 
 h3#foldable Foldable
 | Import with.
@@ -119,13 +184,13 @@ pre
         findLast(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(6)
         findLast(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(6)
 
-+fn('toArary', '(t: Foldable<A>): A[]')
++fn('toArray', '(t: Foldable<A>): A[]')
   div.description
     p Converts a foldable to an array.
 
 +fn('sequence_', '<A extends Applicative>(d: ApplicativeDictionary, t: Foldable<A<any>>): A<{}>')
-  div.description
-    p Returns the last element in the foldable that satisfies the predicate.
+  :markdown-it
+    Sequences applicatives in the foldable from left to right and discarding the result.
 
 +fn('foldrM', '<A, B, M extends Monad>(f: (a: A, b: B) => M<B>, mb: M<B>, t: Foldable<A>): M<B>')
   div.description
@@ -133,8 +198,8 @@ pre
   pre
     code.language-javascript.
       const divide = (a, b) => a === 0 ? nothing : just(b / a);
-      foldrM(divide, just(100), list([10, 5])); //=> just(2)
-      foldrM(divide, just(100), list([5, 0])); //=> nothing
+      foldrM(divide, just(100), fromArray([10, 5])); //=> just(2)
+      foldrM(divide, just(100), fromArray([5, 0])); //=> nothing
 
 h3#traversable Traversable
 | Import with.

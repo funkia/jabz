@@ -10,6 +10,24 @@ pre
   code.language-javascript.
     import {just, nothing, ...} from "jabz/maybe";
 
++fn('Maybe<A>', 'class')
+  :markdown-it
+    Type of maybe values.
+
++fn('Maybe#match', '<K>(m: MaybeMatch<A, K>): K')
+   :markdown-it
+
+     Pattern matching on `Maybe` values. `MaybeMatch<A, K>` must be a
+     object with a `nothing` and `just` properties containing
+     functions that returns `K`.
+
+     ```javascript
+     maybeAge.match({
+       just: (n) => `You're ${n} years old'`,
+       nothing: () => `No age provided :(`
+     });
+     ```
+
 +fn('just', '<A>(a: A): Maybe<A>')
   div.description
     p Creates a Maybe with just the value a.

@@ -1,10 +1,28 @@
 include mixins.pug
 
 h3#either Either
+:markdown-it
+  Either is a container that can be either left or right.
 
-p Either is a container that can be either left or right.
+  Either implements functor and applicative.
 
-p Either implements functor and applicative.
++fn('Either<A, B>', 'class')
+  :markdown-it
+    Type of maybe values.
+
++fn('Either#match', '<K>(m: EitherMatch<A, B, K>): K')
+   :markdown-it
+
+     Pattern matching on `Either` values. `EitherMatch<A, B, K>` must
+     be a object with a `left` and `right` properties containing
+     functions returning `K`.
+
+     ```javascript
+     response.match({
+       right: (rating) => `User gave the rating ${rating}`,
+       left: (message) => `User wrote the message: ${message}`
+     });
+     ```
 
 +fn('left', '<A>(a: A): Either<A, any>')
   div.description

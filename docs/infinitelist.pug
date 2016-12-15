@@ -1,10 +1,18 @@
 include mixins.pug
 
 h3#infinitelist InfiniteList
+:markdown-it
 
-p A simple lazy infinite list. It can only be created based on `naturals`.
+  A simple lazy infinite list. It can only be created based on
+  `naturals`.
 
-p It implements functor, applicative and foldable. Since it is infinite it only works with the short circuiting foldable methods.
+  It implements functor, applicative and foldable. Since it is
+  infinite it only works with the short-circuiting foldable methods.
+
+  ```javascript
+  // Find the first square number larger than 100
+  find((n) => n > 100, map((n) => n * n, naturals)); //=> 121
+  ```
 
 +fn('naturals', 'InfiniteList<number>')
   :markdown-it
