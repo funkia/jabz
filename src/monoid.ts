@@ -13,6 +13,8 @@ export interface MonoidConstructor<A, M extends Monoid<M>> {
   identity: () => M;
 }
 
+export type AnyMonoid<A> = string | Array<any> | Monoid<A>;
+
 export function identity(m: ArrayConstructor): any[];
 export function identity(m: StringConstructor): string;
 export function identity<M extends Monoid<M>>(m: MonoidDictionary<M>): M;

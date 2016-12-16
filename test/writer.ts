@@ -34,20 +34,21 @@ describe("Writer", () => {
       );
     });
   });
-  // it("works with strings", () => {
-  //   const StringWriter =
-  //   const written = go(function*() {
-  //     yield tell("First");
-  //     yield tell("-glance");
-  //     const [_, cur] = yield listen(tell(" feeling of "));
-  //     assert.strictEqual(cur, " feeling of ");
-  //     const next = yield of("New York time");
-  //     yield tell(next);
-  //     return of(22);
-  //   });
-  //   assert.deepEqual(
-  //     runWriter(written),
-  //     ["First-glance feeling of New York time", 22]
-  //   );
-  // });
+  it("works with strings", () => {
+    const StringWriter = createWriter(String);
+    const {tell, listen, of} = StringWriter;
+    const written = go(function*() {
+      yield tell("First");
+      yield tell("-glance");
+      const [_, cur] = yield listen(tell(" feeling of "));
+      assert.strictEqual(cur, " feeling of ");
+      const next = yield of("New York time");
+      yield tell(next);
+      return of(22);
+    });
+    assert.deepEqual(
+      runWriter(written),
+      ["First-glance feeling of New York time", 22]
+    );
+  });
 });
