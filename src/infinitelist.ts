@@ -26,7 +26,6 @@ export class InfiniteList<A> implements Applicative<A>, Foldable<A> {
       for (let j = 1; j < args.length; ++j) {
         vals[j - 1] = args[j].fn(i);
       }
-      console.log(vals);
       return args[0].apply(undefined, vals);
     });
   }

@@ -33,7 +33,7 @@ describe("IO", () => {
       const a = yield IO.of(4);
       const b = yield f1(3);
       const sum = yield f2(a, b);
-      return IO.of(sum);
+      return sum;
     });
     return runIO(comp).then((res) => {
       assert.equal(10, res);
@@ -58,7 +58,7 @@ describe("IO", () => {
         assert.strictEqual(variable, 3);
         const b = yield wrapped(3, 4);
         assert.strictEqual(variable, 10);
-        return IO.of(a + b);
+        return a + b;
       });
       return runIO(comp).then((res) => {
         assert.strictEqual(res, 13);
@@ -76,8 +76,7 @@ describe("IO", () => {
         assert.strictEqual(variable, 3);
         const eb = yield wrapped(3, 4);
         assert.strictEqual(variable, 10);
-        console.log(lift, ea, eb);
-        return IO.of(lift(add, ea, eb));
+        return lift(add, ea, eb);
       });
       return runIO(comp).then((res) => {
         assert.deepEqual(res, right(13));

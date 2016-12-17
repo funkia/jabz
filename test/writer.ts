@@ -20,7 +20,7 @@ describe("Writer", () => {
         assert.deepEqual(cur, Sum.create(7));
         const next = yield of(Sum.create(3));
         yield tell(next);
-        return of("Hello");
+        return "Hello";
       });
       assert.deepEqual(
         runWriter(writer),
@@ -31,6 +31,12 @@ describe("Writer", () => {
       assert.deepEqual(
         runWriter(of("Hello Writer!")),
         [Sum.create(0), "Hello Writer!"]
+      );
+    });
+    it("gives identity on instance", () => {
+      assert.deepEqual(
+        runWriter(of("Foo").of("Bar")),
+        [Sum.create(0), "Bar"]
       );
     });
   });
@@ -44,7 +50,7 @@ describe("Writer", () => {
       assert.strictEqual(cur, " feeling of ");
       const next = yield of("New York time");
       yield tell(next);
-      return of(22);
+      return 22;
     });
     assert.deepEqual(
       runWriter(written),

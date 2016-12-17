@@ -107,7 +107,7 @@ describe("Monad", () => {
       const result = go(function*() {
         const n = yield new List([1, 2, 3]);
         const m = yield new List([10, 100]);
-        return List.of(n * m);
+        return n * m;
       });
       assert.deepEqual(
         result,
@@ -122,7 +122,7 @@ describe("Monad", () => {
         lines[1]++;
         const m = yield new List([10, 100]);
         lines[2]++;
-        return List.of(n * m);
+        return n * m;
       });
       assert.deepEqual(lines, [10, 9, 6]);
     });
@@ -134,7 +134,7 @@ describe("Monad", () => {
         lines[1]++;
         const m = yield just(2);
         lines[2]++;
-        return just(n * m);
+        return n * m;
       });
       assert.deepEqual(lines, [1, 1, 1]);
     });
@@ -144,7 +144,7 @@ describe("Monad", () => {
       const a = yield just(x);
       const b = yield just(y);
       const c = yield just(z)
-      return just(a + b + c);
+      return a + b + c;
     })
     assert.deepEqual(
       just(6),

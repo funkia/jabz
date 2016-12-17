@@ -43,7 +43,7 @@ describe("Maybe", () => {
       const a = yield just(1);
       const b = yield just(3);
       const c = yield just(2);
-      return just(a + b + c);
+      return a + b + c;
     });
     assert.deepEqual(res, just(6));
   });

@@ -121,14 +121,14 @@ pre
       const a = yield just(1);
       const b = yield just(3);
       const c = yield just(2);
-      return just(a + b + c);
+      return a + b + c;
     }); //=> just(6)
 
     go(function*() {
       const a = yield just(1);
       const b = yield nothing;
       const c = yield just(2);
-      return just(a + b + c);
+      return a + b + c;
     }); //=> nothing
     ```
 
@@ -144,7 +144,7 @@ pre
       const a = yield just(x);
       const b = yield just(y);
       const c = yield just(z)
-      return just(a + b + c);
+      return a + b + c;
     });
     fgoExample(1, 2, 3); //=> just(6)
     ```

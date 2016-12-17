@@ -109,7 +109,7 @@ function singleGo(doing: Iterator<Monad<any>>, m: Monad<any>): Monad<any> {
   function doRec(v: any): any {
     const result = doing.next(v);
     if (result.done === true) {
-      return result.value;
+      return m.of(result.value);
     } else if (typeof result.value !== "undefined") {
       return result.value.chain(doRec);
     } else {
@@ -127,7 +127,7 @@ function multiGo<M extends Monad<any>>(gen: () => Iterator<M>, m: M): Monad<any>
     }
     const result = doing.next(v);
     if (result.done === true) {
-      return result.value;
+      return m.of(result.value);
     } else {
       const newStateSoFar = stateSoFar.concat(v);
       return result.value.chain((vv) => doRec(vv, newStateSoFar));
@@ -142,7 +142,7 @@ export function go<M extends Monad<any>>(gen: () => Iterator<M>): any {
   const monad = result.value;
   if (result.done === true) {
     return monad;
-  } else if (result.value.multi === true) {
+  } else if (monad.multi === true) {
     return multiGo(gen, monad);
   } else {
     return singleGo(iterator, monad);
@@ -150,13 +150,15 @@ export function go<M extends Monad<any>>(gen: () => Iterator<M>): any {
 }
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
+  let of: Function;
   return (...args: any[]) => {
     const doing = gen(...args);
     function doRec(v: any): any {
       const a = doing.next(v);
       if (a.done === true) {
-        return a.value;
+        return of(a.value);
       } else if (typeof a.value !== "undefined") {
+        of = a.value.of;
         return a.value.chain(doRec);
       } else {
         throw new Error("Expected monad value");
