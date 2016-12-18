@@ -78,7 +78,9 @@ pre
 
 +fn('ap', '<A, B, F extends Applicative>(fa: F<(a: A) => B>, ba: F<A>): F<B>')
   :markdown-it
-    Applies stuff.
+    Takes two applicatives of the same type. The first must contain a
+    function from `A` and the second an `A`. The function is then
+    applied to the value and a new applicative is returned.
 
 +fn('lift', '<F extends Applicative>(f: (?) => R, ...args: F<?>[]): F<A>')
   :markdown-it
