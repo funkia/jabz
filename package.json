@@ -1,6 +1,6 @@
 {
   "name": "jabz",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Powerful and practical abstractions.",
   "main": "lib/index",
   "scripts": {
