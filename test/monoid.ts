@@ -10,7 +10,7 @@ describe("monoid", () => {
   });
 });
 
-export default function<M extends Monoid<M>>(name: string, monoid: M): void {
+export function testMonoid<M extends Monoid<M>>(name: string, monoid: M): void {
   describe("monoid " + name, () => {
     it("has identity element", () => {
       assert.deepEqual(monoid.identity().combine(monoid),

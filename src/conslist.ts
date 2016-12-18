@@ -1,19 +1,23 @@
+import {Monoid} from "./monoid";
 import {Applicative, ApplicativeDictionary, lift} from "./applicative";
 import {Traversable, traversable} from "./traversable";
 import {Monad, monad} from "./monad";
 import {Either} from "./either";
 
 @monad @traversable
-export class Cons<A> implements Monad<A>, Traversable<A> {
+export class Cons<A> implements Monoid<Cons<A>>, Monad<A>, Traversable<A> {
   constructor(private val: A, private tail: Cons<A>) {}
-  concat(c: Cons<A>): Cons<A> {
-    return this === nil ? c : cons(this.val, this.tail.concat(c));
+  combine(c: Cons<A>): Cons<A> {
+    return this === nil ? c : cons(this.val, this.tail.combine(c));
+  }
+  identity(): Cons<any> {
+    return nil;
   }
   of<B>(b: B): Cons<B> {
     return cons(b, nil);
   }
   chain<B>(f: (a: A) => Cons<B>): Cons<B> {
-    return this === nil ? nil : f(this.val).concat(this.tail.chain(f));
+    return this === nil ? nil : f(this.val).combine(this.tail.chain(f));
   }
   traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Cons<B>> {
     return this === nil ? a.of(nil) : lift(cons, f(this.val), this.tail.traverse(a, f));

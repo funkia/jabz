@@ -14,7 +14,7 @@ Jabz provides the following implementations of the abstractions.
 | ----------------------------- | --------- | ------ | ------- | ----------- | ----- | -------- | ----------- |
 | [Maybe](#maybe)               |           |        | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
 | [Either](#either)             |           |        | ✔︎       | ✔︎           |       |          |            |
-| [ConsList](#conslist)         |           |        | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
+| [Cons](#cons)                 | ✔︎         | ✔︎      | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
 | [InfiniteList](#infinitelist) |           |        | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
 | Identity                      |           |        | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
 | Const                         |           |        | ✔︎       | ✔︎           | ✔︎     | ✔︎        | ✔︎          |
