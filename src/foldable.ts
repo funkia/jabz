@@ -124,6 +124,16 @@ export function findLast<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<A> {
   return t.shortFoldr((a, acc) => f(a) ? left(just(a)) : right(acc), nothing);
 }
 
+export function findIndex<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<number> {
+  const idx = t.shortFoldl((idx, a) => f(a) ? left(-idx) : right(idx - 1), 0);
+  return idx >= 0 ? just(idx) : nothing;
+}
+
+export function findLastIndex<A>(f: (a: A) => boolean, t: Foldable<A>): Maybe<number> {
+  const idx = t.shortFoldr((a, idx) => f(a) ? left(-idx) : right(idx - 1), -1);
+  return idx >= 0 ? just(t.size() - idx) : nothing;
+}
+
 export function shortFoldl<A, B>(f: (b: B, a: A) => Either<B, B>, acc: B, l: Foldable<A>): B {
   return l.shortFoldl<B>(f, acc);
 }

@@ -3,7 +3,7 @@ import {assert} from "chai";
 
 import {
   Foldable, foldable, foldMap, foldr, foldl, foldrM, size, maximum, minimum,
-  sum, find, findLast, toArray, take, sequence_
+  sum, find, findLast, findIndex, findLastIndex, toArray, take, sequence_
 } from "../src/foldable";
 import {Maybe, just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -107,30 +107,38 @@ describe("Foldable", () => {
     });
     it("can find first element", () => {
       assert.deepEqual(
-        just(3),
-        find((n) => n === 3, list([1, 2, 3, 4, 5]))
+        find((n) => n > 6, list([1, 8, 3, 7, 5])),
+        just(8)
       );
       assert.deepEqual(
-        just(8),
-        find((n) => n > 6, list([1, 8, 3, 7, 5]))
-      );
-      assert.deepEqual(
-        nothing,
-        find((n) => n === 3.5, list([1, 2, 3, 4, 5]))
+        find((n) => n === 3.5, list([1, 2, 3, 4, 5])),
+        nothing
       );
     });
     it("can find last element", () => {
       assert.deepEqual(
-        just(3),
-        findLast((n) => n === 3, list([1, 2, 3, 4, 5]))
+        findLast((n) => n > 6, list([1, 8, 3, 7, 5])),
+        just(7)
       );
       assert.deepEqual(
-        just(7),
-        findLast((n) => n > 6, list([1, 8, 3, 7, 5]))
+        findLast((n) => n === 3.5, list([1, 2, 3, 4, 5])),
+        nothing
+      );
+    });
+    it("can find index", () => {
+      assert.deepEqual(
+        findIndex((n) => n % 2 === 0, list([1, 3, 4, 6, 7, 9])), just(2)
       );
       assert.deepEqual(
-        nothing,
-        findLast((n) => n === 3.5, list([1, 2, 3, 4, 5]))
+        findIndex((n) => n % 2 === 0, list([1, 3, 7, 9])), nothing
+      );
+    });
+    it("can find last index", () => {
+      assert.deepEqual(
+        findLastIndex((n) => n % 2 === 0, list([1, 3, 4, 6, 7, 9])), just(3)
+      );
+      assert.deepEqual(
+        findLastIndex((n) => n % 2 === 0, list([1, 3, 7, 9])), nothing
       );
     });
     it("can take first n elements", () => {
