@@ -150,15 +150,15 @@ export function go<M extends Monad<any>>(gen: () => Iterator<M>): any {
 }
 
 export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
-  let of: Function;
+  let m: Monad<any>;
   return (...args: any[]) => {
     const doing = gen(...args);
     function doRec(v: any): any {
       const a = doing.next(v);
       if (a.done === true) {
-        return of(a.value);
+        return m.of(a.value);
       } else if (typeof a.value !== "undefined") {
-        of = a.value.of;
+        m = a.value;
         return a.value.chain(doRec);
       } else {
         throw new Error("Expected monad value");

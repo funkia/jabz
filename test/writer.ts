@@ -5,7 +5,7 @@ import {createWriter, runWriter} from "../src/writer";
 
 import Sum from "../src/monoids/sum";
 
-import {go} from "../src/monad";
+import {go, fgo} from "../src/monad";
 import {map, mapTo} from "../src/functor";
 
 describe("Writer", () => {
@@ -56,5 +56,25 @@ describe("Writer", () => {
       runWriter(written),
       ["First-glance feeling of New York time", 22]
     );
+  });
+  it("works with logging example", () => {
+    const {tell} = createWriter(String);
+    const divide = fgo(function*(n, m) {
+      yield tell(`Divide ${n} by ${m}. `);
+      return n / m;
+    });
+    const add = fgo(function*(n, m) {
+      yield tell(`Add ${n} to ${m}. `);
+      return n + m;
+    });
+    const comp = go(function*() {
+      const a = yield add(12, 8);
+      const b = yield divide(132, 11);
+      return yield add(a, b);
+    });
+    console.log(runWriter(comp));
+    assert.deepEqual(runWriter(comp), [
+      "Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32
+    ]);
   });
 });

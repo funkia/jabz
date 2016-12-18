@@ -6,6 +6,8 @@ include:markdown-it overview.md
 
 h2 API
 
+p API documentation for Jabz.
+
 +h3-section('Semigroup')
 
 p Import with.
@@ -108,29 +110,34 @@ pre
 
 +fn('chain', '<A, B, M extends Monad>(f: (a: A) => M<B>, m: M<A>): M<B>')
   div.description
-    p Monadic chain.
-  pre
-    code.language-javascript.
-      flatten(just(just(1))); //=> just(1)
+    :markdown-it
+
+      Values in `m` are passed to `f` and `f` returns a new monadic
+      value that is joined with the former. This operation is
+      sometimes called `flatMap` and other times `>>=`.
+
+      `m.chain(f)` is equal to `m.map(f).flatten()`.
+
+      ```javascript
+      chain((m) => safeDiv(12, m), just(3)); // just(4)
+      ```
 
 +fn('go', '<M extends Monad>(gen: () => Iterator<M<any>>): M<any>')
   :markdown-it
     Do-notation powered by generator functions.
 
-    ```javascript
-    go(function*() {
-      const a = yield just(1);
-      const b = yield just(3);
-      const c = yield just(2);
-      return a + b + c;
-    }); //=> just(6)
+    The example below demonstrates the use of go-notation with the
+    `Maybe` monad. Note that the yielded values are all in the monad
+    and that the variables becomes bound to the value inside the monad.
 
+    ```javascript
+    const safeDiv = (n, m) => m === 0 ? nothing : just(n / m);
     go(function*() {
-      const a = yield just(1);
-      const b = yield nothing;
-      const c = yield just(2);
+      const a = yield find(isEven, list1);
+      const b = yield find(isEven, list2);
+      const c = yield safeDiv(a, b)
       return a + b + c;
-    }); //=> nothing
+    });
     ```
 
 +fn('fgo', '<M extends Monad>(gen: (..args) => Iterator<M<any>>): (..args) => M<any>')
@@ -165,8 +172,8 @@ pre
     p Returns the number of elements in the foldable.
 
 +fn('take', '(n: number, t: Foldable<A>): A[]')
-  div.description
-    p Returns an array of the first `n` elements in the foldable.
+  :markdown-it
+    Returns an array of the first `n` elements in the foldable.
 
 +fn('find', '(f: (a: A) => boolean, t: Foldable<A>): Maybe<A>')
   div.description
@@ -246,6 +253,7 @@ include maybe.pug
 include either.pug
 include conslist.pug
 include infinitelist.pug
+include writer.pug
 
 h2 Specification
 
