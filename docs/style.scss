@@ -123,15 +123,33 @@ table {
   }
 }
 
+.section-anchor {
+  color: #888888;
+  text-decoration: none;
+  font-weight: normal;
+  position: absolute;
+  padding: 0 .3em;
+  margin-left: -1.1em;
+  opacity: 0;
+  &:hover {
+    color: #555555;
+  }
+}
+
+h3:hover > .section-anchor,
+.signature:hover .section-anchor {
+  opacity: 1;
+}
+
 .fn {
   border-top: 4px solid rgb(245, 245, 240);
   padding: .2em 0;
 }
 
-div.signature {
+.signature {
   font-family: Source Code Pro, Consolas, Menlo, Courier, monospace;
   background-color: $space-grey;
-  padding: .4em;
+  padding: .4em 0;
   margin: 1em 0;
   overflow-x: scroll;
   .name {

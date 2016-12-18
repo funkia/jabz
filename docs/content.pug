@@ -6,7 +6,8 @@ include:markdown-it overview.md
 
 h2 API
 
-h3#semigroup Semigroup
++h3-section('Semigroup')
+
 p Import with.
 pre
   code.language-javascript.
@@ -21,7 +22,7 @@ pre
       combine("Hello ", "there"); //=> "Hello there"
       combine([1, 2, 3], [4, 5]); //=> [1, 2, 3, 4, 5]
 
-h3#monoid Monoid
++h3-section('Monoid')
 p Import with.
 pre
   code.language-javascript.
@@ -36,7 +37,7 @@ pre
       identity(Array); //=> []
       identity(String); //=> ""
 
-h3#functor Functor
++h3-section('Functor')
 | Import with.
 pre
   code.language-javascript.
@@ -58,7 +59,7 @@ pre
       mapTo(2, just(3)); //=> just(2)
       mapTo(4, [1, 2, 3]); //=> [4, 4, 4]
 
-h3#applicative Applicative
++h3-section('Applicative')
 p Import with.
 pre
   code.language-javascript.
@@ -92,7 +93,7 @@ pre
   :markdown-it
     Sequences actions from left to right, i.e. `a` before `b`, discarding the value of `a`.
 
-h3#monad Monad
++h3-section('Monad')
 p Import with.
 pre
   code.language-javascript.
@@ -149,7 +150,7 @@ pre
     fgoExample(1, 2, 3); //=> just(6)
     ```
 
-h3#foldable Foldable
++h3-section('Foldable')
 | Import with.
 pre
   code.language-javascript.
@@ -215,7 +216,7 @@ pre
       foldrM(divide, just(100), fromArray([10, 5])); //=> just(2)
       foldrM(divide, just(100), fromArray([5, 0])); //=> nothing
 
-h3#traversable Traversable
++h3-section('Traversable')
 | Import with.
 pre
   code.language-javascript.

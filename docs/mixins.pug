@@ -1,9 +1,16 @@
 mixin fn(name, signature, description)
   div.fn
-    div.signature
-      span.name= name
+    div.signature(id=name)
+      span.name
+        a.section-anchor(href='#' + name) §
+        =name
       span.type= signature
     block
+
+mixin h3-section(name)
+  h3(id=name)
+    a.section-anchor(href='#' + name) §
+    =name
 
 mixin method(name, signature)
   div.method
