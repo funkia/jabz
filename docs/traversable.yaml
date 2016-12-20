@@ -1,0 +1,29 @@
+name: Traversable
+description: |
+  code.language-javascript.
+    import * as Traversable from "jabz/traversable";
+
+functions:
+- name: sequence
+  type: "<A, T extends Traversable, F extends Applicative>(a: ApplicativeDictionary, t: T<F<A>>): F<T<A>>"
+  description: |
+    Takes a traversable with applicatives inside and "flips" the
+    nesting so that the applicative ends up on the outside and the
+    traversable on the inside.
+
+    In the example below the applicative `Maybe` the traversable
+    created by `fromArray`. Sequence turns them inside out so that
+    `just` floats from the inside to the outside.
+
+    ```javascript
+    sequence(Maybe, fromArray([just(1), just(2), just(3)])); //=> just(fromArray([1, 2, 3]))
+    ```
+
+- name: traverse
+  type: "<A, B, T extends Traversable, F extends Applicative>(a: ApplicativeDictionary, f: (a: A) => F<B>, t: T<A>): F<T<B>>"
+  description: |
+    Traverse.
+
+    ```javascript
+    traverse(Maybe, just, fromArray([1, 2, 3])); //=> just(fromArray([1, 2, 3]))
+    ```

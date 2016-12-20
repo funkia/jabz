@@ -1,0 +1,66 @@
+name: Monad
+description: |
+  Import with.
+
+  ```javascript
+  import * as Monad from "jabz/monad";
+  ```
+
+functions:
+- name: flatten
+  type: "<A, M extends Monad>(m: M<M<A>): M<A>"
+  description: |
+    Removes one level of nesting from a monad inside a monad.
+
+    ```javascript
+    flatten(just(just(1))); //=> just(1)
+    ```
+
+- name: chain
+  type: "<A, B, M extends Monad>(f: (a: A) => M<B>, m: M<A>): M<B>"
+  description: |
+    Values in `m` are passed to `f` and `f` returns a new monadic
+    value that is joined with the former. This operation is
+    sometimes called `flatMap` and other times `>>=`.
+
+    `m.chain(f)` is equal to `m.map(f).flatten()`.
+    
+    ```javascript
+    chain((m) => safeDiv(12, m), just(3)); // just(4)
+    ```
+
+- name: go
+  type: "<M extends Monad>(gen: () => Iterator<M<any>>): M<any>"
+  description: |
+    Do-notation powered by generator functions.
+
+    The example below demonstrates the use of go-notation with the
+    `Maybe` monad. Note that the yielded values are all in the monad
+    and that the variables becomes bound to the value inside the monad.
+
+    ```javascript
+    const safeDiv = (n, m) => m === 0 ? nothing : just(n / m);
+    go(function*() {
+      const a = yield find(isEven, list1);
+      const b = yield find(isEven, list2);
+      const c = yield safeDiv(a, b)
+      return a + b + c;
+    });
+    ```
+
+- name: fgo
+  type: "<M extends Monad>(gen: (..args) => Iterator<M<any>>): (..args) => M<any>"
+  description: |
+    A nifty shortcut for creating a function that uses go-notation.
+    The arguments to the function are passed directly to the generator
+    function.
+
+    ```javascript
+    const fgoExample = fgo(function*(x, y, z) {
+      const a = yield just(x);
+      const b = yield just(y);
+      const c = yield just(z)
+      return a + b + c;
+    });
+    fgoExample(1, 2, 3); //=> just(6)
+    ```

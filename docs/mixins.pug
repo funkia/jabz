@@ -25,3 +25,18 @@ mixin example
   pre
     code.language-javascript
       block
+
+mixin renderFunctions(functions)
+  each f in functions
+    div.fn
+    div.signature(id=f.name)
+      span.name
+        a.section-anchor(href='#' + f.name) §
+        =f.name
+      span.type= f.type
+    div!= marked(f.description)
+
+mixin renderModule(module)
+  +h3-section(module.name)
+  div!= marked(module.description)
+  +renderFunctions(module.functions)

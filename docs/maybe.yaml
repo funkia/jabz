@@ -1,0 +1,91 @@
+name: Maybe
+description: |
+  Maybe is a container that may contain one or zero elements.
+
+  Maybe is an instance of the following abstractions: functor,
+  applicative, monad, foldable and traversable.
+
+  Import with.
+
+  ```javascript
+  import {just, nothing, ...} from "jabz/maybe";
+  ```
+
+functions:
+
+- name: Maybe<A>
+  type: class
+  description:
+    Type of maybe values.
+
+- name: "Maybe#match"
+  type: "<K>(m: MaybeMatch<A, K>): K"
+  description: |
+    Pattern matching on `Maybe` values. `MaybeMatch<A, K>` must be a
+    object with a `nothing` and `just` properties containing functions
+    that returns `K`.
+
+    ```javascript
+    maybeAge.match({
+      just: (n) => `You're ${n} years old'`,
+      nothing: () => `No age provided :(`
+    });
+    ```
+
+- name: "just"
+  type: "<A>(a: A): Maybe<A>"
+  description: |
+    Creates a Maybe with just the value `a`.
+
+    ```javascript
+    map(double, just(4)); //=> just(8)
+    ```
+
+- name: "nothing"
+  type: "Maybe<any>"
+  description: |
+    A Maybe with no value inside
+
+    ```javascript
+    map(double, nothing); //=> nothing
+    ```
+
+- name: isNothing
+  type: "(m: Maybe<any>): boolean"
+  description: |
+    Returns `true` if `m` is empty.
+
+    ```javascript
+    isNothing(nothing); //=> true
+    isNothing(just(3)); //=> false
+    ```
+
+- name: isJust
+  type: "(m: Maybe<any>): boolean"
+  description: |
+    Returns `true` if `m` is contains a value.
+
+    ```javascript
+    isJust(nothing); //=> false
+    isJust(just(3)); //=> true
+    ```
+
+- name: fromMaybe
+  type: "<A>(a: A, m: Maybe<A>): A"
+  description: |
+    Extracts a the potential value from `m` with `a` as a fallback.
+
+    ```javascript
+    fromMaybe(5, nothing); //=> 5
+    fromMaybe(5, just(3)); //=> 3
+    ```
+
+- name: maybe
+  type: "(b: B, f: (a: A) => B, m: Maybe<A>)"
+  description: |
+    If `m` is `nothing` return `b`. Otherwise, extract the value, pass
+    it through `f` and return it.
+
+    ```javascript
+    maybe("--:--", (d) => d.getMinutes() + ":" + d.getSeconds, maybeTime);
+    ```

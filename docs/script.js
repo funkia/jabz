@@ -16,4 +16,7 @@ window.addEventListener('load', function(event) {
   }
   updateFix();
   window.addEventListener('scroll', updateFix);
+
+  var elm = document.querySelector('#menu');
+  var ms = new MenuSpy(elm);
 });

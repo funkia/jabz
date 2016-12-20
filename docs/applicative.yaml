@@ -1,0 +1,43 @@
+name: Applicative
+description: |
+  Import with.
+
+  ```javascript
+  import * as Applicative from "jabz/applicative";
+  ```
+
+functions:
+- name: of
+  type: "<A, F extends Applicative>(d: ApplicativeDictionary, a: A): F<A>"
+  description: |
+    Wraps a value in an applicative. This function is also known as `pure` and `return`.
+
+    ```javascript
+    of(Maybe, 12); //=> just(12)
+    of(Array, 12); //=> [12]
+    ```
+
+- name: ap
+  type: "<A, B, F extends Applicative>(fa: F<(a: A) => B>, ba: F<A>): F<B>"
+  description: |
+    Takes two applicatives of the same type. The first must contain a
+    function from `A` and the second an `A`. The function is then
+    applied to the value and a new applicative is returned.
+
+- name: lift
+  type: "<F extends Applicative>(f: (?) => R, ...args: F<?>[]): F<A>"
+  description: |
+    Takes a function from `n` arguments, `n` applicatives with values
+    matching the function and applies the function inside the
+    applicatives.
+
+    ```javascript
+    lift((a, b, c) => a * b + c, just(4), just(2), just(3)); //=> just(11)
+    lift((a, b, c) => a * b + c, just(4), nothing, just(3)); //=> nothing
+    ```
+
+- name: seq
+  type: "<A, B, F extends Applicative>(a: F<A>, b: F<B>): F<B>"
+  description: |
+    Sequences actions from left to right, i.e. `a` before `b`,
+    discarding the value of `a`.

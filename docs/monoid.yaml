@@ -1,0 +1,21 @@
+name: Monoid
+description: |
+  Import with.
+  
+  ```javascript
+  import * as Monoid from "jabz/monoid";
+  ```
+
+functions:
+- name: identity
+  type: "<M extends Monoid<M>>(m: MonoidDictionary<M>): M"
+  description: |
+    Takes a monoid dictionary and returns the identity element of the
+    monoid. Alternatively it takes a constructor of one of the native
+    monoid instances.
+
+    ```javascript
+    identity(Sum); //=> Sum(0)
+    identity(Array); //=> []
+    identity(String); //=> ""
+    ```

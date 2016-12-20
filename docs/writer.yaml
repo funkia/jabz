@@ -1,9 +1,5 @@
-include mixins.pug
-
-h3#writer Writer
-
-:markdown-it
-
+name: Writer
+description: |
   The `Writer` monad represents computation that produces a value and
   write to a shared state.
 
@@ -37,18 +33,24 @@ h3#writer Writer
   //=> ["Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32];
   ```
 
-+fn('createWriter', '<M extends Monoid<M>>(mc: MonoidDictionary<M>): WriterFunctions<M>')
-  :markdown-it
+functions:
+- name: createWriter
+  type: "<M extends Monoid<M>>(mc: MonoidDictionary<M>): WriterFunctions<M>"
+  description: |
     Creates a writer monad from a monoid dictionary.
 
-+fn('tell', '<A>(w: W): Writer<W, {}>')
-  :markdown-it
+- name: tell
+  type: "<A>(w: W): Writer<W, {}>"
+  description: |
     Returns a `Writer` action that produces no value but combines the
     shared monoid with `w`.
 
-+fn('listen', '<A>(w: Writer<W, A>): Writer<W, [A, W]>')
+- name: listen
+  type: "<A>(w: Writer<W, A>): Writer<W, [A, W]>"
+  description: Listen.
 
-+fn('runWriter', '<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A]')
-  :markdown-it
+- name: runWriter
+  type: "<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A]"
+  description: |
     Runs the `Writer` monad and returns a pair of the monoid value and
     the final result.
