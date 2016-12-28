@@ -79,7 +79,7 @@ functions:
 - name: foldrM
   type: "<A, B, M extends Monad>(f: (a: A, b: B) => M<B>, mb: M<B>, t: Foldable<A>): M<B>"
   description: |
-    Monadic right fold. This function is similair to foldr. The
+    Monadic right fold. This function is similar to foldr. The
     difference is that the accumulator function returns a monadic
     value and that the final result is in the same monad.
 
