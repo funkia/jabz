@@ -44,3 +44,17 @@ export function curry2<A, B, R>(f: (a: A, b: B) => R): (a: A) => (b: B) => R {
 export function flip<A, B, C>(f: (a: A, b: B) => C): (b: B, a: A) => C {
   return (b, a) => f(a, b);
 }
+
+export function deepEqual(a: any, b: any): boolean {
+  if (typeof a === "object" && typeof b === "object") {
+    const aKeys = Object.keys(a);
+    for (const key of aKeys) {
+      if (!deepEqual(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return a === b;
+  }
+}

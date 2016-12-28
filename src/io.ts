@@ -1,5 +1,7 @@
 import {Monad, AbstractMonad} from "./monad";
 import {Either, left, right} from "./either";
+import {Freer, liftF} from "./freer";
+import {deepEqual} from "./utils";
 
 export type F0<Z> =
   () => Z;
@@ -14,33 +16,22 @@ export type F4<A, B, C, D, Z> =
 export type F5<A, B, C, D, E, Z> =
   (a: A, b: B, c: C, d: D, e: E) => Z;
 
-export type ImpureComp<A> = () => Promise<A>;
+export type IOValue<A> = Call | CallP;
 
-export class IO<A> extends AbstractMonad<A> {
-  constructor(public comp: ImpureComp<A>) {
-    super();
-  }
-  map<B>(f: (a: A) => B): IO<B> {
-    return this.chain(v => this.of(f(v)));
-  }
-  of<B>(k: B): IO<B> {
-    return new IO(() => Promise.resolve(k));
-  }
-  static of<B>(k: B): IO<B> {
-    return new IO(() => Promise.resolve(k));
-  }
-  chain<B>(f: (a: A) => IO<B>): IO<B> {
-    return new IO(() => this.comp().then(r => f(r).comp()));
-  }
-  static multi: boolean = false;
-  multi: boolean = false;
+export class Call {
+  type: "call" = "call";
+  constructor(public fn: Function, public args: any[]) {}
 }
 
-export function runIO<A>(e: IO<A>): Promise<A> {
-  return e.comp();
+export class CallP {
+  type: "callP" = "callP";
+  constructor(public fn: Function, public args: any[]) {}
 }
 
-// takes an impure function an converts it to a computation
+export type IO<A> = Freer<IOValue<any>, A>;
+
+export const IO = Freer;
+
 // in the IO monad
 export function withEffects<A, Z>(f: F1<A, Z>): (a: A) => IO<Z>;
 export function withEffects<A, B, Z>(f: F2<A, B, Z>): (a: A, b: B) => IO<Z>;
@@ -48,7 +39,7 @@ export function withEffects<A, B, C, Z>(f: F3<A, B, C, Z>): (a: A, b: B, c: C) =
 export function withEffects<A, B, C, D, Z>(f: F4<A, B, C, D, Z>): (a: A, b: B, c: C, d: D) => IO<Z>;
 export function withEffects<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Z>): (a: A, b: B, c: C, d: D, e: E) => IO<Z>;
 export function withEffects<A>(fn: any): (...as: any[]) => IO<A> {
-  return (...args: any[]) => new IO(() => Promise.resolve(fn(...args)));
+  return (...args: any[]) => liftF(new Call(fn, args));
 }
 
 export function withEffectsP<A, Z>(f: F1<A, Promise<Z>>): (a: A) => IO<Either<any, Z>>;
@@ -57,7 +48,7 @@ export function withEffectsP<A, B, C, Z>(f: F3<A, B, C, Promise<Z>>): (a: A, b: 
 export function withEffectsP<A, B, C, D, Z>(f: F4<A, B, C, D, Promise<Z>>): (a: A, b: B, c: C, d: D) => IO<Either<any, Z>>;
 export function withEffectsP<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Promise<Z>>): (a: A, b: B, c: C, d: D, e: E) => IO<Either<any, Z>>;
 export function withEffectsP<A>(fn: (...as: any[]) => Promise<A>): (...a: any[]) => IO<Either<any, A>> {
-  return (...args: any[]) => new IO(() => fn(...args).then(right).catch(left));
+  return (...args: any[]) => liftF(new CallP(fn, args));
 }
 
 export function call<Z>(f: F0<Z>): IO<Z>;
@@ -66,8 +57,8 @@ export function call<A, B, Z>(f: F2<A, B, Z>, a: A, b: B): IO<Z>;
 export function call<A, B, C, Z>(f: F3<A, B, C, Z>, a: A, b: B, c: C): IO<Z>;
 export function call<A, B, C, D, Z>(f: F4<A, B, C, D, Z>, a: A, b: B, c: C, d: D): IO<Z>;
 export function call<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Z>, a: A, b: B, c: C, d: D, e: E): IO<Z>;
-export function call(f: Function, ...args: any[]): IO<any> {
-  return new IO(() => Promise.resolve(f(...args)));
+export function call(fn: Function, ...args: any[]): IO<any> {
+  return liftF(new Call(fn, args));
 }
 
 export function callP<Z>(f: F0<Z>): IO<Either<any, Z>>;
@@ -76,6 +67,46 @@ export function callP<A, B, Z>(f: F2<A, B, Promise<Z>>, a: A, b: B): IO<Either<a
 export function callP<A, B, C, Z>(f: F3<A, B, C, Promise<Z>>, a: A, b: B, c: C): IO<Either<any, Z>>;
 export function callP<A, B, C, D, Z>(f: F4<A, B, C, D, Promise<Z>>, a: A, b: B, c: C, d: D): IO<Either<any, Z>>;
 export function callP<A, B, C, D, E, Z>(f: F5<A, B, C, D, E, Promise<Z>>, a: A, b: B, c: C, d: D, e: E): IO<Either<any, Z>>;
-export function callP(f: Function, ...args: any[]): IO<any> {
-  return new IO(() => f(...args).then(right).catch(left));
+export function callP(fn: Function, ...args: any[]): IO<any> {
+  return liftF(new CallP(fn, args));
+}
+
+export function runIO<A>(e: IO<A>): Promise<A> {
+  return e.match({
+    pure: (a) => Promise.resolve(a),
+    bind: (io, cont) => {
+      switch (io.type) {
+      case "call":
+        return runIO(cont(io.fn(...io.args)));
+      case "callP":
+        return io.fn(...io.args)
+          .then((a: A) => runIO(cont(right(a))))
+          .catch((a: A) => runIO(cont(left(a))));
+      }
+    }
+  });
+}
+
+function doTestIO<A>(e: IO<A>, arr: any[], ending: A, idx: number): void {
+  e.match({
+    pure: (a2) => {
+      if (ending !== a2) {
+        throw new Error(
+          `Pure value invalid, expected ${ending} but saw ${a2}`
+        );
+      }
+    },
+    bind: (io, cont) => {
+      const [{val: io2}, a] = arr[idx];
+      if (!deepEqual(io, io2)) {
+        throw new Error(`Value invalid, expected ${io2} but saw ${io}`);
+      } else {
+        doTestIO(cont(a), arr, ending, idx + 1);
+      }
+    }
+  });
+}
+
+export function testIO<A>(e: IO<A>, arr: any[], a: A): void {
+  doTestIO(e, arr, a, 0);
 }

@@ -72,7 +72,6 @@ describe("Writer", () => {
       const b = yield divide(132, 11);
       return yield add(a, b);
     });
-    console.log(runWriter(comp));
     assert.deepEqual(runWriter(comp), [
       "Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32
     ]);

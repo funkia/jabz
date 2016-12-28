@@ -2,7 +2,7 @@ import {assert} from "chai";
 
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
-import {IO, runIO, withEffects, withEffectsP, call, callP} from "../src/io";
+import {IO, runIO, testIO, withEffects, withEffectsP, call, callP} from "../src/io";
 import {ap, lift} from "../src/applicative";
 import {go, Monad} from "../src/monad";
 import {right, left} from "../src/either";
@@ -118,6 +118,51 @@ describe("IO", () => {
         assert.deepEqual(variable, 3);
         assert.deepEqual(res, left(3));
       });
+    });
+  });
+  describe("testing", () => {
+    let n = 0;
+    function add(m: number) {
+      return n += m;
+    }
+    function addTwice(m: number) {
+      return n += 2 * m;
+    }
+    const wrapped1 = withEffects(add);
+    const wrapped2 = withEffects(addTwice);
+    const comp = wrapped1(2).chain((n) => wrapped2(3));
+    it("can test", () => {
+      testIO(comp, [
+        [wrapped1(2), 2],
+        [wrapped2(3), 8]
+      ], 8);
+      assert.deepEqual(n, 0);
+    });
+    it("throws on incorrect function", () => {
+      assert.throws(() => {
+        testIO(comp, [
+          [call(wrapped2, 2), 2],
+          [call(wrapped2, 3), 8]
+        ], 8);
+      });
+    });
+    it("handles computation ending with `of`", () => {
+      const comp = wrapped1(3).chain((n) => IO.of(4));
+      testIO(comp, [
+        [wrapped1(3), 3]
+      ], 4)
+      assert.throws(() => {
+        testIO(comp, [
+          [wrapped1(3), 3]
+        ], 5);
+      });
+    });
+    it("handles computation with map and chain", () => {
+      const comp = wrapped1(4).map((n) => n * n).chain((n) => wrapped2(n + 2));
+      testIO(comp, [
+        [wrapped1(4), 4],
+        [wrapped2(18), 18 * 2 + 4]
+      ], 18 * 2 + 4)
     });
   });
 });
