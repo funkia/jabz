@@ -47,8 +47,8 @@ is a functor, an applicative and a monad. Thus we can for instance use
 it with go-notation.
 
 ```javascript
-const fireMissilesAndNotify = fdo(function*(amount) {
-  const n = yield fireMissiles(amount);
+const fireMissilesAndNotify = fgo(function*(amount) {
+  const n = yield fireMissilesIO(amount);
   yield sendMessage(`${n} missiles successfully fired`);
   return n;
 });
@@ -63,7 +63,7 @@ code. Since `sendMessage` is pure it satisfies referential
 transparency. Instead of this:
 
 ```javascript
-do(function*() {
+go(function*() {
   yield sendMessage("foo");
   yield sendMessage("foo");
 });
@@ -72,7 +72,7 @@ do(function*() {
 We can write this:
 
 ```javascript
-do(function*() {
+go(function*() {
   const sendFoo = sendMessage("foo");
   yield sendFoo;
   yield sendFoo;
@@ -85,7 +85,7 @@ out once. But since it's pure it's totally fine. In the dumb example
 above it only made a small difference but in a real program being able
 to perform such refactorings can be very beneficial.
 
-## `IO` handles asynchronous operations
+## Asynchronous operations
 
 IO-actions can be asynchronous. This makes it possible to express
 asynchronous operations very conveniently. Instead of `withEffects` we
@@ -101,6 +101,29 @@ value of the type `IO<Either<any, Response>>`. A `right` value
 indicates that the promise resolved and a `left` value that it
 rejected.
 
+An example of using `fetchIO` is below. Since parsing the body from a
+`fetch` response as JSON is an asynchronous operation we define an
+additional function `responseJson`.
+
+```javascript
+const responseJson = withEffectsP((response) => response.json());
+
+const fetchUser = fgo(function*(userId) {
+  // `eitherResponse` is either a response or an error
+  const eitherResponse = yield fetchIO(usersUrl + "/" + userId);
+  // we pattern match on `eitherResponse`
+  return yield eitherResponse.match({
+    right: (response) => responseJson(response),
+    left: (_) => IO.of(left("Fetching user failed"))
+  });
+});
+```
+
+As defined above `fetchUser` takes a user id and returns
+`IO<Either<string, User>>`. If the request fails `eitherResponse` is a
+`left`. In that case the we yield an IO-action that does nothing
+(created with `IO.of`) but contains a `left` with an error message.
+
 ## Running and testing
 
 An IO-action can be run with the function `runIO`. The function
@@ -112,8 +135,8 @@ To see how this works consider one of the previous examples with a
 small bug added in:
 
 ```javascript
-const fireMissilesAndNotify = fdo(function*(amount) {
-  const n = yield fireMissiles(amount);
+const fireMissilesAndNotify = fgo(function*(amount) {
+  const n = yield fireMissilesIO(amount);
   yield sendMessage(`${amount} missiles successfully fired`);
   return n;
 });
@@ -126,7 +149,7 @@ where requested to be fired. We can test the function with `testIO`:
 ```javascript
 it("fires missiles and sends message", () => {
   testIO(fireMissilesAndNotify(10), [
-    [fireMissiles(10), 10],
+    [fireMissilesIO(10), 10],
     [sendMessage(`10 missiles successfully fired`), undefined]
   ], 10);
 });
@@ -144,13 +167,13 @@ one that does:
 ```javascript
 it("fires missiles and sends message", () => {
   testIO(fireMissilesAndNotify(10), [
-    [fireMissiles(10), 5],
+    [fireMissilesIO(10), 5],
     [sendMessage(`5 missiles successfully fired`), undefined]
   ], 5);
 });
 ```
 
-Here we specify that when the code attempts to run `fireMissiles(10)`
+Here we specify that when the code attempts to run `fireMissilesIO(10)`
 it should get back the response `5`. After this the next line will
 throw because our implementation passes a string to `sendMessage` that
 mentions `10` instead of `5`. Therefore `testIO` will throw and our
