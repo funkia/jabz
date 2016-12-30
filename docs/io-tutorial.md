@@ -96,39 +96,83 @@ promise into a pure function.
 const fetchIO = withEffectsP(fetch);
 ```
 
-Since promises can either resolve or reject `fetchIO` will return a
-value of the type `IO<Either<any, Response>>`. A `right` value
-indicates that the promise resolved and a `left` value that it
-rejected.
+This creates a function with the return value `IO<Response>`. If the
+promise returned by the wrapped function rejects the IO-computation
+will result in an error. Error handling is described in the next
+section.
 
-An example of using `fetchIO` is below. Since parsing the body from a
-`fetch` response as JSON is an asynchronous operation we define an
-additional function `responseJson`.
+## Error handling
+
+The `IO` monad comes with error handling features. It works through
+the functions `throwE` and `catchE`. They resemble `throw` and `catch`
+but instead of being language-features they are built into the `IO`
+implementation.
+
+A value of `IO<A>` can not only produce a value of type `A`. It may
+also produce an error.
+
+To throw an error inside you use `throwE`:
+
+```javascript
+const sendFriendlyMessageTo = fgo(function*(name, message) {
+  if (message.indexOf(":)") === -1) {
+    yield throwE("Please include a friendly smiley :)");
+  }
+  const exists = yield checkUserExistence(name);
+  if (!exists) {
+    yield throwE("User does not exist");
+  }
+  return yield sendMessageTo(name, message);
+});
+```
+
+Once an error is `yield`ed the rest of the computation isn't being
+run. The resulting `IO` value will produce an error instead of a
+value.
+
+To catch an error you use `catchE`. As its first argument it takes a
+error function handling. As its second argument it takes an `IO`
+computation. It returns a new `IO` computation.
+
+```javascript
+const sendFriendlyMessageWithUnfriendlyError(name, message) {
+  return catchE(
+    (error) => "Some error happened. I won't tell you which!",
+    sendFriendlyMessageTo(name, message)
+  );
+}
+```
+
+Here is an example of using `fetchIO` with error handling. Since
+parsing the body from a `fetch` response as JSON is an asynchronous
+operation we define an additional function `responseJson`.
 
 ```javascript
 const responseJson = withEffectsP((response) => response.json());
 
-const fetchUser = fgo(function*(userId) {
-  // `eitherResponse` is either a response or an error
-  const eitherResponse = yield fetchIO(usersUrl + "/" + userId);
-  // we pattern match on `eitherResponse`
-  return yield eitherResponse.match({
-    right: (response) => responseJson(response),
-    left: (_) => IO.of(left("Fetching user failed"))
-  });
+const fetchUsersPet = fgo(function*(userId) {
+  const response = yield catchE(
+    (err) => `Request failed: ${err}`,
+    fetchIO(usersUrl + "/" + userId)
+  );
+  if (response.states === 404) {
+    yield throwE("User does not exist");
+  }
+  const body: User = yield responseJson(response);
+  if (body.pet === undefined) {
+    yield throwE("User has no pet");
+  } else {
+    return body.pet;
+  }
 });
 ```
-
-As defined above `fetchUser` takes a user id and returns
-`IO<Either<string, User>>`. If the request fails `eitherResponse` is a
-`left`. In that case the we yield an IO-action that does nothing
-(created with `IO.of`) but contains a `left` with an error message.
 
 ## Running and testing
 
 An IO-action can be run with the function `runIO`. The function
 actually performs the operations in the IO-action and returns a
-promise that resolves when it is done. `runIO` is an impure function.
+promise that resolves when it is done or rejects is the `IO` produces
+and unhandled error. `runIO` is an impure function.
 
 Besides running IO-actions we can also test them. Or "dry-run" them.
 To see how this works consider one of the previous examples with a

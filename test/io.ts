@@ -2,7 +2,9 @@ import {assert} from "chai";
 
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
-import {IO, runIO, testIO, withEffects, withEffectsP, call, callP} from "../src/io";
+import {
+  IO, runIO, testIO, withEffects, withEffectsP, call, callP, catchE, throwE
+} from "../src/io";
 import {ap, lift} from "../src/applicative";
 import {go, Monad} from "../src/monad";
 import {right, left} from "../src/either";
@@ -72,14 +74,55 @@ describe("IO", () => {
       }
       const wrapped = withEffectsP(imperativeP);
       const comp = go(function*() {
-        const ea = yield wrapped(1, 2);
+        const a = yield wrapped(1, 2);
+        assert.strictEqual(a, 3);
         assert.strictEqual(variable, 3);
-        const eb = yield wrapped(3, 4);
+        const b = yield wrapped(3, 4);
+        assert.strictEqual(b, 10);
         assert.strictEqual(variable, 10);
-        return lift(add, ea, eb);
+        return add(a, b);
       });
       return runIO(comp).then((res) => {
-        assert.deepEqual(res, right(13));
+        assert.deepEqual(res, 13);
+      });
+    });
+  });
+  describe("error handling", () => {
+    const errorMessage = "I do not accept zero";
+    it("can catch error from rejected promise", () => {
+      function imperativeP(a: number): Promise<number> {
+        return a === 0
+          ? Promise.reject(errorMessage)
+          : Promise.resolve(a);
+      }
+      const wrapped = withEffectsP(imperativeP);
+      const comp = catchE((err: string) => IO.of(err.length), wrapped(0));
+      return runIO(comp).then((res) => {
+        assert.deepEqual(res, errorMessage.length);
+        return runIO(wrapped(0));
+      }).catch((res) => {
+        assert.deepEqual(res, errorMessage);
+      });
+    });
+    it("`catchE` function is not called when no error", () => {
+      return runIO(
+        catchE((_: any) => { throw new Error("No"); }, IO.of(12))
+      ).then((res) => {
+        assert.strictEqual(res, 12);
+      })
+    });
+    it("can throw error with `throwE`", () => {
+      const comp = catchE(
+        (err: string) => IO.of(err.length),
+        go(function*() {
+          const a = yield IO.of(13);
+          assert.deepEqual(a, 13);
+          const b = yield throwE(errorMessage);
+          return "Oh no, error thrown above >.<";
+        })
+      );
+      return runIO(comp).then((res) => {
+        assert.deepEqual(res, errorMessage.length);
       });
     });
   });
@@ -105,7 +148,7 @@ describe("IO", () => {
       }
       return runIO(callP(imperative, 1, 2)).then((res) => {
         assert.deepEqual(variable, 3);
-        assert.deepEqual(res, right(3));
+        assert.deepEqual(res, 3);
       });
     });
     it("calls promise returning function that rejects", () => {
@@ -114,9 +157,9 @@ describe("IO", () => {
         variable = a + b;
         return Promise.reject(variable);
       }
-      return runIO(callP(imperative, 1, 2)).then((res) => {
+      return runIO(callP(imperative, 1, 2)).catch((res) => {
         assert.deepEqual(variable, 3);
-        assert.deepEqual(res, left(3));
+        assert.deepEqual(res, 3);
       });
     });
   });
