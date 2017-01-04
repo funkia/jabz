@@ -1,0 +1,90 @@
+name: Foldable
+description: |
+  Import with.
+
+  ```javascript
+  import * as Foldable from "jabz/foldable";
+  ```
+
+functions:
+- name: foldr
+  type: "<A, B>(f: (a: A, b: B) => B, init: B, a: Foldable<A> | A[]): B"
+  description: |
+    Performs a strict right fold over a foldable.
+
+- name: size
+  type: "(t: Foldable<any>): number"
+  description: |
+    Returns the number of elements in the foldable.
+
+- name: take
+  type: "(n: number, t: Foldable<A>): A[]"
+  description: |
+    Returns an array of the first `n` elements in the foldable.
+
+- name: find
+  type: "(f: (a: A) => boolean, t: Foldable<A>): Maybe<A>"
+  description: |
+    Returns the first element in the foldable that satisfies the
+    predicate.
+
+    ```javascript
+    const isEven = (n) => n % 2 === 0;
+    find(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(4)
+    find(isEven, fromArray([1, 3, 5, 7])); //=> nothing
+    ```
+
+- name: findLast
+  type: "(f: (a: A) => boolean, t: Foldable<A>): Maybe<A>"
+  description: |
+    Returns the last element in the foldable that satisfies the
+    predicate.
+
+    ```javascript
+    findLast(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(6)
+    ```
+
+- name: findIndex
+  type: "(f: (a: A) => boolean, t: Foldable<A>): Maybe<number>"
+  description: |
+    Returns the index of the first element in the foldable that
+    satisfies the predicate.
+
+    ```javascript
+    findIndex(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(2)
+    findIndex(isEven, fromArray([1, 3, 5, 7])); //=> nothing
+    ```
+
+- name: findLastIndex
+  type: "(f: (a: A) => boolean, t: Foldable<A>): Maybe<number>"
+  description: |
+    Returns the index of the last element in the foldable that
+    satisfies the predicate.
+
+    ```javascript
+    findLastIndex(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(4)
+    ```
+
+- name: toArray
+  type: "(t: Foldable<A>): A[]"
+  description: |
+    Converts a foldable to an array.
+
+- name: "sequence_"
+  type: "<A extends Applicative>(d: ApplicativeDictionary, t: Foldable<A<any>>): A<{}>"
+  description: |
+    Sequences applicatives in the foldable from left to right
+    discarding the result.
+
+- name: foldrM
+  type: "<A, B, M extends Monad>(f: (a: A, b: B) => M<B>, mb: M<B>, t: Foldable<A>): M<B>"
+  description: |
+    Monadic right fold. This function is similar to foldr. The
+    difference is that the accumulator function returns a monadic
+    value and that the final result is in the same monad.
+
+    ```javascript
+    const divide = (a, b) => a === 0 ? nothing : just(b / a);
+    foldrM(divide, just(100), fromArray([10, 5])); //=> just(2)
+    foldrM(divide, just(100), fromArray([5, 0])); //=> nothing
+    ```

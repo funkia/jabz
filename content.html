@@ -1,0 +1,550 @@
+
+<h2>Overview</h2><p>Jabz provides the following abstractions</p>
+<ul>
+<li><a href="#Semigroup">Semigroup</a></li>
+<li><a href="#Monoid">Monoid</a></li>
+<li><a href="#Functor">Functor</a></li>
+<li><a href="#Applicative">Applicative</a></li>
+<li><a href="#Monad">Monad</a></li>
+<li><a href="#Foldable">Foldable</a></li>
+<li><a href="#Traversable">Traversable</a></li>
+</ul>
+<p>Jabz provides the following implementations of the abstractions.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Semigroup</th>
+<th>Monoid</th>
+<th>Functor</th>
+<th>Applicative</th>
+<th>Monad</th>
+<th>Foldable</th>
+<th>Traversable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#Maybe">Maybe</a></td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+</tr>
+<tr>
+<td><a href="#Either">Either</a></td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="#Cons">Cons</a></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+</tr>
+<tr>
+<td><a href="#InfiniteList">InfiniteList</a></td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+</tr>
+<tr>
+<td><a href="#Writer">Writer</a></td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;</td>
+<td>&#x2714;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Identity</td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+</tr>
+<tr>
+<td>Const</td>
+<td></td>
+<td></td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+<td>&#x2714;&#xFE0E;</td>
+</tr>
+</tbody>
+</table>
+
+<h2>API</h2>
+<p>API documentation for Jabz.</p>
+<h3 id="Semigroup"><a class="section-anchor" href="#Semigroup">&#xA7;</a>Semigroup
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span>combine<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;jabz/semigroup&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="combine"><span class="name"><a class="section-anchor" href="#combine">&#xA7;</a>combine</span><span class="type">&lt;A extends Semigroup&lt;A&gt;&gt;(a: A, b: A): A</span></div>
+<div><p>Combines two members of the same semigroup by using their combine method.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">combine</span><span class="token punctuation">(</span><span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; Sum(8)</span>
+<span class="token function">combine</span><span class="token punctuation">(</span><span class="token string">&quot;Hello &quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;there&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; &quot;Hello there&quot;</span>
+<span class="token function">combine</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [1, 2, 3, 4, 5]</span>
+</code></pre>
+</div>
+<h3 id="Monoid"><a class="section-anchor" href="#Monoid">&#xA7;</a>Monoid
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Monoid <span class="token keyword">from</span> <span class="token string">&quot;jabz/monoid&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="identity"><span class="name"><a class="section-anchor" href="#identity">&#xA7;</a>identity</span><span class="type">&lt;M extends Monoid&lt;M&gt;&gt;(m: MonoidDictionary&lt;M&gt;): M</span></div>
+<div><p>Takes a monoid dictionary and returns the identity element of the
+monoid. Alternatively it takes a constructor of one of the native
+monoid instances.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">identity</span><span class="token punctuation">(</span>Sum<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; Sum(0)</span>
+<span class="token function">identity</span><span class="token punctuation">(</span>Array<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; []</span>
+<span class="token function">identity</span><span class="token punctuation">(</span>String<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; &quot;&quot;</span>
+</code></pre>
+</div>
+<h3 id="Functor"><a class="section-anchor" href="#Functor">&#xA7;</a>Functor
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Functor <span class="token keyword">from</span> <span class="token string">&quot;jabz/functor&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="map"><span class="name"><a class="section-anchor" href="#map">&#xA7;</a>map</span><span class="type">&lt;F extends Functor, A, B&gt;(f: (a: A) =&gt; B, a: F&lt;A&gt;): F&lt;B&gt;</span></div>
+<div><p>Maps a function over a functor.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">*</span> n<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(9)</span>
+<span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">*</span> n<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [1, 4, 9]</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="mapTo"><span class="name"><a class="section-anchor" href="#mapTo">&#xA7;</a>mapTo</span><span class="type">&lt;F extends Functor, A, B&gt;(b: B, as: F&lt;A&gt;): F&lt;B&gt;</span></div>
+<div><p>Replaces each value inside the functor with b.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">mapTo</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(2)</span>
+<span class="token function">mapTo</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [4, 4, 4]</span>
+</code></pre>
+</div>
+<h3 id="Applicative"><a class="section-anchor" href="#Applicative">&#xA7;</a>Applicative
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Applicative <span class="token keyword">from</span> <span class="token string">&quot;jabz/applicative&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="of"><span class="name"><a class="section-anchor" href="#of">&#xA7;</a>of</span><span class="type">&lt;A, F extends Applicative&gt;(d: ApplicativeDictionary, a: A): F&lt;A&gt;</span></div>
+<div><p>Wraps a value in an applicative. This function is also known as <code>pure</code> and <code>return</code>.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">of</span><span class="token punctuation">(</span>Maybe<span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(12)</span>
+<span class="token keyword">of</span><span class="token punctuation">(</span>Array<span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [12]</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="ap"><span class="name"><a class="section-anchor" href="#ap">&#xA7;</a>ap</span><span class="type">&lt;A, B, F extends Applicative&gt;(fa: F&lt;(a: A) =&gt; B&gt;, ba: F&lt;A&gt;): F&lt;B&gt;</span></div>
+<div><p>Takes two applicatives of the same type. The first must contain a
+function from <code>A</code> and the second an <code>A</code>. The function is then
+applied to the value and a new applicative is returned.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="lift"><span class="name"><a class="section-anchor" href="#lift">&#xA7;</a>lift</span><span class="type">&lt;F extends Applicative&gt;(f: (?) =&gt; R, ...args: F&lt;?&gt;[]): F&lt;A&gt;</span></div>
+<div><p>Takes a function from <code>n</code> arguments, <code>n</code> applicatives with values
+matching the function and applies the function inside the
+applicatives.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">lift</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> a <span class="token operator">*</span> b <span class="token operator">+</span> c<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(11)</span>
+<span class="token function">lift</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> a <span class="token operator">*</span> b <span class="token operator">+</span> c<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">,</span> nothing<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="seq"><span class="name"><a class="section-anchor" href="#seq">&#xA7;</a>seq</span><span class="type">&lt;A, B, F extends Applicative&gt;(a: F&lt;A&gt;, b: F&lt;B&gt;): F&lt;B&gt;</span></div>
+<div><p>Sequences actions from left to right, i.e. <code>a</code> before <code>b</code>,
+discarding the value of <code>a</code>.</p>
+</div>
+<h3 id="Monad"><a class="section-anchor" href="#Monad">&#xA7;</a>Monad
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Monad <span class="token keyword">from</span> <span class="token string">&quot;jabz/monad&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="flatten"><span class="name"><a class="section-anchor" href="#flatten">&#xA7;</a>flatten</span><span class="type">&lt;A, M extends Monad&gt;(m: M&lt;M&lt;A&gt;): M&lt;A&gt;</span></div>
+<div><p>Removes one level of nesting from a monad inside a monad.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">flatten</span><span class="token punctuation">(</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(1)</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="chain"><span class="name"><a class="section-anchor" href="#chain">&#xA7;</a>chain</span><span class="type">&lt;A, B, M extends Monad&gt;(f: (a: A) =&gt; M&lt;B&gt;, m: M&lt;A&gt;): M&lt;B&gt;</span></div>
+<div><p>Values in <code>m</code> are passed to <code>f</code> and <code>f</code> returns a new monadic
+value that is joined with the former. This operation is
+sometimes called <code>flatMap</code> and other times <code>&gt;&gt;=</code>.</p>
+<p><code>m.chain(f)</code> is equal to <code>m.map(f).flatten()</code>.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">chain</span><span class="token punctuation">(</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token function">safeDiv</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// just(4)</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="go"><span class="name"><a class="section-anchor" href="#go">&#xA7;</a>go</span><span class="type">&lt;M extends Monad&gt;(gen: () =&gt; Iterator&lt;M&lt;any&gt;&gt;): M&lt;any&gt;</span></div>
+<div><p>Do-notation powered by generator functions.</p>
+<p>The example below demonstrates the use of go-notation with the
+<code>Maybe</code> monad. Note that the yielded values are all in the monad
+and that the variables becomes bound to the value inside the monad.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> safeDiv <span class="token operator">=</span> <span class="token punctuation">(</span>n<span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> m <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">?</span> nothing <span class="token punctuation">:</span> <span class="token function">just</span><span class="token punctuation">(</span>n <span class="token operator">/</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">go</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">find</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> list1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">find</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> list2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> c <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">safeDiv</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="fgo"><span class="name"><a class="section-anchor" href="#fgo">&#xA7;</a>fgo</span><span class="type">&lt;M extends Monad&gt;(gen: (..args) =&gt; Iterator&lt;M&lt;any&gt;&gt;): (..args) =&gt; M&lt;any&gt;</span></div>
+<div><p>A nifty shortcut for creating a function that uses go-notation.
+The arguments to the function are passed directly to the generator
+function.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> fgoExample <span class="token operator">=</span> <span class="token function">fgo</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token operator">*</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> z<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">just</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">just</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> c <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">just</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fgoExample</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(6)</span>
+</code></pre>
+</div>
+<h3 id="Foldable"><a class="section-anchor" href="#Foldable">&#xA7;</a>Foldable
+</h3>
+<div><p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Foldable <span class="token keyword">from</span> <span class="token string">&quot;jabz/foldable&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="foldr"><span class="name"><a class="section-anchor" href="#foldr">&#xA7;</a>foldr</span><span class="type">&lt;A, B&gt;(f: (a: A, b: B) =&gt; B, init: B, a: Foldable&lt;A&gt; | A[]): B</span></div>
+<div><p>Performs a strict right fold over a foldable.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="size"><span class="name"><a class="section-anchor" href="#size">&#xA7;</a>size</span><span class="type">(t: Foldable&lt;any&gt;): number</span></div>
+<div><p>Returns the number of elements in the foldable.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="take"><span class="name"><a class="section-anchor" href="#take">&#xA7;</a>take</span><span class="type">(n: number, t: Foldable&lt;A&gt;): A[]</span></div>
+<div><p>Returns an array of the first <code>n</code> elements in the foldable.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="find"><span class="name"><a class="section-anchor" href="#find">&#xA7;</a>find</span><span class="type">(f: (a: A) =&gt; boolean, t: Foldable&lt;A&gt;): Maybe&lt;A&gt;</span></div>
+<div><p>Returns the first element in the foldable that satisfies the
+predicate.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> isEven <span class="token operator">=</span> <span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">find</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(4)</span>
+<span class="token function">find</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="findLast"><span class="name"><a class="section-anchor" href="#findLast">&#xA7;</a>findLast</span><span class="type">(f: (a: A) =&gt; boolean, t: Foldable&lt;A&gt;): Maybe&lt;A&gt;</span></div>
+<div><p>Returns the last element in the foldable that satisfies the
+predicate.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">findLast</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(6)</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="findIndex"><span class="name"><a class="section-anchor" href="#findIndex">&#xA7;</a>findIndex</span><span class="type">(f: (a: A) =&gt; boolean, t: Foldable&lt;A&gt;): Maybe&lt;number&gt;</span></div>
+<div><p>Returns the index of the first element in the foldable that
+satisfies the predicate.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">findIndex</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(2)</span>
+<span class="token function">findIndex</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="findLastIndex"><span class="name"><a class="section-anchor" href="#findLastIndex">&#xA7;</a>findLastIndex</span><span class="type">(f: (a: A) =&gt; boolean, t: Foldable&lt;A&gt;): Maybe&lt;number&gt;</span></div>
+<div><p>Returns the index of the last element in the foldable that
+satisfies the predicate.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">findLastIndex</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(4)</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="toArray"><span class="name"><a class="section-anchor" href="#toArray">&#xA7;</a>toArray</span><span class="type">(t: Foldable&lt;A&gt;): A[]</span></div>
+<div><p>Converts a foldable to an array.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="sequence_"><span class="name"><a class="section-anchor" href="#sequence_">&#xA7;</a>sequence_</span><span class="type">&lt;A extends Applicative&gt;(d: ApplicativeDictionary, t: Foldable&lt;A&lt;any&gt;&gt;): A&lt;{}&gt;</span></div>
+<div><p>Sequences applicatives in the foldable from left to right
+discarding the result.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="foldrM"><span class="name"><a class="section-anchor" href="#foldrM">&#xA7;</a>foldrM</span><span class="type">&lt;A, B, M extends Monad&gt;(f: (a: A, b: B) =&gt; M&lt;B&gt;, mb: M&lt;B&gt;, t: Foldable&lt;A&gt;): M&lt;B&gt;</span></div>
+<div><p>Monadic right fold. This function is similar to foldr. The
+difference is that the accumulator function returns a monadic
+value and that the final result is in the same monad.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> divide <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> a <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">?</span> nothing <span class="token punctuation">:</span> <span class="token function">just</span><span class="token punctuation">(</span>b <span class="token operator">/</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">foldrM</span><span class="token punctuation">(</span>divide<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(2)</span>
+<span class="token function">foldrM</span><span class="token punctuation">(</span>divide<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
+</code></pre>
+</div>
+<h3 id="Traversable"><a class="section-anchor" href="#Traversable">&#xA7;</a>Traversable
+</h3>
+<div><p>code.language-javascript.
+  import * as Traversable from &quot;jabz/traversable&quot;;</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="sequence"><span class="name"><a class="section-anchor" href="#sequence">&#xA7;</a>sequence</span><span class="type">&lt;A, T extends Traversable, F extends Applicative&gt;(a: ApplicativeDictionary, t: T&lt;F&lt;A&gt;&gt;): F&lt;T&lt;A&gt;&gt;</span></div>
+<div><p>Takes a traversable with applicatives inside and &quot;flips&quot; the
+nesting so that the applicative ends up on the outside and the
+traversable on the inside.</p>
+<p>In the example below the applicative <code>Maybe</code> the traversable
+created by <code>fromArray</code>. Sequence turns them inside out so that
+<code>just</code> floats from the inside to the outside.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">sequence</span><span class="token punctuation">(</span>Maybe<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(fromArray([1, 2, 3]))</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="traverse"><span class="name"><a class="section-anchor" href="#traverse">&#xA7;</a>traverse</span><span class="type">&lt;A, B, T extends Traversable, F extends Applicative&gt;(a: ApplicativeDictionary, f: (a: A) =&gt; F&lt;B&gt;, t: T&lt;A&gt;): F&lt;T&lt;B&gt;&gt;</span></div>
+<div><p>Traverse.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">traverse</span><span class="token punctuation">(</span>Maybe<span class="token punctuation">,</span> just<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(fromArray([1, 2, 3]))</span>
+</code></pre>
+</div>
+<h2>Instances</h2>
+<h3 id="Maybe"><a class="section-anchor" href="#Maybe">&#xA7;</a>Maybe
+</h3>
+<div><p>Maybe is a container that may contain one or zero elements.</p>
+<p>Maybe is an instance of the following abstractions: functor,
+applicative, monad, foldable and traversable.</p>
+<p>Import with.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span>just<span class="token punctuation">,</span> nothing<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;jabz/maybe&quot;</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="Maybe&lt;A&gt;"><span class="name"><a class="section-anchor" href="#Maybe&lt;A&gt;">&#xA7;</a>Maybe&lt;A&gt;</span><span class="type">class</span></div>
+<div><p>Type of maybe values.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="Maybe#match"><span class="name"><a class="section-anchor" href="#Maybe#match">&#xA7;</a>Maybe#match</span><span class="type">&lt;K&gt;(m: MaybeMatch&lt;A, K&gt;): K</span></div>
+<div><p>Pattern matching on <code>Maybe</code> values. <code>MaybeMatch&lt;A, K&gt;</code> must be a
+object with a <code>nothing</code> and <code>just</code> properties containing functions
+that returns <code>K</code>.</p>
+<pre class="language-javascript"><code class="language-javascript">maybeAge<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  just<span class="token punctuation">:</span> <span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token template-string"><span class="token string">`You&apos;re </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>n<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> years old&apos;`</span></span><span class="token punctuation">,</span>
+  nothing<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token template-string"><span class="token string">`No age provided :(`</span></span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="just"><span class="name"><a class="section-anchor" href="#just">&#xA7;</a>just</span><span class="type">&lt;A&gt;(a: A): Maybe&lt;A&gt;</span></div>
+<div><p>Creates a Maybe with just the value <code>a</code>.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">map</span><span class="token punctuation">(</span>double<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(8)</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="nothing"><span class="name"><a class="section-anchor" href="#nothing">&#xA7;</a>nothing</span><span class="type">Maybe&lt;any&gt;</span></div>
+<div><p>A Maybe with no value inside</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">map</span><span class="token punctuation">(</span>double<span class="token punctuation">,</span> nothing<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="isNothing"><span class="name"><a class="section-anchor" href="#isNothing">&#xA7;</a>isNothing</span><span class="type">(m: Maybe&lt;any&gt;): boolean</span></div>
+<div><p>Returns <code>true</code> if <code>m</code> is empty.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">isNothing</span><span class="token punctuation">(</span>nothing<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; true</span>
+<span class="token function">isNothing</span><span class="token punctuation">(</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; false</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="isJust"><span class="name"><a class="section-anchor" href="#isJust">&#xA7;</a>isJust</span><span class="type">(m: Maybe&lt;any&gt;): boolean</span></div>
+<div><p>Returns <code>true</code> if <code>m</code> is contains a value.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">isJust</span><span class="token punctuation">(</span>nothing<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; false</span>
+<span class="token function">isJust</span><span class="token punctuation">(</span><span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; true</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="fromMaybe"><span class="name"><a class="section-anchor" href="#fromMaybe">&#xA7;</a>fromMaybe</span><span class="type">&lt;A&gt;(a: A, m: Maybe&lt;A&gt;): A</span></div>
+<div><p>Extracts a the potential value from <code>m</code> with <code>a</code> as a fallback.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">fromMaybe</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> nothing<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; 5</span>
+<span class="token function">fromMaybe</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; 3</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="maybe"><span class="name"><a class="section-anchor" href="#maybe">&#xA7;</a>maybe</span><span class="type">(b: B, f: (a: A) =&gt; B, m: Maybe&lt;A&gt;)</span></div>
+<div><p>If <code>m</code> is <code>nothing</code> return <code>b</code>. Otherwise, extract the value, pass
+it through <code>f</code> and return it.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">maybe</span><span class="token punctuation">(</span><span class="token string">&quot;--:--&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>d<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> d<span class="token punctuation">.</span><span class="token function">getMinutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">&quot;:&quot;</span> <span class="token operator">+</span> d<span class="token punctuation">.</span>getSeconds<span class="token punctuation">,</span> maybeTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<h3 id="Either"><a class="section-anchor" href="#Either">&#xA7;</a>Either
+</h3>
+<div><p>Either is a container that can be either left or right.</p>
+<p>Either implements functor and applicative.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="Either&lt;A, B&gt;"><span class="name"><a class="section-anchor" href="#Either&lt;A, B&gt;">&#xA7;</a>Either&lt;A, B&gt;</span><span class="type">class</span></div>
+<div><p>Type of either values.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="Either#match"><span class="name"><a class="section-anchor" href="#Either#match">&#xA7;</a>Either#match</span><span class="type">&lt;K&gt;(m: EitherMatch&lt;A, B, K&gt;): K</span></div>
+<div><p>Pattern matching on <code>Either</code> values. <code>EitherMatch&lt;A, B, K&gt;</code> must
+be a object with a <code>left</code> and <code>right</code> properties containing
+functions returning <code>K</code>.</p>
+<pre class="language-javascript"><code class="language-javascript">response<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  right<span class="token punctuation">:</span> <span class="token punctuation">(</span>rating<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token template-string"><span class="token string">`User gave the rating </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>rating<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">,</span>
+  left<span class="token punctuation">:</span> <span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token template-string"><span class="token string">`User wrote the message: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>message<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="left"><span class="name"><a class="section-anchor" href="#left">&#xA7;</a>left</span><span class="type">&lt;A&gt;(a: A): Either&lt;A, any&gt;</span></div>
+<div><p>Returns an <code>Either</code> that is left and contains <code>a</code>.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="right"><span class="name"><a class="section-anchor" href="#right">&#xA7;</a>right</span><span class="type">&lt;B&gt;(b: B): Either&lt;any, B&gt;</span></div>
+<div><p>Returns an <code>Either</code> that is right and contains <code>b</code>.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="isLeft"><span class="name"><a class="section-anchor" href="#isLeft">&#xA7;</a>isLeft</span><span class="type">(either: Either&lt;any, any&gt;): boolean</span></div>
+<div><p>Return <code>true</code> is <code>either</code> is left.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="isRight"><span class="name"><a class="section-anchor" href="#isRight">&#xA7;</a>isRight</span><span class="type">(either: Either&lt;any, any&gt;): boolean</span></div>
+<div><p>Return <code>true</code> is <code>either</code> is right.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="fromEither"><span class="name"><a class="section-anchor" href="#fromEither">&#xA7;</a>fromEither</span><span class="type">&lt;A, B&gt;(either: Either&lt;A, B&gt;): A | B</span></div>
+<div><p>Extracts the value from an <code>Either</code>.</p>
+</div>
+<h3 id="Cons"><a class="section-anchor" href="#Cons">&#xA7;</a>Cons
+</h3>
+<div><p>A simple singly linked list. It can be useful in cases where a list
+is build by repeatedly prepending elements to the front of the this.
+<code>Cons</code> supports the <code>cons</code> operation in very low constant time.</p>
+<p>It implements semigroup, monoid, functor, applicative, monad,
+foldable and traversable.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="nil"><span class="name"><a class="section-anchor" href="#nil">&#xA7;</a>nil</span><span class="type">Cons&lt;any&gt;</span></div>
+<div><p>The sentinel value at the end of the list indicating the end.
+Alternatively it can be though of as the empty list.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="cons"><span class="name"><a class="section-anchor" href="#cons">&#xA7;</a>cons</span><span class="type">&lt;A&gt;(a: A, as: Cons&lt;A&gt;)</span></div>
+<div><p>Prepend the element <code>a</code> to the beginning of the list <code>as</code>.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="fromArray"><span class="name"><a class="section-anchor" href="#fromArray">&#xA7;</a>fromArray</span><span class="type">&lt;A&gt;(as: A[]): Cons&lt;A&gt;</span></div>
+<div><p>Creates a <code>Cons</code>-list from an array</p>
+</div>
+<h3 id="InfiniteList"><a class="section-anchor" href="#InfiniteList">&#xA7;</a>InfiniteList
+</h3>
+<div><p>A simple lazy infinite list. It can only be created based on
+<code>naturals</code>.</p>
+<p>It implements functor, applicative and foldable. Since it is
+infinite it only works with the short-circuiting foldable methods.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// Find the first square number larger than 100</span>
+<span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">&gt;</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">*</span> n<span class="token punctuation">,</span> naturals<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; 121</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="naturals"><span class="name"><a class="section-anchor" href="#naturals">&#xA7;</a>naturals</span><span class="type">InfiniteList&lt;number&gt;</span></div>
+<div><p>An infinite list of the natural numbers. <code>[0, 1, 2, ...]</code>.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="repeat"><span class="name"><a class="section-anchor" href="#repeat">&#xA7;</a>repeat</span><span class="type">(a: A): InfiniteList&lt;A&gt;</span></div>
+<div><p>An infinite list of <code>a</code>s. <code>[a, a, a, ...]</code>.</p>
+</div>
+<h3 id="Writer"><a class="section-anchor" href="#Writer">&#xA7;</a>Writer
+</h3>
+<div><p>The <code>Writer</code> monad represents computation that produces a value and
+write to a shared state.</p>
+<p>The <code>Writer</code> monad is useful in cases where functions produce a
+&quot;primary&quot; output but alongside that also need to append values to a
+shared state. This shared state is a monoid.</p>
+<p>A value of type <code>Writer&lt;A, B&gt;</code> is a computation that produces a
+value of type <code>B</code> and produces a monoid value of type <code>A</code> as a
+secondary output.</p>
+<p>In the example below the functions <code>divide</code> and <code>add</code> does
+arithmetic but besides that they also produce strings for a log.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span>tell<span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">createWriter</span><span class="token punctuation">(</span>String<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> divide <span class="token operator">=</span> <span class="token function">fgo</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token operator">*</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">yield</span> <span class="token function">tell</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Divide </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>n<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> by </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>m<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">. `</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> n <span class="token operator">/</span> m<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> add <span class="token operator">=</span> <span class="token function">fgo</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token operator">*</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">yield</span> <span class="token function">tell</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Add </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>n<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> to </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>m<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">. `</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> n <span class="token operator">+</span> m<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> comp <span class="token operator">=</span> <span class="token function">go</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token function">divide</span><span class="token punctuation">(</span><span class="token number">132</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token keyword">yield</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">runWriter</span><span class="token punctuation">(</span>comp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//=&gt; [&quot;Add 12 to 8. Divide 132 by 11. Add 20 to 12. &quot;, 32];</span>
+</code></pre>
+</div>
+<div class="fn"></div>
+<div class="signature" id="createWriter"><span class="name"><a class="section-anchor" href="#createWriter">&#xA7;</a>createWriter</span><span class="type">&lt;M extends Monoid&lt;M&gt;&gt;(mc: MonoidDictionary&lt;M&gt;): WriterFunctions&lt;M&gt;</span></div>
+<div><p>Creates a writer monad from a monoid dictionary.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="tell"><span class="name"><a class="section-anchor" href="#tell">&#xA7;</a>tell</span><span class="type">&lt;A&gt;(w: W): Writer&lt;W, {}&gt;</span></div>
+<div><p>Returns a <code>Writer</code> action that produces no value but combines the
+shared monoid with <code>w</code>.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="listen"><span class="name"><a class="section-anchor" href="#listen">&#xA7;</a>listen</span><span class="type">&lt;A&gt;(w: Writer&lt;W, A&gt;): Writer&lt;W, [A, W]&gt;</span></div>
+<div><p>Listen.</p>
+</div>
+<div class="fn"></div>
+<div class="signature" id="runWriter"><span class="name"><a class="section-anchor" href="#runWriter">&#xA7;</a>runWriter</span><span class="type">&lt;W extends Monoid&lt;W&gt;, A&gt;(w: Writer&lt;W, A&gt;): [W, A]</span></div>
+<div><p>Runs the <code>Writer</code> monad and returns a pair of the monoid value and
+the final result.</p>
+</div>
+<h2>Specification</h2>
+<h3>Semigroup</h3>
+<table class="spec-table">
+  <tr>
+    <td>Description</td>
+    <td>
+      <p>A semigroup represents things that can be combined. That is, two objects of the same semigroups can be combined into one object of the semigroup. In other words semigroups are things that can be composed.</p>
+      <p>Examples are many. For instance numbers can be combined by adding them together, lists can be combined by concatenating them and images can be combined by overlaying them.</p>
+    </td>
+  </tr>
+  <tr>
+    <td>Methods</td>
+    <td>
+      <div class="method"><span class="name">combine</span><span>: (a: A) =&gt; A</span></div>
+    </td>
+  </tr>
+</table>
+<h3>Monoid</h3>
+<table class="spec-table">
+  <tr>
+    <td>Description</td>
+    <td>Monoid extends semigroups with an identity element.</td>
+  </tr>
+  <tr>
+    <td>Methods</td>
+    <td>
+      <div class="method"><span class="name">identity</span><span>: () =&gt; A</span></div>
+    </td>
+  </tr>
+  <tr>
+    <td>Laws</td>
+    <td class="method">m.combine*(m.identity()) === m.identity().combine(m) === m</td>
+  </tr>
+</table>

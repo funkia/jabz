@@ -1,0 +1,24 @@
+name: InfiniteList
+description: |
+  A simple lazy infinite list. It can only be created based on
+  `naturals`.
+
+  It implements functor, applicative and foldable. Since it is
+  infinite it only works with the short-circuiting foldable methods.
+
+  ```javascript
+  // Find the first square number larger than 100
+  find((n) => n > 100, map((n) => n * n, naturals)); //=> 121
+  ```
+
+functions:
+
+- name: naturals
+  type: "InfiniteList<number>"
+  description: |
+    An infinite list of the natural numbers. `[0, 1, 2, ...]`.
+
+- name: repeat
+  type: "(a: A): InfiniteList<A>"
+  description: |
+    An infinite list of `a`s. `[a, a, a, ...]`.

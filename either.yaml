@@ -1,0 +1,51 @@
+name: Either
+description: |
+  Either is a container that can be either left or right.
+
+  Either implements functor and applicative.
+
+functions:
+- name: "Either<A, B>"
+  type: "class"
+  description: |
+    Type of either values.
+
+- name: "Either#match"
+  type: "<K>(m: EitherMatch<A, B, K>): K"
+  description: |
+    Pattern matching on `Either` values. `EitherMatch<A, B, K>` must
+    be a object with a `left` and `right` properties containing
+    functions returning `K`.
+
+    ```javascript
+    response.match({
+      right: (rating) => `User gave the rating ${rating}`,
+      left: (message) => `User wrote the message: ${message}`
+    });
+    ```
+
+- name: "left"
+  type: "<A>(a: A): Either<A, any>"
+  description: |
+    Returns an `Either` that is left and contains `a`.
+
+- name: "right"
+  type: "<B>(b: B): Either<any, B>"
+  description: |
+    Returns an `Either` that is right and contains `b`.
+
+- name: "isLeft"
+  type: "(either: Either<any, any>): boolean"
+  description: |
+    Return `true` is `either` is left.
+
+- name: "isRight"
+  type: "(either: Either<any, any>): boolean"
+  description: |
+    Return `true` is `either` is right.
+
+
+- name: "fromEither"
+  type: "<A, B>(either: Either<A, B>): A | B"
+  description: |
+    Extracts the value from an `Either`.

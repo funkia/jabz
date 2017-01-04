@@ -1,0 +1,26 @@
+name: Cons
+description: |
+  A simple singly linked list. It can be useful in cases where a list
+  is build by repeatedly prepending elements to the front of the this.
+  `Cons` supports the `cons` operation in very low constant time.
+
+  It implements semigroup, monoid, functor, applicative, monad,
+  foldable and traversable.
+
+functions:
+
+- name: 'nil'
+  type: 'Cons<any>'
+  description: |
+    The sentinel value at the end of the list indicating the end.
+    Alternatively it can be though of as the empty list.
+
+- name: 'cons'
+  type: '<A>(a: A, as: Cons<A>)'
+  description: |
+    Prepend the element `a` to the beginning of the list `as`.
+
+- name: 'fromArray'
+  type: '<A>(as: A[]): Cons<A>'
+  description: |
+    Creates a `Cons`-list from an array

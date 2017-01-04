@@ -1,0 +1,17 @@
+
+<h3 id="writer">Writer</h3><p>The <code>Writer</code> monad represents computation that produce a value an
+write to a shared state.</p>
+
+<div class="fn">
+  <div class="signature" id="createWriter"><span class="name"><a class="section-anchor" href="#createWriter">§</a>createWriter</span><span class="type">&lt;M extends Monoid&lt;M&gt;&gt;(mc: MonoidDictionary&lt;M&gt;): WriterFunctions&lt;M&gt;</span></div><p>Creates a writer monad from a monoid dictionary.</p>
+
+</div>
+<div class="fn">
+  <div class="signature" id="tell"><span class="name"><a class="section-anchor" href="#tell">§</a>tell</span><span class="type">&lt;A&gt;(w: W): Writer&lt;W, {}&gt;</span></div>
+</div>
+<div class="fn">
+  <div class="signature" id="listen"><span class="name"><a class="section-anchor" href="#listen">§</a>listen</span><span class="type">&lt;A&gt;(w: Writer&lt;W, A&gt;): Writer&lt;W, [A, W]&gt;</span></div>
+</div>
+<div class="fn">
+  <div class="signature" id="runWriter"><span class="name"><a class="section-anchor" href="#runWriter">§</a>runWriter</span><span class="type">&lt;W extends Monoid&lt;W&gt;, A&gt;(w: Writer&lt;W, A&gt;): [W, A]</span></div>
+</div>

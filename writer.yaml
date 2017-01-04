@@ -1,0 +1,56 @@
+name: Writer
+description: |
+  The `Writer` monad represents computation that produces a value and
+  write to a shared state.
+
+  The `Writer` monad is useful in cases where functions produce a
+  "primary" output but alongside that also need to append values to a
+  shared state. This shared state is a monoid.
+
+  A value of type `Writer<A, B>` is a computation that produces a
+  value of type `B` and produces a monoid value of type `A` as a
+  secondary output.
+
+  In the example below the functions `divide` and `add` does
+  arithmetic but besides that they also produce strings for a log.
+
+  ```javascript
+  const {tell} = createWriter(String);
+  const divide = fgo(function*(n, m) {
+    yield tell(`Divide ${n} by ${m}. `);
+    return n / m;
+  });
+  const add = fgo(function*(n, m) {
+    yield tell(`Add ${n} to ${m}. `);
+    return n + m;
+  });
+  const comp = go(function*() {
+    const a = yield add(12, 8);
+    const b = yield divide(132, 11);
+    return yield add(a, b);
+  });
+  runWriter(comp);
+  //=> ["Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32];
+  ```
+
+functions:
+- name: createWriter
+  type: "<M extends Monoid<M>>(mc: MonoidDictionary<M>): WriterFunctions<M>"
+  description: |
+    Creates a writer monad from a monoid dictionary.
+
+- name: tell
+  type: "<A>(w: W): Writer<W, {}>"
+  description: |
+    Returns a `Writer` action that produces no value but combines the
+    shared monoid with `w`.
+
+- name: listen
+  type: "<A>(w: Writer<W, A>): Writer<W, [A, W]>"
+  description: Listen.
+
+- name: runWriter
+  type: "<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A]"
+  description: |
+    Runs the `Writer` monad and returns a pair of the monoid value and
+    the final result.

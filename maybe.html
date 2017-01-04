@@ -1,0 +1,57 @@
+
+<h3>Maybe</h3>
+<p>Maybe is a container that may contain one or zero elements.</p>
+<p>Maybe is an instance of the following abstractions: functor, applicative, monad, foldable and traversable.</p>
+<p>Import with.</p>
+<pre><code class="lang-javascript">import {just, nothing, ...} from "jabz/maybe";
+</code></pre>
+<div class="fn">
+  <div class="signature" id="just"><span class="name"><a class="section-anchor" href="#just">§</a>just</span><span class="type">&lt;A&gt;(a: A): Maybe&lt;A&gt;</span></div>
+  <div class="description">
+    <p>Creates a Maybe with just the value a.</p>
+  </div>
+  <pre><code class="lang-javascript">map(double, just(4)); //=> just(8)
+</code></pre>
+</div>
+<div class="fn">
+  <div class="signature" id="nothing"><span class="name"><a class="section-anchor" href="#nothing">§</a>nothing</span><span class="type">Maybe&lt;any&gt;</span></div>
+  <div class="description">
+    <p>A Maybe with no value inside</p>
+  </div>
+  <pre><code class="lang-javascript">map(double, nothing); //=> nothing
+</code></pre>
+</div>
+<div class="fn">
+  <div class="signature" id="isNothing"><span class="name"><a class="section-anchor" href="#isNothing">§</a>isNothing</span><span class="type">(m: Maybe&lt;any&gt;): boolean</span></div>
+  <div class="description">
+    <p>Returns true if m is empty.</p>
+  </div>
+  <pre><code class="lang-javascript">isNothing(nothing); //=> true
+isNothing(just(3)); //=> false
+</code></pre>
+</div>
+<div class="fn">
+  <div class="signature" id="isJust"><span class="name"><a class="section-anchor" href="#isJust">§</a>isJust</span><span class="type">(m: Maybe&lt;any&gt;): boolean</span></div>
+  <div class="description">
+    <p>Returns true if m is contains a value.</p>
+  </div>
+  <pre><code class="lang-javascript">isJust(nothing); //=> false
+isJust(just(3)); //=> true
+</code></pre>
+</div>
+<div class="fn">
+  <div class="signature" id="fromMaybe"><span class="name"><a class="section-anchor" href="#fromMaybe">§</a>fromMaybe</span><span class="type">&lt;A&gt;(a: A, m: Maybe&lt;A&gt;): A</span></div>
+  <div class="description">
+    <p>Extracts a the potential value from `m` with `a` as a fallback.</p>
+  </div>
+  <pre><code class="lang-javascript">fromMaybe(5, nothing); //=> 5
+fromMaybe(5, just(3)); //=> 3
+</code></pre>
+</div>
+<div class="fn">
+  <div class="signature" id="maybe"><span class="name"><a class="section-anchor" href="#maybe">§</a>maybe</span><span class="type">(b: B, f: (a: A) =&gt; B, m: Maybe&lt;A&gt;)</span></div>
+  <div class="description"><p>If <code>m</code> is <code>nothing</code> return <code>b</code>. Otherwise, extract the value, pass it through <code>f</code> and return it.</p>
+
+  </div>
+  <pre><code class="lang-javascript">maybe("--:--", (d) => d.getMinutes() + ":" + d.getSeconds, maybeTime);</code></pre>
+</div>

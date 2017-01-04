@@ -1,0 +1,28 @@
+name: Functor
+description: |
+  Import with.
+
+  ```javascript
+  import * as Functor from "jabz/functor";
+  ```
+
+functions:
+- name: map
+  type: "<F extends Functor, A, B>(f: (a: A) => B, a: F<A>): F<B>"
+  description: |
+    Maps a function over a functor.
+
+    ```javascript
+    map((n) => n * n, just(3)); //=> just(9)
+    map((n) => n * n, [1, 2, 3]); //=> [1, 4, 9]
+    ```
+
+- name: mapTo
+  type: "<F extends Functor, A, B>(b: B, as: F<A>): F<B>"
+  description: |
+    Replaces each value inside the functor with b.
+
+    ```javascript
+    mapTo(2, just(3)); //=> just(2)
+    mapTo(4, [1, 2, 3]); //=> [4, 4, 4]
+    ```
