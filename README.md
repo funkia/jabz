@@ -28,6 +28,11 @@ see [this blog post](http://vindum.io/blog/introducing-jabz/).
 See [the API documentation](https://funkia.github.io/jabz/) and the
 example below.
 
+Note that the specification for the abstractions is not written down
+formally yet. But the source code contain TypeScript interfaces that
+documents the different required methods. The laws associated with the
+abstractions are as expected if one is familiar with them.
+
 ## Example
 
 This example demonstrates some of what Jabz can do by implementing a
