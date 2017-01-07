@@ -66,6 +66,9 @@ describe("Maybe", () => {
     // this should not throw a type error
     map<number, number>(x => x + 2, just(1)).chain(x => nothing);
   });
+  it("is still nothing after map on nothing", () => {
+    assert.strictEqual(isNothing(nothing.map(x => x * x)), true);
+  });
   it("works with mapTo", () => {
     assert.deepEqual(just(1), mapTo(1, just(2)));
   });

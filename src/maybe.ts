@@ -79,13 +79,13 @@ class Nothing<A> extends Maybe<A> {
     return this;
   }
   map<B>(f: (a: A) => B): Maybe<B> {
-    return new Nothing<B>();
+    return nothing;
   }
   mapTo<B>(b: B): Maybe<B> {
-    return new Nothing<B>();
+    return nothing;
   }
   ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
-    return new Nothing<B>();
+    return nothing;
   }
   foldr<B>(f: (a: A, b: B) => B, acc: B): B {
     return acc;
