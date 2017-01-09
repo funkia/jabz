@@ -1,6 +1,7 @@
 import {assert} from "chai";
 
-import {Functor, functor} from "../src/functor";
+import {Functor, functor, mapMap} from "../src/functor";
+import {just} from "../src/maybe";
 
 function id<A>(a: A) {
   return a;
@@ -40,6 +41,26 @@ describe("deriving", () => {
       class NotAFunctor {
         constructor() {};
       }
+    });
+  });
+  describe("mapMap", () => {
+    it("maps function over just of just", () => {
+      assert.deepEqual(
+        mapMap((n) => n * n, just(just(3))),
+        just(just(9))
+      );
+    });
+    it("works on array", () => {
+      assert.deepEqual(
+        mapMap((n) => n * n, [[1, 2, 3], [4, 5], [6, 7]]),
+        [[1, 4, 9], [16, 25], [36, 49]]
+      );
+    });
+    it("supports mix", () => {
+      assert.deepEqual(
+        mapMap((n) => n * n, just([1, 2, 3])),
+        just([1, 4, 9])
+      );
     });
   });
 });
