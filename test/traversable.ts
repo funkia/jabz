@@ -32,7 +32,7 @@ describe("Traversable", () => {
         a: ApplicativeDictionary,
         f: (a: A) => Applicative<B>
       ): Applicative<List<B>> {
-        return traverse(a, f, this.list).map((a) => new List(a));
+        return traverse(a, f, this.list).map((a: B[]) => new List(a));
       }
       sequence: <A>(a: ApplicativeDictionary, t: Traversable<Applicative<A>>) => Applicative<Traversable<A>>;
       map: <B>(f: (a: A) => B) => List<B>;
@@ -70,7 +70,7 @@ describe("Traversable", () => {
         a: ApplicativeDictionary,
         t: List<Applicative<A>>
       ): Applicative<Traversable<A>> {
-        return sequence(a, t.list).map((a) => new List(a));
+        return sequence(a, t.list).map((a: A[]) => new List(a));
       }
       map<B>(f: (a: A) => B): List<B> {
         return new List(this.list.map(f));
@@ -99,7 +99,7 @@ describe("Traversable", () => {
             a: ApplicativeDictionary,
             t: List<Applicative<A>>
           ): Applicative<List<A>> {
-            return sequence(a, t.list).map((a) => new List(a));
+            return sequence(a, t.list).map((a: A[]) => new List(a));
           }
         }
       });

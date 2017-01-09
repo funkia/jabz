@@ -77,8 +77,8 @@ function arrayTraverse<A, B>(
   return result;
 }
 
-export function sequence<A>(a: ApplicativeDictionary, t: Applicative<A>[]): Applicative<A[]>;
-export function sequence<A>(a: ApplicativeDictionary, t: Traversable<Applicative<A>>): Applicative<Traversable<A>>;
+export function sequence<A>(a: ApplicativeDictionary, t: Applicative<A>[]): any;
+export function sequence<A>(a: ApplicativeDictionary, t: Traversable<Applicative<A>>): any;
 export function sequence<A>(
   a: ApplicativeDictionary,
   t: Traversable<Applicative<A>> | Applicative<A>[]
@@ -90,8 +90,8 @@ export function sequence<A>(
   }
 }
 
-export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: A[]): Applicative<B[]>;
-export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: Traversable<A>): Applicative<Traversable<B>>;
+export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: A[]): any;
+export function traverse<A, B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>, t: Traversable<A>): any;
 export function traverse<A, B>(
   a: ApplicativeDictionary,
   f: (a: A) => Applicative<B>,
