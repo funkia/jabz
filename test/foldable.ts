@@ -2,8 +2,9 @@ import "mocha";
 import {assert} from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, foldl, foldrM, size, maximum, minimum,
-  sum, find, findLast, findIndex, findLastIndex, toArray, take, sequence_
+  Foldable, foldable, foldMap, foldr, foldl, foldrM, size, isEmpty,
+  maximum, minimum, sum, find, findLast, findIndex, findLastIndex,
+  toArray, take, sequence_
 } from "../src/foldable";
 import {Maybe, just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
@@ -58,6 +59,11 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
   });
   it("has size", () => {
     assert.deepEqual(size(list([1, 1, 1, 1])), 4);
+  });
+  it("can get emptyness", () => {
+    assert.strictEqual(isEmpty(list([1, 2, 3])), false);
+    assert.strictEqual(isEmpty(list([1])), false);
+    assert.strictEqual(isEmpty(list([])), true);
   });
   it("can get `maximum`", () => {
     assert.deepEqual(maximum((list([1, 2, 4, 3]))), 4);

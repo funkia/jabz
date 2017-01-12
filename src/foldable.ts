@@ -92,6 +92,10 @@ export function size(a: Foldable<any> | any[]): number {
   }
 }
 
+export function isEmpty(a: Foldable<any>): boolean {
+  return a.shortFoldl((_, a) => left(false), true);
+}
+
 export function maximum(t: Foldable<number>): number {
   return t.maximum();
 }

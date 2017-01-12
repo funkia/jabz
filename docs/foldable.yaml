@@ -17,6 +17,12 @@ functions:
   description: |
     Returns the number of elements in the foldable.
 
+- name: isEmpty
+  type: "(f: Foldable<any>): boolean"
+  description: |
+    Returns true if the foldable contains no elements and true
+    otherwise.
+
 - name: take
   type: "(n: number, t: Foldable<A>): A[]"
   description: |
