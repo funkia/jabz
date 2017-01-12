@@ -6,11 +6,19 @@ description: |
   import * as Foldable from "jabz/foldable";
   ```
 
+  In the examples below a hypothetical function `fromArray` will be
+  used. It converts an array into some foldable.
+
 functions:
 - name: foldr
   type: "<A, B>(f: (a: A, b: B) => B, init: B, a: Foldable<A> | A[]): B"
   description: |
     Performs a strict right fold over a foldable.
+
+- name: foldl
+  type: "<A, B>(f: (acc: B, a: A) => B, init: B, a: Foldable<A> | A[]): B"
+  description: |
+    Performs a strict left fold over a foldable.
 
 - name: size
   type: "(t: Foldable<any>): number"
@@ -94,3 +102,18 @@ functions:
     foldrM(divide, just(100), fromArray([10, 5])); //=> just(2)
     foldrM(divide, just(100), fromArray([5, 0])); //=> nothing
     ```
+
+- name: maximum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the maximum number in a foldable.
+
+- name: minimum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the minimum number in a foldable.
+
+- name: sum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the sum of numbers in a foldable.

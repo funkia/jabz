@@ -62,14 +62,14 @@ export function foldMap<A, M extends Monoid<M>>(f: MonoidConstructor<A, M>, a: F
   return foldr((a, b) => f.create(a).combine(b), f.identity(), a);
 }
 
-export function foldr<A, B>(f: (a: A, b: B) => B, acc: B, a: Foldable<A> | A[]): B {
+export function foldr<A, B>(f: (a: A, b: B) => B, init: B, a: Foldable<A> | A[]): B {
   if (a instanceof Array) {
     for (let i = a.length - 1; 0 <= i; --i) {
-      acc = f(a[i], acc);
+      init = f(a[i], init);
     }
-    return acc;
+    return init;
   } else {
-    return a.foldr(f, acc);
+    return a.foldr(f, init);
   }
 }
 
@@ -94,18 +94,6 @@ export function size(a: Foldable<any> | any[]): number {
 
 export function isEmpty(a: Foldable<any>): boolean {
   return a.shortFoldl((_, a) => left(false), true);
-}
-
-export function maximum(t: Foldable<number>): number {
-  return t.maximum();
-}
-
-export function minimum(t: Foldable<number>) {
-  return t.minimum();
-}
-
-export function sum(t: Foldable<number>) {
-  return t.sum();
 }
 
 export function take<A>(n: number, t: Foldable<A>): A[] {
@@ -159,4 +147,16 @@ export function sequence_(
 
 export function foldrM<A, B>(f: (a: A, b: B) => Monad<B>, mb: Monad<B>, t: Foldable<A> | A[]): Monad<B> {
   return foldr((a, mb) => mb.chain((b) => f(a, b)), mb, t);
+}
+
+export function maximum(t: Foldable<number>): number {
+  return t.maximum();
+}
+
+export function minimum(t: Foldable<number>) {
+  return t.minimum();
+}
+
+export function sum(t: Foldable<number>) {
+  return t.sum();
 }
