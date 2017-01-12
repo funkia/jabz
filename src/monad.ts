@@ -75,7 +75,7 @@ export function arrayFlatten<A>(m: A[][]): A[] {
 }
 
 export function flatten<A>(m: A[][]): A[];
-export function flatten<A>(m: Monad<Monad<A>>): Monad<A>;
+export function flatten<A>(m: Monad<Monad<A>>): any;
 export function flatten<A>(m: Monad<Monad<A>> | A[][]): Monad<A> | A[] {
   if (Array.isArray(m)) {
     return arrayFlatten(m);
@@ -96,7 +96,7 @@ function arrayChain<A, B>(f: (a: A) => B[], m: A[]): B[] {
 }
 
 export function chain<A, B>(f: (a: A) => B[], m: A[]): B[];
-export function chain<A, B>(f: (a: A) => Monad<B>, m: Monad<A>): Monad<B>;
+export function chain<A, B>(f: (a: A) => Monad<B>, m: Monad<A>): any;
 export function chain<A, B>(f: any, m: Monad<Monad<A>> | A[]): Monad<B> | B[] {
   if (Array.isArray(m)) {
     return arrayChain<A, B>(f, m);
