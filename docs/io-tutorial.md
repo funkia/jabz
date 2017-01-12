@@ -152,7 +152,7 @@ const responseJson = withEffectsP((response) => response.json());
 
 const fetchUsersPet = fgo(function*(userId) {
   const response = yield catchE(
-    (err) => `Request failed: ${err}`,
+    (err) => throwE(`Request failed: ${err}`),
     fetchIO(usersUrl + "/" + userId)
   );
   if (response.states === 404) {
