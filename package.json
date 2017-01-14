@@ -2,7 +2,7 @@
   "name": "jabz",
   "version": "0.0.15",
   "description": "Powerful and practical abstractions.",
-  "main": "lib/index",
+  "main": "index.js",
   "scripts": {
     "build": "tsc -P ./tsconfig-release.json",
     "test": "nyc mocha --compilers ts:ts-node/register test/**/*.ts && nyc report",
