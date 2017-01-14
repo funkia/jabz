@@ -26,3 +26,13 @@ functions:
     mapTo(2, just(3)); //=> just(2)
     mapTo(4, [1, 2, 3]); //=> [4, 4, 4]
     ```
+
+- name: mapMap
+  type: "<F extends Functor, A, B>(f: (a: A) => B, as: F<F<A>>): F<F<B>>"
+  description: |
+    `map` composed with `map`. A convenience function for applying a
+    function to a functor inside another functor.
+
+    ```javascript
+    mapMap((n) => n * n, just([1, 2, 3])); //=> just([1, 4, 9])
+    ```

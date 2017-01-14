@@ -6,6 +6,7 @@
     <link href="./solarized-light.css" rel="stylesheet">
     <script src="./menuspy.js"></script>
     <script src="./script.js"></script>
+    <script src="http://localhost:35729/livereload.js"></script>
     <meta name="viewport" content="width=device-width">
   </head>
   <body>
@@ -35,6 +36,7 @@
                   <ul>
                     <li><a href="#map">map</a></li>
                     <li><a href="#mapTo">mapTo</a></li>
+                    <li><a href="#mapMap">mapMap</a></li>
                   </ul>
                 </li>
                 <li><a href="#Applicative">Applicative</a>
@@ -56,15 +58,22 @@
                 <li><a href="#Foldable">Foldable</a>
                   <ul>
                     <li><a href="#foldr">foldr</a></li>
+                    <li><a href="#foldl">foldl</a></li>
                     <li><a href="#size">size</a></li>
+                    <li><a href="#isEmpty">isEmpty</a></li>
                     <li><a href="#take">take</a></li>
                     <li><a href="#find">find</a></li>
                     <li><a href="#findLast">findLast</a></li>
                     <li><a href="#findIndex">findIndex</a></li>
                     <li><a href="#findLastIndex">findLastIndex</a></li>
+                    <li><a href="#all">all</a></li>
+                    <li><a href="#all">all</a></li>
                     <li><a href="#toArray">toArray</a></li>
                     <li><a href="#sequence_">sequence_</a></li>
                     <li><a href="#foldrM">foldrM</a></li>
+                    <li><a href="#maximum">maximum</a></li>
+                    <li><a href="#minimum">minimum</a></li>
+                    <li><a href="#sum">sum</a></li>
                   </ul>
                 </li>
                 <li><a href="#Traversable">Traversable</a>
@@ -277,6 +286,13 @@ monoid instances.</p>
 <span class="token function">mapTo</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [4, 4, 4]</span>
 </code></pre>
 </div>
+                        <div class="fn"></div>
+                        <div class="signature" id="mapMap"><span class="name"><a class="section-anchor" href="#mapMap">&#xA7;</a>mapMap</span><span class="type">&lt;F extends Functor, A, B&gt;(f: (a: A) =&gt; B, as: F&lt;F&lt;A&gt;&gt;): F&lt;F&lt;B&gt;&gt;</span></div>
+                        <div><p><code>map</code> composed with <code>map</code>. A convenience function for applying a
+function to a functor inside another functor.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">mapMap</span><span class="token punctuation">(</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> n <span class="token operator">*</span> n<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just([1, 4, 9])</span>
+</code></pre>
+</div>
                         <h3 id="Applicative"><a class="section-anchor" href="#Applicative">&#xA7;</a>Applicative
                         </h3>
                 <div><p>Import with.</p>
@@ -365,14 +381,25 @@ function.</p>
                 <div><p>Import with.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> Foldable <span class="token keyword">from</span> <span class="token string">&quot;jabz/foldable&quot;</span><span class="token punctuation">;</span>
 </code></pre>
+<p>In the examples below a hypothetical function <code>fromArray</code> will be
+used. It converts an array into some foldable.</p>
 </div>
                         <div class="fn"></div>
                         <div class="signature" id="foldr"><span class="name"><a class="section-anchor" href="#foldr">&#xA7;</a>foldr</span><span class="type">&lt;A, B&gt;(f: (a: A, b: B) =&gt; B, init: B, a: Foldable&lt;A&gt; | A[]): B</span></div>
                         <div><p>Performs a strict right fold over a foldable.</p>
 </div>
                         <div class="fn"></div>
+                        <div class="signature" id="foldl"><span class="name"><a class="section-anchor" href="#foldl">&#xA7;</a>foldl</span><span class="type">&lt;A, B&gt;(f: (acc: B, a: A) =&gt; B, init: B, a: Foldable&lt;A&gt; | A[]): B</span></div>
+                        <div><p>Performs a strict left fold over a foldable.</p>
+</div>
+                        <div class="fn"></div>
                         <div class="signature" id="size"><span class="name"><a class="section-anchor" href="#size">&#xA7;</a>size</span><span class="type">(t: Foldable&lt;any&gt;): number</span></div>
                         <div><p>Returns the number of elements in the foldable.</p>
+</div>
+                        <div class="fn"></div>
+                        <div class="signature" id="isEmpty"><span class="name"><a class="section-anchor" href="#isEmpty">&#xA7;</a>isEmpty</span><span class="type">(f: Foldable&lt;any&gt;): boolean</span></div>
+                        <div><p>Returns true if the foldable contains no elements and true
+otherwise.</p>
 </div>
                         <div class="fn"></div>
                         <div class="signature" id="take"><span class="name"><a class="section-anchor" href="#take">&#xA7;</a>take</span><span class="type">(n: number, t: Foldable&lt;A&gt;): A[]</span></div>
@@ -410,8 +437,30 @@ satisfies the predicate.</p>
 </code></pre>
 </div>
                         <div class="fn"></div>
+                        <div class="signature" id="all"><span class="name"><a class="section-anchor" href="#all">&#xA7;</a>all</span><span class="type">(pred: (a: A) =&gt; boolean, foldable: Foldable&lt;A&gt;): boolean</span></div>
+                        <div><p>Returns <code>true</code> if the predicate function returns <code>true</code> for all
+elements in the foldable. This function short-circuits as soon a
+<code>false</code> value is encountered.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">all</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; true</span>
+<span class="token function">all</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; false</span>
+<span class="token function">all</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; true</span>
+</code></pre>
+</div>
+                        <div class="fn"></div>
+                        <div class="signature" id="all"><span class="name"><a class="section-anchor" href="#all">&#xA7;</a>all</span><span class="type">(pred: (a: A) =&gt; boolean, foldable: Foldable&lt;A&gt;): boolean</span></div>
+                        <div><p>Returns <code>true</code> if the predicate function returns <code>true</code> for any
+elements in the foldable. This function short-circuits as soon a
+<code>true</code> value is encountered.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">any</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; false</span>
+<span class="token function">any</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; true</span>
+<span class="token function">any</span><span class="token punctuation">(</span>isEven<span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; false</span>
+</code></pre>
+</div>
+                        <div class="fn"></div>
                         <div class="signature" id="toArray"><span class="name"><a class="section-anchor" href="#toArray">&#xA7;</a>toArray</span><span class="type">(t: Foldable&lt;A&gt;): A[]</span></div>
                         <div><p>Converts a foldable to an array.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [1, 2, 3]</span>
+</code></pre>
 </div>
                         <div class="fn"></div>
                         <div class="signature" id="sequence_"><span class="name"><a class="section-anchor" href="#sequence_">&#xA7;</a>sequence_</span><span class="type">&lt;A extends Applicative&gt;(d: ApplicativeDictionary, t: Foldable&lt;A&lt;any&gt;&gt;): A&lt;{}&gt;</span></div>
@@ -420,13 +469,25 @@ discarding the result.</p>
 </div>
                         <div class="fn"></div>
                         <div class="signature" id="foldrM"><span class="name"><a class="section-anchor" href="#foldrM">&#xA7;</a>foldrM</span><span class="type">&lt;A, B, M extends Monad&gt;(f: (a: A, b: B) =&gt; M&lt;B&gt;, mb: M&lt;B&gt;, t: Foldable&lt;A&gt;): M&lt;B&gt;</span></div>
-                        <div><p>Monadic right fold. This function is similar to foldr. The
+                        <div><p>Monadic right fold. This function is similar to <code>foldr</code>. The
 difference is that the accumulator function returns a monadic
 value and that the final result is in the same monad.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> divide <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> a <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">?</span> nothing <span class="token punctuation">:</span> <span class="token function">just</span><span class="token punctuation">(</span>b <span class="token operator">/</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">foldrM</span><span class="token punctuation">(</span>divide<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; just(2)</span>
 <span class="token function">foldrM</span><span class="token punctuation">(</span>divide<span class="token punctuation">,</span> <span class="token function">just</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fromArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; nothing</span>
 </code></pre>
+</div>
+                        <div class="fn"></div>
+                        <div class="signature" id="maximum"><span class="name"><a class="section-anchor" href="#maximum">&#xA7;</a>maximum</span><span class="type">(t: Foldable&lt;number&gt;): number</span></div>
+                        <div><p>Returns the maximum number in a foldable.</p>
+</div>
+                        <div class="fn"></div>
+                        <div class="signature" id="minimum"><span class="name"><a class="section-anchor" href="#minimum">&#xA7;</a>minimum</span><span class="type">(t: Foldable&lt;number&gt;): number</span></div>
+                        <div><p>Returns the minimum number in a foldable.</p>
+</div>
+                        <div class="fn"></div>
+                        <div class="signature" id="sum"><span class="name"><a class="section-anchor" href="#sum">&#xA7;</a>sum</span><span class="type">(t: Foldable&lt;number&gt;): number</span></div>
+                        <div><p>Returns the sum of numbers in a foldable.</p>
 </div>
                         <h3 id="Traversable"><a class="section-anchor" href="#Traversable">&#xA7;</a>Traversable
                         </h3>

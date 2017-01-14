@@ -6,16 +6,30 @@ description: |
   import * as Foldable from "jabz/foldable";
   ```
 
+  In the examples below a hypothetical function `fromArray` will be
+  used. It converts an array into some foldable.
+
 functions:
 - name: foldr
   type: "<A, B>(f: (a: A, b: B) => B, init: B, a: Foldable<A> | A[]): B"
   description: |
     Performs a strict right fold over a foldable.
 
+- name: foldl
+  type: "<A, B>(f: (acc: B, a: A) => B, init: B, a: Foldable<A> | A[]): B"
+  description: |
+    Performs a strict left fold over a foldable.
+
 - name: size
   type: "(t: Foldable<any>): number"
   description: |
     Returns the number of elements in the foldable.
+
+- name: isEmpty
+  type: "(f: Foldable<any>): boolean"
+  description: |
+    Returns true if the foldable contains no elements and true
+    otherwise.
 
 - name: take
   type: "(n: number, t: Foldable<A>): A[]"
@@ -65,10 +79,40 @@ functions:
     findLastIndex(isEven, fromArray([1, 3, 4, 5, 6, 7])); //=> just(4)
     ```
 
+- name: all
+  type: "(pred: (a: A) => boolean, foldable: Foldable<A>): boolean"
+  description: |
+    Returns `true` if the predicate function returns `true` for all
+    elements in the foldable. This function short-circuits as soon a
+    `false` value is encountered.
+
+    ```javascript
+    all(isEven, fromArray([2, 4, 6])); //=> true
+    all(isEven, fromArray([2, 4, 7])); //=> false
+    all(isEven, fromArray([])); //=> true
+    ```
+
+- name: all
+  type: "(pred: (a: A) => boolean, foldable: Foldable<A>): boolean"
+  description: |
+    Returns `true` if the predicate function returns `true` for any
+    elements in the foldable. This function short-circuits as soon a
+    `true` value is encountered.
+
+    ```javascript
+    any(isEven, fromArray([1, 3, 7])); //=> false
+    any(isEven, fromArray([1, 3, 6])); //=> true
+    any(isEven, fromArray([])); //=> false
+    ```
+
 - name: toArray
   type: "(t: Foldable<A>): A[]"
   description: |
     Converts a foldable to an array.
+
+    ```javascript
+    toArray(fromArray([1, 2, 3])); //=> [1, 2, 3]
+    ```
 
 - name: "sequence_"
   type: "<A extends Applicative>(d: ApplicativeDictionary, t: Foldable<A<any>>): A<{}>"
@@ -79,7 +123,7 @@ functions:
 - name: foldrM
   type: "<A, B, M extends Monad>(f: (a: A, b: B) => M<B>, mb: M<B>, t: Foldable<A>): M<B>"
   description: |
-    Monadic right fold. This function is similar to foldr. The
+    Monadic right fold. This function is similar to `foldr`. The
     difference is that the accumulator function returns a monadic
     value and that the final result is in the same monad.
 
@@ -88,3 +132,18 @@ functions:
     foldrM(divide, just(100), fromArray([10, 5])); //=> just(2)
     foldrM(divide, just(100), fromArray([5, 0])); //=> nothing
     ```
+
+- name: maximum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the maximum number in a foldable.
+
+- name: minimum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the minimum number in a foldable.
+
+- name: sum
+  type: "(t: Foldable<number>): number"
+  description: |
+    Returns the sum of numbers in a foldable.
