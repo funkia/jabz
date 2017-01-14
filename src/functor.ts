@@ -8,7 +8,7 @@ function arrayMap<A, B>(f: (a: A) => B, as: A[]): B[] {
   return newArr;
 }
 
-export function repeat<A>(a: A, length: number): A[] {
+function repeat<A>(a: A, length: number): A[] {
   let newArr: A[] = [];
   for (let i = 0; i < length; ++i) { newArr.push(a); }
   return newArr;

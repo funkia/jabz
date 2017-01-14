@@ -1,23 +1,14 @@
-import * as Applicative from "./applicative";
-import * as Either from "./either";
-import * as Foldable from "./foldable";
-import * as Functor from "./functor";
-import * as IO from "./io";
-import * as Maybe from "./maybe";
-import * as Monad from "./monad";
-import * as Monoid from "./monoid";
-import * as Semigroup from "./semigroup";
-import * as Writer from "./writer";
+export * from "./semigroup";
+export * from "./monoid";
+export * from "./functor";
+export * from "./applicative";
+export * from "./monad";
+export * from "./foldable";
+export * from "./traversable";
 
-export {
-  Applicative,
-  Either,
-  Foldable,
-  Functor,
-  IO,
-  Maybe,
-  Monad,
-  Monoid,
-  Semigroup,
-  Writer
-};
+export * from "./maybe";
+export * from "./either";
+export * from "./conslist";
+export * from "./infinitelist";
+export * from "./io";
+export * from "./writer";
