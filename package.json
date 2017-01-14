@@ -1,6 +1,6 @@
 {
   "name": "jabz",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Powerful and practical abstractions.",
   "main": "index.js",
   "scripts": {
