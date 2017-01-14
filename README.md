@@ -136,5 +136,5 @@ Seamless instances means that certain native JavaScript types can be
 used as if they implemented the abstractions relevant for them.
 
 * `string`, implements setoid and monoid.
-* `array`, implements setoid, monoid and functor.
+* `array`, implements setoid, monoid, functor, foldable and traversable.
 
