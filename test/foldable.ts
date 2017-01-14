@@ -4,13 +4,15 @@ import {assert} from "chai";
 import {
   Foldable, foldable, foldMap, foldr, foldl, foldrM, size, isEmpty,
   maximum, minimum, sum, find, findLast, findIndex, findLastIndex,
-  toArray, take, sequence_
+  all, any, toArray, take, sequence_
 } from "../src/foldable";
 import {Maybe, just, nothing} from "../src/maybe";
 import {Either, left, right} from "../src/either";
 import {Monoid, MonoidConstructor} from "../src/monoid";
 import {IO, call, runIO} from "../src/io";
 import Sum from "../src/monoids/sum";
+
+const isEven = (n: number): boolean => n % 2 === 0;
 
 export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
   it("has foldMap", () => {
@@ -97,6 +99,40 @@ describe("Foldable", () => {
     }
     const list = (arr: any[]) => new List(arr);
     testFoldable(list);
+    describe("all", () => {
+      it("returns true when all elements are true", () => {
+        assert.strictEqual(
+          all(isEven, list([2, 4, 6])), true
+        );
+      });
+      it("returns false when some elements are false", () => {
+        assert.strictEqual(
+          all(isEven, list([2, 4, 7])), false
+        );
+      });
+      it("returns true on empty list", () => {
+        assert.strictEqual(
+          all(isEven, list([])), true
+        );
+      });
+    });
+    describe("any", () => {
+      it("returns false when no elements are true", () => {
+        assert.strictEqual(
+          any(isEven, list([1, 3, 7])), false
+        );
+      });
+      it("returns true when some elements are true", () => {
+        assert.strictEqual(
+          any(isEven, list([1, 3, 6])), true
+        );
+      });
+      it("returns false on empty list", () => {
+        assert.strictEqual(
+          any(isEven, list([])), false
+        );
+      });
+    });
     describe("toArray", () => {
       it("can convert foldable to array", () => {
         assert.deepEqual(

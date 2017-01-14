@@ -130,6 +130,14 @@ export function shortFoldl<A, B>(f: (b: B, a: A) => Either<B, B>, acc: B, l: Fol
   return l.shortFoldl<B>(f, acc);
 }
 
+export function all<A>(pred: (a: A) => boolean, foldable: Foldable<A>): boolean {
+  return shortFoldl((_, val) => pred(val) === true ? right(true) : left(false), true, foldable);
+}
+
+export function any<A>(pred: (a: A) => boolean, foldable: Foldable<A>): boolean {
+  return shortFoldl((_, val) => pred(val) === true ? left(true) : right(false), false, foldable);
+}
+
 export function toArray<A>(t: Foldable<A> | A[]): A[] {
   if (Array.isArray(t)) {
     return t;
