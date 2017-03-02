@@ -17,6 +17,8 @@ export interface Foldable<A> {
   sum(): number;
 }
 
+export type AnyFoldable<A> = Foldable<A> | A[];
+
 function incr<A>(_: A, acc: number): number {
   return acc + 1;
 }
@@ -92,8 +94,12 @@ export function size(a: Foldable<any> | any[]): number {
   }
 }
 
-export function isEmpty(a: Foldable<any>): boolean {
-  return a.shortFoldl((_, a) => left(false), true);
+export function isEmpty(a: AnyFoldable<any>): boolean {
+  if (a instanceof Array) {
+    return a.length === 0;
+  } else {
+    return a.shortFoldl((_, a) => left(false), true);
+  }
 }
 
 export function take<A>(n: number, t: Foldable<A>): A[] {

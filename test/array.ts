@@ -7,7 +7,7 @@ import {identity, combine} from "../src/monoid";
 import {map, mapTo} from "../src/functor";
 import {lift, of} from "../src/applicative";
 import {chain, flatten, go} from "../src/monad";
-import {size, foldr, foldl, foldMap, sequence_} from "../src/foldable";
+import {size, foldr, foldl, foldMap, sequence_, isEmpty} from "../src/foldable";
 import {traverse, sequence} from "../src/traversable";
 import {IO, call, runIO} from "../src/io";
 
@@ -84,6 +84,10 @@ describe("Native list", () => {
         foldl((acc, n) => acc - n, 1, [16, 12, 9, 6, 3]),
         ((((1 - 16) - 12) - 9) - 6) - 3
       );
+    });
+    it("isEmpty", () => {
+      assert.strictEqual(isEmpty([1, 2, 3]), false);
+      assert.strictEqual(isEmpty([]), true);
     });
     describe("sequence_", () => {
       it("sequences justs to just", () => {
