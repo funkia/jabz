@@ -8,12 +8,13 @@ description: |
 
 functions:
 - name: combine
-  type: "<A extends Semigroup<A>>(a: A, b: A): A"
+  type: "<A extends Semigroup<A>>(...m: A): A"
   description: |
-    Combines two members of the same semigroup by using their combine method.
+    Combines two or more members of the same semigroup by using their
+    `combine` method.
 
     ```javascript
     combine(sum(3), sum(5)); //=> Sum(8)
-    combine("Hello ", "there"); //=> "Hello there"
-    combine([1, 2, 3], [4, 5]); //=> [1, 2, 3, 4, 5]
+    combine("Hello ", "over ", "there"); //=> "Hello over there"
+    combine([1], [2], [3], [4, 5]); //=> [1, 2, 3, 4, 5]
     ```

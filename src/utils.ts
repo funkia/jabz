@@ -45,6 +45,23 @@ export function flip<A, B, C>(f: (a: A, b: B) => C): (b: B, a: A) => C {
   return (b, a) => f(a, b);
 }
 
+export function foldlArray<A, B>(f: (acc: B, a: A) => B, init: B, a: A[]): B {
+  for (let i = 0; i < a.length; ++i) {
+    init = f(init, a[i]);
+  }
+  return init;
+}
+
+export function arrayFlatten<A>(m: A[][]): A[] {
+  let result: A[] = [];
+  for (let i = 0; i < m.length; ++i) {
+    for (let j = 0; j < m[i].length; ++j) {
+      result.push(m[i][j]);
+    }
+  }
+  return result;
+}
+
 export function deepEqual(a: any, b: any): boolean {
   if (typeof a === "object" && typeof b === "object") {
     const aKeys = Object.keys(a);

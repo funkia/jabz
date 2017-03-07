@@ -1,7 +1,7 @@
 import {Applicative, ApplicativeDictionary} from "./applicative";
 import {foldr} from "./foldable";
 import {Traversable} from "./traversable";
-import {mixin, id} from "./utils";
+import {mixin, id, arrayFlatten} from "./utils";
 
 export interface Monad<A> extends Applicative<A> {
   multi: boolean;
@@ -62,16 +62,6 @@ export function monad(constructor: Function): void {
     (<any>constructor).multi = false;
   }
   mixin(constructor, [AbstractMonad]);
-}
-
-export function arrayFlatten<A>(m: A[][]): A[] {
-  let result: A[] = [];
-  for (let i = 0; i < m.length; ++i) {
-    for (let j = 0; j < m[i].length; ++j) {
-      result.push(m[i][j]);
-    }
-  }
-  return result;
 }
 
 export function flatten<A>(m: A[][]): A[];

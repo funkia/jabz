@@ -1,9 +1,9 @@
 import "mocha";
 import {assert} from "chai";
 
-import {mixin} from "../src/utils";
+import {mixin, arrayFlatten} from "../src/utils";
 import {Applicative} from "../src/applicative";
-import {Monad, monad, arrayFlatten, go, fgo, flatten} from "../src/monad";
+import {Monad, monad, go, fgo, flatten} from "../src/monad";
 import {Maybe, just, nothing} from "../src/maybe";
 import {testFunctor} from "./functor";
 import {testApplicative} from "./applicative";
