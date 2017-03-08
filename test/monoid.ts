@@ -1,6 +1,7 @@
 import "mocha";
 import {assert} from "chai";
 
+import {Semigroup} from "../src/semigroup";
 import {Monoid, combine, identity} from "../src/monoid";
 import Sum from "../src/monoids/sum";
 
@@ -21,6 +22,15 @@ export function testMonoid<M extends Monoid<M>>(name: string, monoid: M): void {
   });
 };
 
+class TestSemigroup<A> implements Semigroup<TestSemigroup<A>> {
+  constructor(private list: A[]) {};
+  combine(b: TestSemigroup<A>): TestSemigroup<A> {
+    return new TestSemigroup(this.list.concat(b.list));
+  }
+}
+
+const s = <A>(...a: A[]) => new TestSemigroup(a);
+
 class TestMonoid<A> implements Monoid<TestMonoid<A>> {
   constructor(private list: A[]) {};
   identity() {
@@ -36,10 +46,10 @@ const m = <A>(...a: A[]) => new TestMonoid(a);
 describe("monoid", () => {
   describe("combine", () => {
     it("combines two elements", () => {
-      assert.deepEqual(combine(m(1, 2, 3), m(4, 5)), m(1, 2, 3, 4, 5));
+      assert.deepEqual(combine(s(1, 2, 3), s(4, 5)), s(1, 2, 3, 4, 5));
     });
     it("combines three elements", () => {
-      assert.deepEqual(combine(m(1, 2), m(3), m(4, 5)), m(1, 2, 3, 4, 5));
+      assert.deepEqual(combine(s(1, 2), s(3), s(4, 5)), s(1, 2, 3, 4, 5));
     });
     it("combines strings", () => {
       assert.strictEqual(

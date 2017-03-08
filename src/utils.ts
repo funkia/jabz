@@ -52,6 +52,14 @@ export function foldlArray<A, B>(f: (acc: B, a: A) => B, init: B, a: A[]): B {
   return init;
 }
 
+export function foldlArray1<A>(f: (acc: A, a: A) => A, a: A[]): A {
+  let init = a[0];
+  for (let i = 1; i < a.length; ++i) {
+    init = f(init, a[i]);
+  }
+  return init;
+}
+
 export function arrayFlatten<A>(m: A[][]): A[] {
   let result: A[] = [];
   for (let i = 0; i < m.length; ++i) {
