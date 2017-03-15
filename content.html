@@ -106,11 +106,12 @@
 </code></pre>
 </div>
 <div class="fn"></div>
-<div class="signature" id="combine"><span class="name"><a class="section-anchor" href="#combine">&#xA7;</a>combine</span><span class="type">&lt;A extends Semigroup&lt;A&gt;&gt;(a: A, b: A): A</span></div>
-<div><p>Combines two members of the same semigroup by using their combine method.</p>
+<div class="signature" id="combine"><span class="name"><a class="section-anchor" href="#combine">&#xA7;</a>combine</span><span class="type">&lt;A extends Semigroup&lt;A&gt;&gt;(...m: A): A</span></div>
+<div><p>Combines two or more members of the same semigroup by using their
+<code>combine</code> method.</p>
 <pre class="language-javascript"><code class="language-javascript"><span class="token function">combine</span><span class="token punctuation">(</span><span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; Sum(8)</span>
-<span class="token function">combine</span><span class="token punctuation">(</span><span class="token string">&quot;Hello &quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;there&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; &quot;Hello there&quot;</span>
-<span class="token function">combine</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [1, 2, 3, 4, 5]</span>
+<span class="token function">combine</span><span class="token punctuation">(</span><span class="token string">&quot;Hello &quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;over &quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;there&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; &quot;Hello over there&quot;</span>
+<span class="token function">combine</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//=&gt; [1, 2, 3, 4, 5]</span>
 </code></pre>
 </div>
 <h3 id="Monoid"><a class="section-anchor" href="#Monoid">&#xA7;</a>Monoid
@@ -310,7 +311,7 @@ elements in the foldable. This function short-circuits as soon a
 </code></pre>
 </div>
 <div class="fn"></div>
-<div class="signature" id="all"><span class="name"><a class="section-anchor" href="#all">&#xA7;</a>all</span><span class="type">(pred: (a: A) =&gt; boolean, foldable: Foldable&lt;A&gt;): boolean</span></div>
+<div class="signature" id="any"><span class="name"><a class="section-anchor" href="#any">&#xA7;</a>any</span><span class="type">(pred: (a: A) =&gt; boolean, foldable: Foldable&lt;A&gt;): boolean</span></div>
 <div><p>Returns <code>true</code> if the predicate function returns <code>true</code> for any
 elements in the foldable. This function short-circuits as soon a
 <code>true</code> value is encountered.</p>
