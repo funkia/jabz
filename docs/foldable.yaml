@@ -92,7 +92,7 @@ functions:
     all(isEven, fromArray([])); //=> true
     ```
 
-- name: all
+- name: any
   type: "(pred: (a: A) => boolean, foldable: Foldable<A>): boolean"
   description: |
     Returns `true` if the predicate function returns `true` for any
