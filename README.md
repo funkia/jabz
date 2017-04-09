@@ -23,6 +23,12 @@ For a more detailed introduction to the design of the specification
 and a comparison to Fantasy Land please
 see [this blog post](http://vindum.io/blog/introducing-jabz/).
 
+## Install
+
+```
+npm install @funkia/jabz
+```
+
 ## Documentation
 
 See [the API documentation](https://funkia.github.io/jabz/) and the

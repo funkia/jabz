@@ -1,5 +1,5 @@
 {
-  "name": "jabz",
+  "name": "@funkia/jabz",
   "version": "0.0.18",
   "description": "Powerful and practical abstractions.",
   "main": "index.js",
