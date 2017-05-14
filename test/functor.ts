@@ -21,7 +21,7 @@ export function testFunctor<A>(name: string, functor: Functor<number>) {
       assert.deepEqual(functor.mapTo(9), functor.map((_) => 9));
     });
   });
-};
+}
 
 describe("deriving", () => {
   it("derives `mapTo`", () => {

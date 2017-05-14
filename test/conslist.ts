@@ -23,7 +23,7 @@ describe("cons list", () => {
     assert.deepEqual(
       fromArray([1, 2, 3]).combine(fromArray([4, 5])),
       fromArray([1, 2, 3, 4, 5])
-    )
+    );
   });
   it("can flatten", () => {
     assert.deepEqual(

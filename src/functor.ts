@@ -39,6 +39,7 @@ export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
 export function map<A, B, C>(f: (b: B) => C, functor: Either<A, B>): Either<A, C>;
 export function map<A, B>(f: (a: A) => B, functor: Functor<A>): any;
 export function map<A, B>(f: (a: A) => B, functor: A[]): B[];
+export function map<A, B>(f: (a: A) => B, functor: any): any;
 export function map<A, B>(f: (a: A) => B, functor: Functor<A> | A[]): Functor<B> | B[] {
   if (Array.isArray(functor)) {
     return arrayMap(f, functor);
@@ -51,6 +52,7 @@ export function mapTo<A, B>(b: B, functor: Maybe<A>): Maybe<B>;
 export function mapTo<A, B, C>(c: C, functor: Either<A, B>): Either<A, C>;
 export function mapTo<A, B>(b: B, functor: A[]): B[];
 export function mapTo<A, B>(b: B, functor: Functor<A>): any;
+export function mapTo<A, B>(b: B, functor: any): any;
 export function mapTo<A, B>(b: B, functor: Functor<A> | A[]): Functor<B> | B[] {
   if (Array.isArray(functor)) {
     return repeat(b, functor.length);
