@@ -27,7 +27,7 @@ describe("Freer", () => {
     }
 
     it("works", () => {
-      const testState = go(function*() {
+      const testState: Freer<State<number, number>, number> = go(function*() {
         yield putF(10);
         const x = yield getF;
         return x;

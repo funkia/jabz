@@ -1,7 +1,7 @@
 import "mocha";
 import {assert} from "chai";
 
-import {createWriter, runWriter} from "../src/writer";
+import {Writer, createWriter, runWriter} from "../src/writer";
 
 import Sum from "../src/monoids/sum";
 
@@ -13,7 +13,7 @@ describe("Writer", () => {
     const SumWriter = createWriter(Sum);
     const {tell, listen, of} = SumWriter;
     it("works with Sum monoid", () => {
-      const writer = go(function*() {
+      const writer: Writer<Sum, string> = go(function*() {
         yield tell(Sum.create(3));
         yield tell(Sum.create(2));
         const [_, cur] = yield listen(tell(Sum.create(7)));
@@ -52,7 +52,7 @@ describe("Writer", () => {
       yield tell(next);
       return 22;
     });
-    assert.deepEqual(
+    assert.deepEqual<any>(
       runWriter(written),
       ["First-glance feeling of New York time", 22]
     );
@@ -72,7 +72,7 @@ describe("Writer", () => {
       const b = yield divide(132, 11);
       return yield add(a, b);
     });
-    assert.deepEqual(runWriter(comp), [
+    assert.deepEqual<any>(runWriter(comp), [
       "Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32
     ]);
   });

@@ -28,7 +28,7 @@ export class Cons<A> implements Monoid<Cons<A>>, Monad<A>, Traversable<A> {
   ap: <B>(a: Monad<(a: A) => B>) => Cons<B>;
   lift: (f: Function, ...ms: any[]) => Cons<any>;
   multi: boolean;
-  flatten: () => Cons<A>;
+  flatten: () => Cons<any>;
   foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
   foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
   sequence: <A>(a: ApplicativeDictionary, t: Cons<Applicative<A>>) => Applicative<Traversable<A>>;

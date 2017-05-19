@@ -4,7 +4,7 @@ import {AbstractMonad, Monad, monad} from "./monad";
 export type FreerMatch<F, A, K> = {
   pure: (a: A) => K
   bind: (u: F, k: (a: any) => Freer<F, A>) => K
-}
+};
 
 export abstract class Freer<F, A> extends AbstractMonad<A> {
   static of<B>(b: B): Freer<any, B> {
@@ -24,7 +24,7 @@ export abstract class Freer<F, A> extends AbstractMonad<A> {
 export class Pure<F, A> extends Freer<F, A> {
   constructor(private a: A) {
     super();
-  };
+  }
   match<K>(m: FreerMatch<F, A, K>): K {
     return m.pure(this.a);
   }
@@ -53,7 +53,7 @@ export class Bind<F, A> extends Freer<F, A> {
   }
   chain<B>(f: (a: A) => Freer<F, B>): Freer<F, B> {
     return new Bind(this.val, (a: any) => this.f(a).chain(f));
-  }  
+  }
 }
 
 export function liftF<F, A>(fa: any): Freer<F, A> {

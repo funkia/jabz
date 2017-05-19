@@ -5,8 +5,8 @@
   "main": "index.js",
   "module": "dist/es/index.js",
   "scripts": {
-    "build": "tsc -P ./tsconfig-release.json; tsc -P ./tsconfig-release.json --outDir 'dist/es' --module es6",
-    "test": "nyc mocha --compilers ts:ts-node/register test/**/*.ts && nyc report",
+    "build": "tsc -P ./tsconfig-release.json; tsc -P ./tsconfig-release.json --outDir 'dist/es' --target es6 --module es6",
+    "test": "nyc mocha --recursive test/**/*.ts",
     "test-watch": "mocha --watch --compilers ts:ts-node/register test/**/*.ts",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "release-major": "xyz --repo git@github.com:funkia/jabz.git --increment major",
@@ -29,11 +29,11 @@
   "homepage": "https://github.com/paldepind/jabz#readme",
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "^3.4.35",
-    "@types/mocha": "^2.2.40",
+    "@types/chai": "^3.5.2",
+    "@types/mocha": "^2.2.41",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
-    "js-yaml": "^3.8.3",
+    "js-yaml": "^3.8.4",
     "jstransformer-markdown-it": "^2.0.0",
     "marked": "^0.3.6",
     "metalsmith": "^2.3.0",
@@ -45,20 +45,25 @@
     "normalize.css": "^5.0.0",
     "nyc": "^8.4.0",
     "ts-node": "^0.8.0",
-    "typescript": "^2.2.2",
+    "typescript": "^2.3.2",
     "xyz": "0.5.x"
   },
   "nyc": {
-    "include": [
-      "src/*.ts",
-      "src/**/*.ts"
-    ],
     "extension": [
       ".ts"
     ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
     "reporter": [
       "json",
-      "html"
+      "html",
+      "text"
     ]
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }

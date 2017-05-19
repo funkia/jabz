@@ -32,7 +32,7 @@ describe("cons list", () => {
     );
   });
   testMonoid("Cons", cons(1, nil));
-  testFunctor("Cons", cons(1, nil))
+  testFunctor("Cons", cons(1, nil));
   testApplicative(cons(1, nil));
   testFoldable(fromArray);
   testTraversable(fromArray);

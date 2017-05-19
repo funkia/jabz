@@ -53,18 +53,18 @@ describe("Traversable", () => {
     it("has mapAccumR", () => {
       assert.deepEqual(
         mapAccumR((a, b) => [a + b, b * 2], 0, list([1, 2, 3, 4])),
-        [10, list([2, 4, 6, 8])]
+        [10, list([2, 4, 6, 8])] as [number, Traversable<number>]
       );
       assert.deepEqual(
         mapAccumR((a, b) => [a + b, b * 2 + a], 0, list([1, 2, 3, 4])),
-        [10, list([11, 11, 10, 8])]
+        [10, list([11, 11, 10, 8])] as [number, Traversable<number>]
       );
     });
   });
   describe("deriving with `sequence`", () => {
     @traversable
     class List<A> implements Traversable<A> {
-      constructor(private list: A[]) {};
+      constructor(private list: A[]) {}
       traverse: <B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>) => Applicative<List<B>>;
       sequence<A>(
         a: ApplicativeDictionary,
