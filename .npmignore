@@ -1,4 +1,10 @@
-src
+*~
+node_modules
 test
-lib
+docs
 benchmark
+coverage/
+docs-build/
+*.log
+.tern-port
+.nyc_output

@@ -2,9 +2,10 @@
   "name": "@funkia/jabz",
   "version": "0.0.19",
   "description": "Powerful and practical abstractions.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "module": "dist/es/index.js",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "tsc -P ./tsconfig-release.json; tsc -P ./tsconfig-release.json --outDir 'dist/es' --target es6 --module es6",
     "test": "nyc mocha --recursive test/**/*.ts",
     "test-watch": "mocha --watch --compilers ts:ts-node/register test/**/*.ts",

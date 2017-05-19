@@ -1,8 +1,9 @@
 *~
-typings
 node_modules
-lib
+dist
 coverage/
 docs-build/
 *.log
 .tern-port
+dist
+.nyc_output
