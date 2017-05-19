@@ -3,25 +3,26 @@
 # Jabz
 
 Powerful and practical abstractions for JavaScript. Functors, monads,
-foldables traversables and all that jazz.
+foldables, traversables, and all that jazz.
 
-[![Build Status](https://travis-ci.org/Funkia/jabz.svg?branch=master)](https://travis-ci.org/Funkia/jabz)
-[![codecov](https://codecov.io/gh/Funkia/jabz/branch/master/graph/badge.svg)](https://codecov.io/gh/Funkia/jabz)
+[![Build Status](https://travis-ci.org/funkia/jabz.svg?branch=master)](https://travis-ci.org/funkia/jabz)
+[![codecov](https://codecov.io/gh/funkia/jabz/branch/master/graph/badge.svg)](https://codecov.io/gh/funkia/jabz)
 [![Gitter chat](https://badges.gitter.im/Join_Chat.svg)](https://gitter.im/funkia/General?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Goals and features
 
 * Be as simple and convenient as possible in usage
 * Allow for performant implementations
-* Support TypeScript to the extent possible
+* TypeScript support
 * Batteries included. Provide implementations of often used instances
   and commonly used utility functions.
 * Do-notation
 * [Seamless instances](#seamless-instances)
+* Comes with files in ES2015 module format for tree-shaking
 
 For a more detailed introduction to the design of the specification
-and a comparison to Fantasy Land please
-see [this blog post](http://vindum.io/blog/introducing-jabz/).
+and a comparison to Fantasy Land please see [this blog
+post](http://vindum.io/blog/introducing-jabz/).
 
 ## Install
 

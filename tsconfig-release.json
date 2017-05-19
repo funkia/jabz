@@ -1,18 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "declaration": true,
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "outDir": "dist/",
-    "experimentalDecorators": true,
-    "lib": ["dom", "es5", "es2015.core", "es2015.promise", "es2015.iterable", "es2015.generator"]
+    "outDir": "dist/"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
   "exclude": [
-    "node_modules"
+    "test/**/*.ts"
   ]
 }

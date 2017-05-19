@@ -27,7 +27,9 @@
     "url": "https://github.com/paldepind/jabz/issues"
   },
   "homepage": "https://github.com/paldepind/jabz#readme",
-  "dependencies": {},
+  "dependencies": {
+    "tslib": "^1.7.1"
+  },
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",

@@ -2,10 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
     "lib": ["dom", "es5", "es2015.core", "es2015.promise", "es2015.iterable", "es2015.generator"]
   },
   "files": [
