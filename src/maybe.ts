@@ -12,12 +12,16 @@ export type MaybeMatch<T, K> = {
 };
 
 export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
+  isMaybe: true;
   abstract match<K>(m: MaybeMatch<A, K>): K;
   of<B>(v: B): Maybe<B> {
     return just(v);
   }
   static of<B>(v: B): Maybe<B> {
     return just(v);
+  }
+  static is(a: any): a is Maybe<any> {
+    return typeof a === "object" && a.isMaybe === true;
   }
   abstract chain<B>(f: (a: A) => Maybe<B>): Maybe<B>;
   flatten<B>(): Maybe<any> {
@@ -71,7 +75,8 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
 class Nothing<A> extends Maybe<A> {
   constructor() {
     super();
-  };
+    this.isMaybe = true;
+  }
   match<K>(m: MaybeMatch<any, K>): K {
     return m.nothing();
   }
@@ -106,6 +111,7 @@ class Just<A> extends Maybe<A> {
   val: A;
   constructor(val: A) {
     super();
+    this.isMaybe = true;
     this.val = val;
   }
   match<K>(m: MaybeMatch<A, K>): K {

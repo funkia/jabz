@@ -1,7 +1,7 @@
-import {Applicative, ApplicativeDictionary} from "./applicative";
-import {foldr} from "./foldable";
-import {Traversable} from "./traversable";
-import {mixin, id, arrayFlatten} from "./utils";
+import { Applicative, ApplicativeDictionary } from "./applicative";
+import { foldr } from "./foldable";
+import { Traversable } from "./traversable";
+import { mixin, id, arrayFlatten } from "./utils";
 
 export interface Monad<A> extends Applicative<A> {
   multi: boolean;
@@ -35,14 +35,14 @@ export abstract class AbstractMonad<A> implements Monad<A> {
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Applicative<T1>, m2: Applicative<T2>): Applicative<R>;
   lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Applicative<T1>, m2: Applicative<T2>, m3: Applicative<T3>): Applicative<R>;
   lift(f: Function, ...ms: any[]): Monad<any> {
-    const {of} = ms[0];
+    const { of } = ms[0];
     switch (f.length) {
-    case 1:
-      return ms[0].map(f);
-    case 2:
-      return ms[0].chain((a: any) => ms[1].chain((b: any) => of(f(a, b))));
-    case 3:
-      return ms[0].chain((a: any) => ms[1].chain((b: any) => ms[2].chain((c: any) => of(f(a, b, c)))));
+      case 1:
+        return ms[0].map(f);
+      case 2:
+        return ms[0].chain((a: any) => ms[1].chain((b: any) => of(f(a, b))));
+      case 3:
+        return ms[0].chain((a: any) => ms[1].chain((b: any) => ms[2].chain((c: any) => of(f(a, b, c)))));
     }
   }
 }
@@ -95,65 +95,76 @@ export function chain<A, B>(f: any, m: Monad<Monad<A>> | A[]): Monad<B> | B[] {
   }
 }
 
-function singleGo(doing: Iterator<Monad<any>>, m: Monad<any>): Monad<any> {
+function reportErrorInGenerator(value: any): void {
+  throw new Error("An incorrect value was yielded inside a generator function: " + value.toString());
+}
+
+function singleGo(
+  doing: Iterator<Monad<any>>, m: Monad<any>, check: (value: any) => boolean
+): Monad<any> {
   function doRec(v: any): any {
     const result = doing.next(v);
     if (result.done === true) {
       return m.of(result.value);
-    } else if (typeof result.value !== "undefined") {
+    } else if (check(result.value) === true) {
       return result.value.chain(doRec);
     } else {
-      throw new Error("Expected monad value");
+      reportErrorInGenerator(result.value);
     }
   }
   return m.chain(doRec);
-};
+}
 
-function multiGo<M extends Monad<any>>(gen: () => Iterator<M>, m: M): Monad<any> {
-  const doRec = function(v: any, stateSoFar: any): any {
-    const doing = gen();
+function multiGo<M extends Monad<any>>(
+  gen: (...a: any[]) => IterableIterator<any>, m: M, check: (value: any) => boolean, args: any[]
+): Monad<any> {
+  const doRec = function (v: any, stateSoFar: any): any {
+    const doing = gen(...args);
     for (const it of stateSoFar) {
       doing.next(it);
     }
     const result = doing.next(v);
     if (result.done === true) {
       return m.of(result.value);
-    } else {
+    } else if (check(result.value) === true) {
       const newStateSoFar = stateSoFar.concat(v);
-      return result.value.chain((vv) => doRec(vv, newStateSoFar));
+      return result.value.chain((vv: any) => doRec(vv, newStateSoFar));
+    } else {
+      reportErrorInGenerator(result.value);
     }
   };
   return m.chain((vv) => doRec(vv, [undefined]));
-};
+}
 
-export function go<M extends Monad<any>>(gen: () => Iterator<M>): any {
-  const iterator = gen();
-  const result = iterator.next();
-  const monad = result.value;
-  if (result.done === true) {
-    return monad;
-  } else if (monad.multi === true) {
-    return multiGo(gen, monad);
+function hasChain(value: any): boolean {
+  return value.chain !== undefined;
+}
+
+export function beginGo(gen: (...a: any[]) => IterableIterator<any>, monad?: MonadDictionary, args: any[] = []): any {
+  const iterator = gen(...args);
+  const { done, value } = iterator.next();
+  if (done === true) {
+    if (monad !== undefined) {
+      return monad.of(value);
+    } else {
+      throw new Error("The generator function never yielded a monad and no monad was specified.");
+    }
+  }
+  const check = (monad !== undefined && (<any>monad).is) ? (<any>monad).is : hasChain;
+  if (!check(value)) {
+    reportErrorInGenerator(value);
+  }
+  if (value.multi === true) {
+    return multiGo(gen, value, check, args);
   } else {
-    return singleGo(iterator, monad);
+    return singleGo(iterator, value, check);
   }
 }
 
-export function fgo(gen: (...a: any[]) => Iterator<Monad<any>>) {
-  let m: Monad<any>;
-  return (...args: any[]) => {
-    const doing = gen(...args);
-    function doRec(v: any): any {
-      const a = doing.next(v);
-      if (a.done === true) {
-        return m.of(a.value);
-      } else if (typeof a.value !== "undefined") {
-        m = a.value;
-        return a.value.chain(doRec);
-      } else {
-        throw new Error("Expected monad value");
-      }
-    }
-    return doRec(undefined);
-  };
+export function go(gen: () => IterableIterator<any>, monad?: MonadDictionary): any {
+  return beginGo(gen, monad, []);
+}
+
+export function fgo(gen: (...a: any[]) => IterableIterator<any>, monad?: MonadDictionary): any {
+  return (...args: any[]) => beginGo(gen, monad, args);
 }

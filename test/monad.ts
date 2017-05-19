@@ -1,19 +1,22 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
-import {mixin, arrayFlatten} from "../src/utils";
-import {Applicative} from "../src/applicative";
-import {Monad, monad, go, fgo, flatten} from "../src/monad";
-import {Maybe, just, nothing} from "../src/maybe";
-import {testFunctor} from "./functor";
-import {testApplicative} from "./applicative";
-import {fromArray} from "../src/conslist";
+import { mixin, arrayFlatten } from "../src/utils";
+import { Applicative } from "../src/applicative";
+import { Monad, monad, go, fgo, flatten } from "../src/monad";
+import { Maybe, just, nothing, fromMaybe } from "../src/maybe";
+import { testFunctor } from "./functor";
+import { testApplicative } from "./applicative";
+import { fromArray } from "../src/conslist";
 
 @monad
 class List<A> implements Monad<A> {
-  constructor(public arr: A[]) {};
+  constructor(public arr: A[]) { };
   static multi = true;
   multi = true;
+  static is(a: any): a is List<any> {
+    return a instanceof List;
+  }
   static of<B>(b: B): List<B> {
     return new List([b]);
   };
@@ -57,7 +60,7 @@ describe("Monad", () => {
   describe("deriving with `of` and `flatten`", () => {
     @monad
     class List<A> implements Monad<A> {
-      constructor(public arr: A[]) {};
+      constructor(public arr: A[]) { };
       static multi = true;
       multi = true;
       static of<B>(b: B): List<B> {
@@ -94,17 +97,64 @@ describe("Monad", () => {
   });
   describe("go-notation", () => {
     it("handles immediate return", () => {
-      const single = go<Maybe<number>>(function*(): any {
-        return just(12);
+      const single = go(function* (): any {
+        return yield just(12);
       });
       assert.deepEqual(single, just(12));
-      const multi = go<List<number>>(function*(): any {
-        return List.of(12);
+      const multi = go(function* (): any {
+        return yield List.of(12);
       });
       assert.deepEqual(multi, new List([12]));
     });
-    it("go works with multi-monad", () => {
-      const result = go(function*() {
+    it("throws if no monad is ever yielded", () => {
+      assert.throws(() => {
+        go(function* () {
+          return 12;
+        });
+      });
+    });
+    it("throws if value without chain is yielded", () => {
+      assert.throw(() => {
+        go(function* () {
+          yield just(12);
+          yield 12;
+          return 0;
+        });
+      }, "incorrect value");
+    });
+    describe("second optional argument", () => {
+      it("allows one to not yield inside generator", () => {
+        const value = go(function* () {
+          return 12;
+        }, Maybe);
+        assert.strictEqual(fromMaybe(0, value), 12);
+      });
+      it("throws on incorrect monad in first yield", () => {
+        assert.throws(() => {
+          go(function* () {
+            return yield new List([1, 2, 3]);
+          }, Maybe);
+        }, "incorrect value");
+      });
+      it("throws on incorrect monad in second yield", () => {
+        assert.throws(() => {
+          go(function* () {
+            yield just(12);
+            return yield new List([1, 2, 3]);
+          }, Maybe);
+        }, "incorrect value");
+      });
+      it("throws on incorrect monad in second yield in multi", () => {
+        assert.throws(() => {
+          go(function* () {
+            yield new List([1, 2, 3]);
+            return yield just(12);
+          }, List);
+        }, "incorrect value");
+      });
+    });
+    it("works with multi-monad", () => {
+      const result = go(function* () {
         const n = yield new List([1, 2, 3]);
         const m = yield new List([10, 100]);
         return n * m;
@@ -116,7 +166,7 @@ describe("Monad", () => {
     });
     it("generator function is invoked correctly with multi", () => {
       const lines = [0, 0, 0];
-      const result = go(function*() {
+      const result = go(function* () {
         lines[0]++;
         const n = yield new List([1, 2, 3]);
         lines[1]++;
@@ -128,7 +178,7 @@ describe("Monad", () => {
     });
     it("generator function is invoked correctly with single path", () => {
       const lines = [0, 0, 0];
-      const result = go(function*() {
+      const result = go(function* () {
         lines[0]++;
         const n = yield just(1);
         lines[1]++;
@@ -139,16 +189,29 @@ describe("Monad", () => {
       assert.deepEqual(lines, [1, 1, 1]);
     });
   });
-  it("fgo works with Maybe", () => {
-    const fgoMaybe: (x: number, y: number, z: number) => Maybe<number> = fgo(function*(x, y, z) {
-      const a = yield just(x);
-      const b = yield just(y);
-      const c = yield just(z)
-      return a + b + c;
-    })
-    assert.deepEqual(
-      just(6),
-      fgoMaybe(1, 2, 3)
-    );
+  describe("fgo-notation", () => {
+    it("works with Maybe", () => {
+      const fgoMaybe: (x: number, y: number, z: number) => Maybe<number> = fgo(function* (x, y, z) {
+        const a = yield just(x);
+        const b = yield just(y);
+        const c = yield just(z);
+        return a + b + c;
+      });
+      assert.deepEqual(
+        just(6),
+        fgoMaybe(1, 2, 3)
+      );
+    });
+    it("works with multi-monad", () => {
+      const fgoList = fgo(function* (a, b) {
+        const n = yield new List([a, 2, 3]);
+        const m = yield new List([b, 100]);
+        return n * m;
+      });
+      assert.deepEqual(
+        fgoList(1, 10),
+        new List([10, 100, 20, 200, 30, 300])
+      );
+    });
   });
 });

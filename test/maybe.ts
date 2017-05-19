@@ -19,6 +19,13 @@ describe("Maybe", () => {
     assert.strictEqual(isNothing(nothing), true);
     assert.strictEqual(isNothing(just(1)), false);
   });
+  it("can check wether something is a maybe", () => {
+    assert.isTrue(Maybe.is(nothing));
+    assert.isTrue(Maybe.is(just(2)));
+    assert.isFalse(Maybe.is(2));
+    assert.isFalse(Maybe.is(undefined));
+    assert.isFalse(Maybe.is({foo: "bar"}));
+  });
   it("fromMaybe", () => {
     assert.strictEqual(fromMaybe(5, nothing), 5);
     assert.strictEqual(fromMaybe(5, just(3)), 3);
