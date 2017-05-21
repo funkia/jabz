@@ -1,7 +1,7 @@
 import { Applicative, ApplicativeDictionary } from "./applicative";
 import { foldr } from "./foldable";
 import { Traversable } from "./traversable";
-import { mixin, id, arrayFlatten } from "./utils";
+import { mixin, id, arrayFlatten, F0, F1, F2, F3, F4, F5 } from "./utils";
 
 export interface Monad<A> extends Applicative<A> {
   multi: boolean;
@@ -165,6 +165,14 @@ export function go(gen: () => IterableIterator<any>, monad?: MonadDictionary): a
   return beginGo(gen, monad, []);
 }
 
+export type II<A = any> = IterableIterator<A>;
+
+export function fgo<A>(gen: (a: A) => II, monad?: MonadDictionary): F1<A, any>;
+export function fgo<A, B>(gen: (a: A, b: B) => II, monad?: MonadDictionary): F2<A, B, any>;
+export function fgo<A, B, C>(gen: (a: A, b: B, c: C) => II, monad?: MonadDictionary): F3<A, B, C, any>;
+export function fgo<A, B, C, D>(gen: (a: A, b: B, c: C, d: D) => II, monad?: MonadDictionary): F4<A, B, C, D, any>;
+export function fgo<A, B, C, D, E>(gen: (a: A, b: B, c: C, d: D, e: E) => II, monad?: MonadDictionary): F5<A, B, C, D, E, any>;
+export function fgo(gen: (...a: any[]) => IterableIterator<any>, monad?: MonadDictionary): any;
 export function fgo(gen: (...a: any[]) => IterableIterator<any>, monad?: MonadDictionary): any {
   return (...args: any[]) => beginGo(gen, monad, args);
 }

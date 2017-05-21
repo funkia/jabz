@@ -39,7 +39,7 @@ describe("deriving", () => {
     assert.throws(() => {
       @functor
       class NotAFunctor {
-        constructor() {};
+        constructor() {}
       }
     });
   });

@@ -191,7 +191,7 @@ describe("Monad", () => {
   });
   describe("fgo-notation", () => {
     it("works with Maybe", () => {
-      const fgoMaybe: (x: number, y: number, z: number) => Maybe<number> = fgo(function* (x, y, z) {
+      const fgoMaybe = fgo(function* (x: number, y: number, z: number) {
         const a = yield just(x);
         const b = yield just(y);
         const c = yield just(z);
@@ -203,7 +203,7 @@ describe("Monad", () => {
       );
     });
     it("works with multi-monad", () => {
-      const fgoList = fgo(function* (a, b) {
+      const fgoList = fgo(function* (a: number, b: number) {
         const n = yield new List([a, 2, 3]);
         const m = yield new List([b, 100]);
         return n * m;

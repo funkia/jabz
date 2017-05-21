@@ -83,3 +83,16 @@ export function deepEqual(a: any, b: any): boolean {
     return a === b;
   }
 }
+
+export type F0<Z> =
+  () => Z;
+export type F1<A, Z> =
+  (a: A) => Z;
+export type F2<A, B, Z> =
+  (a: A, b: B) => Z;
+export type F3<A, B, C, Z> =
+  (a: A, b: B, c: C) => Z;
+export type F4<A, B, C, D, Z> =
+  (a: A, b: B, c: C, d: D) => Z;
+export type F5<A, B, C, D, E, Z> =
+  (a: A, b: B, c: C, d: D, e: E) => Z;

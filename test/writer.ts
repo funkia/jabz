@@ -59,11 +59,11 @@ describe("Writer", () => {
   });
   it("works with logging example", () => {
     const {tell} = createWriter(String);
-    const divide = fgo(function*(n, m) {
+    const divide = fgo(function*(n: number, m: number) {
       yield tell(`Divide ${n} by ${m}. `);
       return n / m;
     });
-    const add = fgo(function*(n, m) {
+    const add = fgo(function*(n: number, m: number) {
       yield tell(`Add ${n} to ${m}. `);
       return n + m;
     });
