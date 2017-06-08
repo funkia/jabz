@@ -47,7 +47,7 @@ is a functor, an applicative and a monad. Thus we can for instance use
 it with go-notation.
 
 ```javascript
-const fireMissilesAndNotify = fgo(function*(amount) {
+const fireMissilesAndNotify = go(function*(amount) {
   const n = yield fireMissilesIO(amount);
   yield sendMessage(`${n} missiles successfully fired`);
   return n;
