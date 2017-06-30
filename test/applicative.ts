@@ -31,7 +31,7 @@ describe("applicative", () => {
       assert.throws(() => {
         @applicative
         class NotAnApplicative {
-          constructor() {};
+          constructor() {}
         }
       });
     });
@@ -39,17 +39,17 @@ describe("applicative", () => {
       assert.throws(() => {
         @applicative
         class NotAnApplicative<A> {
-          constructor(private val: A) {};
+          constructor(private val: A) {}
           of<B>(b: B): NotAnApplicative<B> {
             return new NotAnApplicative(b);
           }
-        }      
+        }
       });
     });
     describe("with `of` and `ap`", () => {
       @applicative
       class Container<A> implements Applicative<A> {
-        constructor(private val: A) {};
+        constructor(private val: A) {}
         of<B>(b: B): Container<B> {
           return new Container(b);
         }
@@ -67,7 +67,7 @@ describe("applicative", () => {
     describe("with `of` and `lift`", () => {
       @applicative
       class Container<A> implements Applicative<A> {
-        constructor(private val: A) {};
+        constructor(private val: A) {}
         of<B>(b: B): Container<B> {
           return new Container(b);
         }

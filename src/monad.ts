@@ -65,7 +65,7 @@ export function monad(constructor: Function): void {
 }
 
 export function flatten<A>(m: A[][]): A[];
-export function flatten<A>(m: Monad<Monad<A>>): any;
+export function flatten(m: Monad<Monad<any>>): any;
 export function flatten<A>(m: Monad<Monad<A>> | A[][]): Monad<A> | A[] {
   if (Array.isArray(m)) {
     return arrayFlatten(m);

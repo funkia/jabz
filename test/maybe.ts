@@ -64,8 +64,8 @@ describe("Maybe", () => {
     assert.deepEqual(res, nothing);
   });
   it("is joined correctly", () => {
-    assert.deepEqual(nothing, flatten<number>(nothing));
-    assert.deepEqual(just(12), flatten<number>(just(just(12))));
+    assert.deepEqual(nothing, flatten(nothing));
+    assert.deepEqual(just(12), flatten(just(just(12))));
   });
   testFunctor("Maybe", nothing);
   testFunctor("Maybe", just(12));
@@ -161,7 +161,7 @@ describe("Maybe", () => {
         assert.deepEqual(
           sequence(Either, nothing),
           right(nothing)
-        )
+        );
       });
       it("returns applicative of just when just", () => {
         assert.deepEqual(

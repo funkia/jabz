@@ -59,7 +59,7 @@ function arraySequence<A>(
   let result = a.of<A[]>([]);
   const lift = result.lift;
   for (let i = t.length - 1; i >= 0; --i) {
-    result = lift(cons, t[i], result);
+    result = lift<A, A[], A[]>(cons, t[i], result);
   }
   return result;
 }
@@ -72,7 +72,7 @@ function arrayTraverse<A, B>(
   let result = a.of<B[]>([]);
   const lift = result.lift;
   for (let i = t.length - 1; i >= 0; --i) {
-    result = lift(cons, f(t[i]), result)
+    result = lift<B, B[], B[]>(cons, f(t[i]), result);
   }
   return result;
 }

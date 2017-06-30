@@ -18,7 +18,7 @@ export interface Applicative<A> extends Functor<A> {
 export abstract class AbstractApplicative<A> extends AbstractFunctor<A> implements Applicative<A> {
   abstract of<B>(b: B): Applicative<B>;
   ap<B>(f: Applicative<(a: A) => B>): Applicative<B> {
-    return this.lift(apply, f, this)
+    return this.lift<(a: A) => B, A, B>(apply, f, this);
   }
   lift<T1, R>(f: (t: T1) => R, m: Applicative<T1>): Applicative<R>;
   lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Applicative<T1>, m2: Applicative<T2>): Applicative<R>;

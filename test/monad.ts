@@ -11,18 +11,18 @@ import { fromArray } from "../src/conslist";
 
 @monad
 class List<A> implements Monad<A> {
-  constructor(public arr: A[]) { };
-  static multi = true;
-  multi = true;
+  constructor(public arr: A[]) { }
+  static multi: boolean = true;
+  multi: boolean = true;
   static is(a: any): a is List<any> {
     return a instanceof List;
   }
   static of<B>(b: B): List<B> {
     return new List([b]);
-  };
+  }
   of<B>(b: B): List<B> {
     return new List([b]);
-  };
+  }
   chain<B>(f: (a: A) => List<B>): List<B> {
     let newArr: B[] = [];
     for (let i = 0; i < this.arr.length; ++i) {
@@ -33,10 +33,10 @@ class List<A> implements Monad<A> {
     }
     return new List(newArr);
   }
-  ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
+  ap: <B>(a: Applicative<(a: A) => B>) => Applicative<B>;
   flatten: <B>() => Monad<B>;
-  map: <B>(f: (a: A) => B) => Monad<B>;
-  mapTo: <B>(b: B) => Monad<B>;
+  map: <B>(f: (a: A) => B) => Applicative<B>;
+  mapTo: <B>(b: B) => Applicative<B>;
   lift: (f: Function, ...ms: any[]) => Monad<any>;
 }
 
@@ -65,20 +65,20 @@ describe("Monad", () => {
       multi = true;
       static of<B>(b: B): List<B> {
         return new List([b]);
-      };
+      }
       of<B>(b: B): List<B> {
         return new List([b]);
-      };
+      }
       chain: <B>(f: (a: A) => List<B>) => List<B>;
-      ap: <B>(a: Monad<(a: A) => B>) => Monad<B>;
+      ap: <B>(a: Applicative<(a: A) => B>) => Applicative<B>;
       flatten<B>(): List<B> {
         return new List(arrayFlatten(this.arr.map(l => (<List<B>><any>l).arr)));
       }
-      map<B>(f: (a: A) => B): Monad<B> {
+      map<B>(f: (a: A) => B): Applicative<B> {
         return new List(this.arr.map(f));
       }
-      mapTo: <B>(b: B) => Monad<B>;
-      lift: (f: Function, ...ms: any[]) => Monad<any>;
+      mapTo: <B>(b: B) => Applicative<B>;
+      lift: (f: Function, ...ms: any[]) => Applicative<any>;
     }
     testFunctor("List", new List([1, 2]));
     testApplicative(new List([1, 2]));

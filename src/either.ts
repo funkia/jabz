@@ -6,7 +6,7 @@ export enum EitherTag { Left, Right }
 export type EitherMatch<A, B, K> = {
   left: (a: A) => K,
   right: (b: B) => K
-}
+};
 
 export abstract class Either<A, B> implements Applicative<B> {
   tag: EitherTag;

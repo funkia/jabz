@@ -57,11 +57,12 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
   maximum: () => number;
   minimum: () => number;
   sum: () => number;
-  abstract size(): number;  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>>;
+  abstract size(): number;
+  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): any;
   sequence<A>(
     a: ApplicativeDictionary,
     m: Maybe<Applicative<A>>
-  ): Applicative<Traversable<A>> {
+  ): any {
     return m.match({
       nothing: () => a.of(nothing),
       just: (v) => v.map(just)
@@ -101,7 +102,7 @@ class Nothing<A> extends Maybe<A> {
   size(): number {
     return 0;
   }
-  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>> {
+  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): any {
     return a.of(nothing);
   }
 }
@@ -141,7 +142,7 @@ class Just<A> extends Maybe<A> {
   size(): number {
     return 1;
   }
-  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Traversable<B>> {
+  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): any {
     return f(this.val).map(just);
   }
 }

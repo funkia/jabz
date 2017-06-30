@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paldepind/jabz.git"
+    "url": "git+https://github.com/funkia/jabz.git"
   },
   "keywords": [
     "monad"
@@ -26,17 +26,17 @@
   "author": "Funkia",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/paldepind/jabz/issues"
+    "url": "https://github.com/funkia/jabz/issues"
   },
-  "homepage": "https://github.com/paldepind/jabz#readme",
+  "homepage": "https://github.com/funkia/jabz#readme",
   "dependencies": {
     "tslib": "^1.7.1"
   },
   "devDependencies": {
-    "@types/chai": "^3.5.2",
+    "@types/chai": "^4.0.1",
     "@types/mocha": "^2.2.41",
-    "chai": "^3.5.0",
-    "codecov": "^1.0.1",
+    "chai": "^4.0.2",
+    "codecov": "^2.2.0",
     "js-yaml": "^3.8.4",
     "jstransformer-markdown-it": "^2.0.0",
     "marked": "^0.3.6",
@@ -45,12 +45,12 @@
     "metalsmith-pug": "^2.0.0",
     "metalsmith-sass": "^1.4.0",
     "metalsmith-watch": "^1.0.3",
-    "mocha": "^2.5.3",
-    "normalize.css": "^5.0.0",
-    "nyc": "^8.4.0",
-    "ts-node": "^0.8.0",
-    "typescript": "^2.3.2",
-    "xyz": "0.5.x"
+    "mocha": "^3.4.2",
+    "normalize.css": "^7.0.0",
+    "nyc": "^11.0.3",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.4.1",
+    "xyz": "2.1.0"
   },
   "nyc": {
     "extension": [
