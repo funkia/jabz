@@ -61,7 +61,6 @@ export function mapTo<A, B>(b: B, functor: Functor<A> | A[]): Functor<B> | B[] {
   }
 }
 
-export function mapMap<A, B>(f: (a: A) => B, functor: AnyFunctor<AnyFunctor<A>>): any;
-export function mapMap<A, B>(f: (a: A) => B, functor: any): any {
+export function mapMap(f: (a: any) => any, functor: any): any {
   return map((fa: any) => map(f, fa), functor);
 }

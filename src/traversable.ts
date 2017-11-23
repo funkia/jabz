@@ -11,10 +11,10 @@ export interface Traversable<A> extends Functor<A>, Foldable<A> {
     a: ApplicativeDictionary,
     f: (a: A) => Applicative<B>
   ): Applicative<Traversable<B>>;
-  sequence<A>(
+  sequence<B>(
     a: ApplicativeDictionary,
-    t: Traversable<Applicative<A>>
-  ): Applicative<Traversable<A>>;
+    t: Traversable<Applicative<B>>
+  ): Applicative<Traversable<B>>;
 }
 
 export abstract class AbstractTraversable<A> extends AbstractFoldable<A> implements Traversable<A> {

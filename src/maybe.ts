@@ -1,6 +1,6 @@
 import {Monoid, MonoidConstructor} from "./monoid";
 import {Applicative, ApplicativeDictionary} from "./applicative";
-import {foldable} from "./foldable";
+import {foldable, Foldable} from "./foldable";
 import {Traversable} from "./traversable";
 import {Monad} from "./monad";
 import {Either} from "./either";
@@ -11,7 +11,7 @@ export type MaybeMatch<T, K> = {
   just: (t: T) => K
 };
 
-export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
+export abstract class Maybe<A> implements Monad<A>, Foldable<A> {
   isMaybe: true;
   abstract match<K>(m: MaybeMatch<A, K>): K;
   of<B>(v: B): Maybe<B> {
@@ -50,7 +50,7 @@ export abstract class Maybe<A> implements Monad<A>, Traversable<A> {
       return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
-  abstract foldr<B>(acc: B, f: (a: A, b: B) => B): B;
+  abstract foldr<B>(f: (acc: A, b: B) => B, init: B): B;
   abstract foldl<B>(f: (acc: B, a: A) => B, init: B): B;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
@@ -81,8 +81,8 @@ class Nothing<A> extends Maybe<A> {
   match<K>(m: MaybeMatch<any, K>): K {
     return m.nothing();
   }
-  chain<B>(f: (a: A) => Maybe<B>): Maybe<A> {
-    return this;
+  chain<B>(f: (a: A) => Maybe<B>): Maybe<B> {
+    return nothing;
   }
   map<B>(f: (a: A) => B): Maybe<B> {
     return nothing;
@@ -93,11 +93,11 @@ class Nothing<A> extends Maybe<A> {
   ap<B>(a: Maybe<(a: A) => B>): Maybe<B> {
     return nothing;
   }
-  foldr<B>(f: (a: A, b: B) => B, acc: B): B {
-    return acc;
+  foldr<B>(f: (a: A, acc: B) => B, init: B): B {
+    return init;
   }
-  foldl<B>(f: (a: A, b: B) => B, acc: B): B {
-    return acc;
+  foldl<B>(f: (acc: B, a: A) => B, init: B): B {
+    return init;
   }
   size(): number {
     return 0;
@@ -122,7 +122,7 @@ class Just<A> extends Maybe<A> {
     return f(this.val);
   }
   map<B>(f: (a: A) => B): Maybe<B> {
-    return new Just(f(this.val));;
+    return new Just(f(this.val));
   }
   mapTo<B>(b: B): Maybe<B> {
     return new Just<B>(b);
