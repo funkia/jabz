@@ -11,8 +11,8 @@ export class Writer<W extends AnyMonoid<W>, A> extends AbstractMonad<A> {
   constructor(public identity: W, public state: W, public value: A) {
     super();
   }
-  of(a: A): Writer<W, A> {
-    return new Writer(this.identity, this.identity, a);
+  of<B>(value: B): Writer<W, B> {
+    return new Writer(this.identity, this.identity, value);
   }
   chain<B>(f: (a: A) => Writer<W, B>): Writer<W, B> {
     const { state, value } = f(this.value);
