@@ -1,4 +1,4 @@
-import {Applicative, applicative, AbstractApplicative} from "./applicative";
+import { Applicative, applicative, AbstractApplicative } from "./applicative";
 import Endo from "./monoids/endo";
 
 export class ConstEndo<M, N> extends AbstractApplicative<N> {

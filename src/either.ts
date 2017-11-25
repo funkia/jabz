@@ -1,11 +1,14 @@
-import {Functor} from "./functor";
-import {Applicative} from "./applicative";
+import { Functor } from "./functor";
+import { Applicative } from "./applicative";
 
-export enum EitherTag { Left, Right }
+export enum EitherTag {
+  Left,
+  Right
+}
 
 export type EitherMatch<A, B, K> = {
-  left: (a: A) => K,
-  right: (b: B) => K
+  left: (a: A) => K;
+  right: (b: B) => K;
 };
 
 export abstract class Either<A, B> implements Applicative<B> {
@@ -28,8 +31,17 @@ export abstract class Either<A, B> implements Applicative<B> {
     }
   }
   lift<A, T1, R>(f: (t: T1) => R, m: Either<A, T1>): Either<A, R>;
-  lift<A, T1, T2, R>(f: (t: T1, u: T2) => R, m1: Either<A, T1>, m2: Either<A, T2>): Either<A, R>;
-  lift<A, T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Either<A, T1>, m2: Either<A, T2>, m3: Either<A, T3>): Either<A, R>;
+  lift<A, T1, T2, R>(
+    f: (t: T1, u: T2) => R,
+    m1: Either<A, T1>,
+    m2: Either<A, T2>
+  ): Either<A, R>;
+  lift<A, T1, T2, T3, R>(
+    f: (t1: T1, t2: T2, t3: T3) => R,
+    m1: Either<A, T1>,
+    m2: Either<A, T2>,
+    m3: Either<A, T3>
+  ): Either<A, R>;
   lift<A>(f: Function, ...args: Either<A, any>[]): Either<A, any> {
     for (let i = 0; i < args.length; i++) {
       if (args[i].tag === EitherTag.Left) {

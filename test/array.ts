@@ -1,15 +1,22 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
 import Sum from "../src/monoids/sum";
-import {Maybe, just, nothing} from "../src/maybe";
-import {identity, combine} from "../src/monoid";
-import {map, mapTo} from "../src/functor";
-import {lift, of} from "../src/applicative";
-import {chain, flatten, go} from "../src/monad";
-import {size, foldr, foldl, foldMap, sequence_, isEmpty} from "../src/foldable";
-import {traverse, sequence} from "../src/traversable";
-import {IO, call, runIO} from "../src/io";
+import { Maybe, just, nothing } from "../src/maybe";
+import { identity, combine } from "../src/monoid";
+import { map, mapTo } from "../src/functor";
+import { lift, of } from "../src/applicative";
+import { chain, flatten, go } from "../src/monad";
+import {
+  size,
+  foldr,
+  foldl,
+  foldMap,
+  sequence_,
+  isEmpty
+} from "../src/foldable";
+import { traverse, sequence } from "../src/traversable";
+import { IO, call, runIO } from "../src/io";
 
 describe("Native list", () => {
   describe("monoid", () => {
@@ -22,16 +29,10 @@ describe("Native list", () => {
   });
   describe("functor", () => {
     it("map", () => {
-      assert.deepEqual(
-        [1, 4, 9, 16],
-        map((n) => n * n, [1, 2, 3, 4])
-      );
+      assert.deepEqual([1, 4, 9, 16], map(n => n * n, [1, 2, 3, 4]));
     });
     it("mapTo", () => {
-      assert.deepEqual(
-        [7, 7, 7],
-        mapTo(7, [1, 2, 3])
-      );
+      assert.deepEqual([7, 7, 7], mapTo(7, [1, 2, 3]));
     });
   });
   describe("applicative", () => {
@@ -48,10 +49,7 @@ describe("Native list", () => {
   });
   describe("monad", () => {
     it("flatten", () => {
-      assert.deepEqual(
-        [1, 2, 3, 4, 5],
-        flatten([[1, 2], [3], [4, 5]])
-      );
+      assert.deepEqual([1, 2, 3, 4, 5], flatten([[1, 2], [3], [4, 5]]));
     });
     it("chain", () => {
       assert.deepEqual(
@@ -65,10 +63,12 @@ describe("Native list", () => {
       assert.deepEqual(foldMap(Sum, [1, 2, 3, 4]), Sum.create(10));
     });
     it("foldr", () => {
-      assert.deepEqual(
-        foldr((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]),
-        [4, 3, 2, 1]
-      );
+      assert.deepEqual(foldr((n, ns) => ns.concat([n]), [], [1, 2, 3, 4]), [
+        4,
+        3,
+        2,
+        1
+      ]);
     });
     it("size", () => {
       assert.strictEqual(size([1, 2, 3, 4]), 4);
@@ -76,13 +76,13 @@ describe("Native list", () => {
     it("folds in right direction", () => {
       assert.deepEqual(
         foldr((n, m) => n - m, 1, [12, 3, 4]),
-        (12 - (3 - (4 - 1)))
+        12 - (3 - (4 - 1))
       );
     });
     it("foldl", () => {
       assert.deepEqual(
         foldl((acc, n) => acc - n, 1, [16, 12, 9, 6, 3]),
-        ((((1 - 16) - 12) - 9) - 6) - 3
+        1 - 16 - 12 - 9 - 6 - 3
       );
     });
     it("isEmpty", () => {
@@ -98,7 +98,8 @@ describe("Native list", () => {
       });
       it("sequences nothing to nothing", () => {
         assert.deepEqual(
-          sequence_(Maybe, [just(1), nothing, just(3)]), nothing
+          sequence_(Maybe, [just(1), nothing, just(3)]),
+          nothing
         );
       });
       it("sequences in right order", () => {
@@ -121,10 +122,7 @@ describe("Native list", () => {
         sequence(Maybe, [just(1), just(2), just(3)]),
         just([1, 2, 3])
       );
-      assert.deepEqual(
-        sequence(Maybe, [just(1), nothing, just(3)]),
-        nothing
-      );
+      assert.deepEqual(sequence(Maybe, [just(1), nothing, just(3)]), nothing);
     });
     it("traverse", () => {
       function safeParseInt(s: string): Maybe<number> {

@@ -1,4 +1,4 @@
-import {foldlArray1, arrayFlatten} from "./utils";
+import { foldlArray1, arrayFlatten } from "./utils";
 
 export interface Semigroup<T> {
   combine: (a: T) => T;
@@ -11,7 +11,9 @@ function combineTwo<A extends Semigroup<A>>(a: A, b: A): A {
 }
 
 export function combine<A extends AnySemigroup<A>>(...a: A[]): A;
-export function combine<A extends AnySemigroup<A>>(...a: any[]): AnySemigroup<A> {
+export function combine<A extends AnySemigroup<A>>(
+  ...a: any[]
+): AnySemigroup<A> {
   if (Array.isArray(a[0])) {
     return arrayFlatten(a);
   } else if (typeof a[0] === "string") {

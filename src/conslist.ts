@@ -1,10 +1,11 @@
-import {Monoid} from "./monoid";
-import {Applicative, ApplicativeDictionary, lift} from "./applicative";
-import {Traversable, traversable} from "./traversable";
-import {Monad, monad} from "./monad";
-import {Either} from "./either";
+import { Monoid } from "./monoid";
+import { Applicative, ApplicativeDictionary, lift } from "./applicative";
+import { Traversable, traversable } from "./traversable";
+import { Monad, monad } from "./monad";
+import { Either } from "./either";
 
-@monad @traversable
+@monad
+@traversable
 export class Cons<A> implements Monoid<Cons<A>>, Monad<A>, Traversable<A> {
   constructor(private val: A, private tail: Cons<A>) {}
   combine(c: Cons<A>): Cons<A> {
@@ -19,8 +20,13 @@ export class Cons<A> implements Monoid<Cons<A>>, Monad<A>, Traversable<A> {
   chain<B>(f: (a: A) => Cons<B>): Cons<B> {
     return this === nil ? nil : f(this.val).combine(this.tail.chain(f));
   }
-  traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): Applicative<Cons<B>> {
-    return this === nil ? a.of(nil) : lift(cons, f(this.val), this.tail.traverse(a, f));
+  traverse<B>(
+    a: ApplicativeDictionary,
+    f: (a: A) => Applicative<B>
+  ): Applicative<Cons<B>> {
+    return this === nil
+      ? a.of(nil)
+      : lift(cons, f(this.val), this.tail.traverse(a, f));
   }
   // To make TypeScript pleased
   map: <B>(f: (a: A) => B) => Cons<B>;
@@ -31,7 +37,10 @@ export class Cons<A> implements Monoid<Cons<A>>, Monad<A>, Traversable<A> {
   flatten: () => Cons<any>;
   foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
   foldl: <B>(f: (acc: B, a: A) => B, init: B) => B;
-  sequence: <A>(a: ApplicativeDictionary, t: Cons<Applicative<A>>) => Applicative<Traversable<A>>;
+  sequence: <A>(
+    a: ApplicativeDictionary,
+    t: Cons<Applicative<A>>
+  ) => Applicative<Traversable<A>>;
   shortFoldr: <B>(f: (a: A, b: B) => Either<B, B>, acc: B) => B;
   shortFoldl: <B>(f: (acc: B, a: A) => Either<B, B>, acc: B) => B;
   size: () => number;

@@ -1,7 +1,7 @@
-import {Monoid, MonoidConstructor} from "../monoid";
+import { Monoid, MonoidConstructor } from "../monoid";
 
 export default class Sum implements Monoid<Sum> {
-  constructor(private n: number) {};
+  constructor(private n: number) {}
   static identity(): Sum {
     return sumId;
   }

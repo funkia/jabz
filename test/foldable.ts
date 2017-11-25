@@ -1,15 +1,32 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
 import {
-  Foldable, foldable, foldMap, foldr, foldl, foldrM, size, isEmpty,
-  maximum, minimum, sum, find, findLast, findIndex, findLastIndex,
-  all, any, toArray, take, sequence_
+  Foldable,
+  foldable,
+  foldMap,
+  foldr,
+  foldl,
+  foldrM,
+  size,
+  isEmpty,
+  maximum,
+  minimum,
+  sum,
+  find,
+  findLast,
+  findIndex,
+  findLastIndex,
+  all,
+  any,
+  toArray,
+  take,
+  sequence_
 } from "../src/foldable";
-import {Maybe, just, nothing} from "../src/maybe";
-import {Either, left, right} from "../src/either";
-import {Monoid, MonoidConstructor} from "../src/monoid";
-import {IO, call, runIO} from "../src/io";
+import { Maybe, just, nothing } from "../src/maybe";
+import { Either, left, right } from "../src/either";
+import { Monoid, MonoidConstructor } from "../src/monoid";
+import { IO, call, runIO } from "../src/io";
 import Sum from "../src/monoids/sum";
 
 const isEven = (n: number): boolean => n % 2 === 0;
@@ -22,41 +39,45 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
     assert.deepEqual(foldMap(Sum, list([])), Sum.create(0));
   });
   it("has foldr", () => {
-    assert.deepEqual(
-      (list([1, 2, 3, 4, 5])).foldr((n, m) => n + m, 0), 15
-    );
-    assert.deepEqual(
-      foldr((n, m) => n + m, 0, list([1, 2, 3, 4, 5])), 15
-    );
+    assert.deepEqual(list([1, 2, 3, 4, 5]).foldr((n, m) => n + m, 0), 15);
+    assert.deepEqual(foldr((n, m) => n + m, 0, list([1, 2, 3, 4, 5])), 15);
   });
   it("folds in right direction", () => {
     assert.deepEqual(
       foldr((n, m) => n - m, 1, list([12, 3, 4])),
-      (12 - (3 - (4 - 1)))
+      12 - (3 - (4 - 1))
     );
   });
   it("has left fold", () => {
     assert.deepEqual(
       foldl((acc, n) => acc - n, 1, list([16, 12, 9, 6, 3])),
-      ((((1 - 16) - 12) - 9) - 6) - 3
+      1 - 16 - 12 - 9 - 6 - 3
     );
   });
   it("has short-circuiting foldr", () => {
     assert.deepEqual(
-      list([1, 2, 3, 4, 5]).shortFoldr((n, m) => right(n + m), 0), 15
+      list([1, 2, 3, 4, 5]).shortFoldr((n, m) => right(n + m), 0),
+      15
     );
     assert.deepEqual(
-      list([1, 2, 3, 4, 5])
-        .shortFoldr((n, m) => n === 3 ? left(m) : right(n + m), 0), 9
+      list([1, 2, 3, 4, 5]).shortFoldr(
+        (n, m) => (n === 3 ? left(m) : right(n + m)),
+        0
+      ),
+      9
     );
   });
   it("has short-circuiting foldl", () => {
     assert.deepEqual(
-      list([1, 2, 3, 4, 5]).shortFoldl((n, m) => right(n + m), 0), 15
+      list([1, 2, 3, 4, 5]).shortFoldl((n, m) => right(n + m), 0),
+      15
     );
     assert.deepEqual(
-      list([4, 4, 2, 3, 3])
-        .shortFoldl((m, n) => n === 2 ? left(m) : right(n + m), 0), 8
+      list([4, 4, 2, 3, 3]).shortFoldl(
+        (m, n) => (n === 2 ? left(m) : right(n + m)),
+        0
+      ),
+      8
     );
   });
   it("has size", () => {
@@ -68,13 +89,13 @@ export function testFoldable(list: <A>(l: A[]) => Foldable<A>) {
     assert.strictEqual(isEmpty(list([])), true);
   });
   it("can get `maximum`", () => {
-    assert.deepEqual(maximum((list([1, 2, 4, 3]))), 4);
+    assert.deepEqual(maximum(list([1, 2, 4, 3])), 4);
   });
   it("can get `minimum`", () => {
-    assert.deepEqual(minimum((list([3, 2, 1, 3]))), 1);
+    assert.deepEqual(minimum(list([3, 2, 1, 3])), 1);
   });
   it("can get `sum`", () => {
-    assert.deepEqual(sum((list([1, 2, 3, 4]))), 10);
+    assert.deepEqual(sum(list([1, 2, 3, 4])), 10);
   });
 }
 
@@ -82,7 +103,7 @@ describe("Foldable", () => {
   describe("derived foldable implementation", () => {
     @foldable
     class List<A> implements Foldable<A> {
-      constructor(private arr: A[]) {};
+      constructor(private arr: A[]) {}
       foldr<B>(f: (a: A, b: B) => B, acc: B): B {
         for (let i = this.arr.length - 1; 0 <= i; --i) {
           acc = f(this.arr[i], acc);
@@ -101,86 +122,63 @@ describe("Foldable", () => {
     testFoldable(list);
     describe("all", () => {
       it("returns true when all elements are true", () => {
-        assert.strictEqual(
-          all(isEven, list([2, 4, 6])), true
-        );
+        assert.strictEqual(all(isEven, list([2, 4, 6])), true);
       });
       it("returns false when some elements are false", () => {
-        assert.strictEqual(
-          all(isEven, list([2, 4, 7])), false
-        );
+        assert.strictEqual(all(isEven, list([2, 4, 7])), false);
       });
       it("returns true on empty list", () => {
-        assert.strictEqual(
-          all(isEven, list([])), true
-        );
+        assert.strictEqual(all(isEven, list([])), true);
       });
     });
     describe("any", () => {
       it("returns false when no elements are true", () => {
-        assert.strictEqual(
-          any(isEven, list([1, 3, 7])), false
-        );
+        assert.strictEqual(any(isEven, list([1, 3, 7])), false);
       });
       it("returns true when some elements are true", () => {
-        assert.strictEqual(
-          any(isEven, list([1, 3, 6])), true
-        );
+        assert.strictEqual(any(isEven, list([1, 3, 6])), true);
       });
       it("returns false on empty list", () => {
-        assert.strictEqual(
-          any(isEven, list([])), false
-        );
+        assert.strictEqual(any(isEven, list([])), false);
       });
     });
     describe("toArray", () => {
       it("can convert foldable to array", () => {
-        assert.deepEqual(
-          toArray(list([1, 2, 3, 4])),
-          [1, 2, 3, 4]
-        );
+        assert.deepEqual(toArray(list([1, 2, 3, 4])), [1, 2, 3, 4]);
       });
       it("doesn't touch array", () => {
-        assert.deepEqual(
-          toArray([1, 2, 3, 4]),
-          [1, 2, 3, 4]
-        );        
+        assert.deepEqual(toArray([1, 2, 3, 4]), [1, 2, 3, 4]);
       });
     });
     it("can find first element", () => {
-      assert.deepEqual(
-        find((n) => n > 6, list([1, 8, 3, 7, 5])),
-        just(8)
-      );
-      assert.deepEqual(
-        find((n) => n === 3.5, list([1, 2, 3, 4, 5])),
-        nothing
-      );
+      assert.deepEqual(find(n => n > 6, list([1, 8, 3, 7, 5])), just(8));
+      assert.deepEqual(find(n => n === 3.5, list([1, 2, 3, 4, 5])), nothing);
     });
     it("can find last element", () => {
+      assert.deepEqual(findLast(n => n > 6, list([1, 8, 3, 7, 5])), just(7));
       assert.deepEqual(
-        findLast((n) => n > 6, list([1, 8, 3, 7, 5])),
-        just(7)
-      );
-      assert.deepEqual(
-        findLast((n) => n === 3.5, list([1, 2, 3, 4, 5])),
+        findLast(n => n === 3.5, list([1, 2, 3, 4, 5])),
         nothing
       );
     });
     it("can find index", () => {
       assert.deepEqual(
-        findIndex((n) => n % 2 === 0, list([1, 3, 4, 6, 7, 9])), just(2)
+        findIndex(n => n % 2 === 0, list([1, 3, 4, 6, 7, 9])),
+        just(2)
       );
       assert.deepEqual(
-        findIndex((n) => n % 2 === 0, list([1, 3, 7, 9])), nothing
+        findIndex(n => n % 2 === 0, list([1, 3, 7, 9])),
+        nothing
       );
     });
     it("can find last index", () => {
       assert.deepEqual(
-        findLastIndex((n) => n % 2 === 0, list([1, 3, 4, 6, 7, 9])), just(3)
+        findLastIndex(n => n % 2 === 0, list([1, 3, 4, 6, 7, 9])),
+        just(3)
       );
       assert.deepEqual(
-        findLastIndex((n) => n % 2 === 0, list([1, 3, 7, 9])), nothing
+        findLastIndex(n => n % 2 === 0, list([1, 3, 7, 9])),
+        nothing
       );
     });
     it("can take first n elements", () => {
@@ -192,7 +190,7 @@ describe("Foldable", () => {
       assert.throws(() => {
         @foldable
         class NotAFoldable<A> {
-          constructor(private arr: A[]) {};
+          constructor(private arr: A[]) {}
         }
       });
     });
@@ -205,7 +203,8 @@ describe("Foldable", () => {
       });
       it("sequences nothing to nothing", () => {
         assert.deepEqual(
-          sequence_(Maybe, list([just(1), nothing, just(3)])), nothing
+          sequence_(Maybe, list([just(1), nothing, just(3)])),
+          nothing
         );
       });
       it("sequences in right order", () => {
@@ -223,23 +222,18 @@ describe("Foldable", () => {
     });
     describe("foldrM", () => {
       it("works over foldable", () => {
-        const divide = (a: number, b: number) => a === 0 ? nothing : just(b / a);
-        assert.deepEqual(
-          foldrM(divide, just(100), list([10, 5])),
-          just(2)
-        );
-        assert.deepEqual(
-          foldrM(divide, just(100), list([5, 0])),
-          nothing
-        );
+        const divide = (a: number, b: number) =>
+          a === 0 ? nothing : just(b / a);
+        assert.deepEqual(foldrM(divide, just(100), list([10, 5])), just(2));
+        assert.deepEqual(foldrM(divide, just(100), list([5, 0])), nothing);
       });
       it("works over array", () => {
         assert.deepEqual(
-          foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [4, 3]),
+          foldrM((a, b) => (b === a ? nothing : just(b + a)), just(2), [4, 3]),
           just(9)
         );
         assert.deepEqual(
-          foldrM((a, b) => b === a ? nothing : just(b + a), just(2), [5, 3]),
+          foldrM((a, b) => (b === a ? nothing : just(b + a)), just(2), [5, 3]),
           nothing
         );
       });

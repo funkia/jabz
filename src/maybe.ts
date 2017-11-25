@@ -1,14 +1,14 @@
-import {Monoid, MonoidConstructor} from "./monoid";
-import {Applicative, ApplicativeDictionary} from "./applicative";
-import {foldable, Foldable} from "./foldable";
-import {Traversable} from "./traversable";
-import {Monad} from "./monad";
-import {Either} from "./either";
-import {id} from "./utils";
+import { Monoid, MonoidConstructor } from "./monoid";
+import { Applicative, ApplicativeDictionary } from "./applicative";
+import { foldable, Foldable } from "./foldable";
+import { Traversable } from "./traversable";
+import { Monad } from "./monad";
+import { Either } from "./either";
+import { id } from "./utils";
 
 export type MaybeMatch<T, K> = {
-  nothing: () => K,
-  just: (t: T) => K
+  nothing: () => K;
+  just: (t: T) => K;
 };
 
 export abstract class Maybe<A> implements Monad<A>, Foldable<A> {
@@ -34,20 +34,31 @@ export abstract class Maybe<A> implements Monad<A>, Foldable<A> {
   abstract mapTo<B>(b: B): Maybe<B>;
   abstract ap<B>(a: Applicative<(a: A) => B>): Applicative<B>;
   lift<T1, R>(f: (t: T1) => R, m: Maybe<T1>): Maybe<R>;
-  lift<T1, T2, R>(f: (t: T1, u: T2) => R, m1: Maybe<T1>, m2: Maybe<T2>): Maybe<R>;
-  lift<T1, T2, T3, R>(f: (t1: T1, t2: T2, t3: T3) => R, m1: Maybe<T1>, m2: Maybe<T2>, m3: Maybe<T3>): Maybe<R>;
+  lift<T1, T2, R>(
+    f: (t: T1, u: T2) => R,
+    m1: Maybe<T1>,
+    m2: Maybe<T2>
+  ): Maybe<R>;
+  lift<T1, T2, T3, R>(
+    f: (t1: T1, t2: T2, t3: T3) => R,
+    m1: Maybe<T1>,
+    m2: Maybe<T2>,
+    m3: Maybe<T3>
+  ): Maybe<R>;
   lift(/* arguments */): any {
     const f = arguments[0];
     for (let i = 1; i < arguments.length; ++i) {
-      if (isNothing(arguments[i])) { return nothing; }
+      if (isNothing(arguments[i])) {
+        return nothing;
+      }
     }
     switch (arguments.length - 1) {
-    case 1:
-      return just(f(arguments[1].val));
-    case 2:
-      return just(f(arguments[1].val, arguments[2].val));
-    case 3:
-      return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
+      case 1:
+        return just(f(arguments[1].val));
+      case 2:
+        return just(f(arguments[1].val, arguments[2].val));
+      case 3:
+        return just(f(arguments[1].val, arguments[2].val, arguments[3].val));
     }
   }
   abstract foldr<B>(f: (acc: A, b: B) => B, init: B): B;
@@ -58,14 +69,14 @@ export abstract class Maybe<A> implements Monad<A>, Foldable<A> {
   minimum: () => number;
   sum: () => number;
   abstract size(): number;
-  abstract traverse<B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>): any;
-  sequence<A>(
+  abstract traverse<B>(
     a: ApplicativeDictionary,
-    m: Maybe<Applicative<A>>
-  ): any {
+    f: (a: A) => Applicative<B>
+  ): any;
+  sequence<A>(a: ApplicativeDictionary, m: Maybe<Applicative<A>>): any {
     return m.match({
       nothing: () => a.of(nothing),
-      just: (v) => v.map(just)
+      just: v => v.map(just)
     });
   }
   static multi: boolean = false;
@@ -130,7 +141,7 @@ class Just<A> extends Maybe<A> {
   ap<B>(m: Maybe<(a: A) => B>): Maybe<B> {
     return m.match({
       nothing: () => nothing,
-      just: (f) => new Just(f(this.val))
+      just: f => new Just(f(this.val))
     });
   }
   foldr<B>(f: (a: A, b: B) => B, init: B): B {

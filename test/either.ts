@@ -1,10 +1,10 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
-import {Either, left, right, isLeft, isRight} from "../src/either";
-import {map} from "../src/functor";
-import {testFunctor} from "./functor";
-import {lift} from "../src/applicative";
+import { Either, left, right, isLeft, isRight } from "../src/either";
+import { map } from "../src/functor";
+import { testFunctor } from "./functor";
+import { lift } from "../src/applicative";
 
 describe("Either", () => {
   describe("Functor", () => {
@@ -36,16 +36,10 @@ describe("Either", () => {
     });
     describe("ap", () => {
       it("applies function on two rights", () => {
-        assert.deepEqual(
-          right(12).ap(right((n: number) => n * n)),
-          right(144)
-        );
+        assert.deepEqual(right(12).ap(right((n: number) => n * n)), right(144));
       });
       it("when both left it returns first", () => {
-        assert.deepEqual(
-          left("not his one").ap(left("fail")),
-          left("fail")
-        );
+        assert.deepEqual(left("not his one").ap(left("fail")), left("fail"));
       });
       it("when last left it returns last left", () => {
         assert.deepEqual(

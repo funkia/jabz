@@ -1,17 +1,21 @@
-import {Monoid, MonoidDictionary, AnyMonoid, combine, identity} from "./monoid";
-import {Monad, AbstractMonad} from "./monad";
+import {
+  Monoid,
+  MonoidDictionary,
+  AnyMonoid,
+  combine,
+  identity
+} from "./monoid";
+import { Monad, AbstractMonad } from "./monad";
 
 export class Writer<W extends AnyMonoid<W>, A> extends AbstractMonad<A> {
-  constructor(public identity: W,
-              public state: W,
-              public value: A) {
+  constructor(public identity: W, public state: W, public value: A) {
     super();
   }
   of(a: A): Writer<W, A> {
     return new Writer(this.identity, this.identity, a);
   }
   chain<B>(f: (a: A) => Writer<W, B>): Writer<W, B> {
-    const {state, value} = f(this.value);
+    const { state, value } = f(this.value);
     return new Writer(this.identity, combine(this.state, state), value);
   }
   multi: boolean = false;
@@ -22,15 +26,17 @@ export function runWriter<W extends Monoid<W>, A>(w: Writer<W, A>): [W, A] {
 }
 
 export type WriterFunctions<W extends AnyMonoid<W>> = {
-  tell<A>(w: W): Writer<W, {}>,
-  listen<A>(w: Writer<W, A>): Writer<W, [A, W]>,
-  of<A>(a: A): Writer<W, A>
+  tell<A>(w: W): Writer<W, {}>;
+  listen<A>(w: Writer<W, A>): Writer<W, [A, W]>;
+  of<A>(a: A): Writer<W, A>;
   multi: boolean;
-}
+};
 
 export function createWriter(mc: ArrayConstructor): WriterFunctions<any[]>;
 export function createWriter(mc: StringConstructor): WriterFunctions<string>;
-export function createWriter<M extends Monoid<M>>(mc: MonoidDictionary<M>): WriterFunctions<M>;
+export function createWriter<M extends Monoid<M>>(
+  mc: MonoidDictionary<M>
+): WriterFunctions<M>;
 export function createWriter<M extends Monoid<M>>(mc: any): any {
   const identityElm = identity(mc);
   return {

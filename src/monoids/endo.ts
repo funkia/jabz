@@ -1,14 +1,14 @@
-import {Monoid, MonoidConstructor} from "../monoid";
-import {compose} from "../utils";
+import { Monoid, MonoidConstructor } from "../monoid";
+import { compose } from "../utils";
 
 export default class Endo<A> implements Monoid<Endo<A>> {
-  constructor(public fn: (a: A) => A) {};
+  constructor(public fn: (a: A) => A) {}
   static identity(): Endo<any> {
     return endoId;
-  };
+  }
   identity(): Endo<A> {
     return endoId;
-  };
+  }
   combine(e: Endo<A>): Endo<A> {
     return new Endo(compose(this.fn, e.fn));
   }

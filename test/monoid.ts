@@ -1,8 +1,8 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
-import {Semigroup} from "../src/semigroup";
-import {Monoid, combine, identity} from "../src/monoid";
+import { Semigroup } from "../src/semigroup";
+import { Monoid, combine, identity } from "../src/monoid";
 import Sum from "../src/monoids/sum";
 
 describe("monoid", () => {
@@ -14,16 +14,20 @@ describe("monoid", () => {
 export function testMonoid<M extends Monoid<M>>(name: string, monoid: M): void {
   describe("monoid " + name, () => {
     it("has identity element", () => {
-      assert.deepEqual(monoid.identity().combine(monoid),
-                       monoid.combine(monoid.identity()));
-      assert.deepEqual(identity(monoid).combine(monoid),
-                       monoid.combine(monoid.identity()));
+      assert.deepEqual(
+        monoid.identity().combine(monoid),
+        monoid.combine(monoid.identity())
+      );
+      assert.deepEqual(
+        identity(monoid).combine(monoid),
+        monoid.combine(monoid.identity())
+      );
     });
   });
-};
+}
 
 class TestSemigroup<A> implements Semigroup<TestSemigroup<A>> {
-  constructor(private list: A[]) {};
+  constructor(private list: A[]) {}
   combine(b: TestSemigroup<A>): TestSemigroup<A> {
     return new TestSemigroup(this.list.concat(b.list));
   }
@@ -32,7 +36,7 @@ class TestSemigroup<A> implements Semigroup<TestSemigroup<A>> {
 const s = <A>(...a: A[]) => new TestSemigroup(a);
 
 class TestMonoid<A> implements Monoid<TestMonoid<A>> {
-  constructor(private list: A[]) {};
+  constructor(private list: A[]) {}
   identity() {
     return new TestMonoid([]);
   }
@@ -58,10 +62,7 @@ describe("monoid", () => {
       );
     });
     it("combines arrays", () => {
-      assert.deepEqual(
-        combine([1, 2], [3], [4], [5, 6]),
-        [1, 2, 3, 4, 5, 6]
-      );
+      assert.deepEqual(combine([1, 2], [3], [4], [5, 6]), [1, 2, 3, 4, 5, 6]);
     });
   });
   describe("identity", () => {
@@ -69,7 +70,8 @@ describe("monoid", () => {
       assert.deepEqual(identity(String), "");
     });
     it("has empty array as identity", () => {
-      assert.deepEqual(identity(Array), []);``
+      assert.deepEqual(identity(Array), []);
+      ``;
     });
   });
 });

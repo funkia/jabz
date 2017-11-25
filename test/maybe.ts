@@ -1,16 +1,22 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
 import Sum from "../src/monoids/sum";
 import {
-  Maybe, just, nothing, isNothing, isJust, fromMaybe, maybe
+  Maybe,
+  just,
+  nothing,
+  isNothing,
+  isJust,
+  fromMaybe,
+  maybe
 } from "../src/maybe";
-import {map, mapTo} from "../src/functor";
-import {go, flatten} from "../src/monad";
-import {size, foldr, foldMap} from "../src/foldable";
-import {Either, right, left} from "../src/either";
-import {of} from "../src/applicative";
-import {testFunctor} from "./functor";
+import { map, mapTo } from "../src/functor";
+import { go, flatten } from "../src/monad";
+import { size, foldr, foldMap } from "../src/foldable";
+import { Either, right, left } from "../src/either";
+import { of } from "../src/applicative";
+import { testFunctor } from "./functor";
 
 describe("Maybe", () => {
   it("isJust and isNothing", () => {
@@ -24,7 +30,7 @@ describe("Maybe", () => {
     assert.isTrue(Maybe.is(just(2)));
     assert.isFalse(Maybe.is(2));
     assert.isFalse(Maybe.is(undefined));
-    assert.isFalse(Maybe.is({foo: "bar"}));
+    assert.isFalse(Maybe.is({ foo: "bar" }));
   });
   it("fromMaybe", () => {
     assert.strictEqual(fromMaybe(5, nothing), 5);
@@ -80,7 +86,7 @@ describe("Maybe", () => {
     assert.deepEqual(just(1), mapTo(1, just(2)));
   });
   describe("applicative", () => {
-    const {lift} = nothing;
+    const { lift } = nothing;
     it("of", () => {
       assert.deepEqual(of(Maybe, 12), just(12));
     });
@@ -96,14 +102,8 @@ describe("Maybe", () => {
       });
     });
     it("lifts function of one argument", () => {
-      assert.deepEqual(
-        just(8),
-        lift((x: number) => x * 2, just(4))
-      );
-      assert.deepEqual(
-        nothing,
-        lift((x: number) => x * 2, nothing)
-      );
+      assert.deepEqual(just(8), lift((x: number) => x * 2, just(4)));
+      assert.deepEqual(nothing, lift((x: number) => x * 2, nothing));
     });
     it("lifts function of two arguments", () => {
       assert.deepEqual(
@@ -118,11 +118,21 @@ describe("Maybe", () => {
     it("lifts function of three arguments", () => {
       assert.deepEqual(
         just(10),
-        lift((x: number, y: number, z: number) => x + y + z, just(4), just(5), just(1))
+        lift(
+          (x: number, y: number, z: number) => x + y + z,
+          just(4),
+          just(5),
+          just(1)
+        )
       );
       assert.deepEqual(
         nothing,
-        lift((x: number, y: number, z: number) => x + y + z, nothing, just(5), just(1))
+        lift(
+          (x: number, y: number, z: number) => x + y + z,
+          nothing,
+          just(5),
+          just(1)
+        )
       );
     });
   });
@@ -150,7 +160,7 @@ describe("Maybe", () => {
       });
       it("gives just from just", () => {
         assert.deepEqual(
-          just(12).traverse(Either, (n => right(n * 2))),
+          just(12).traverse(Either, n => right(n * 2)),
           right(just(24))
         );
       });
@@ -158,20 +168,11 @@ describe("Maybe", () => {
     describe("sequence", () => {
       const sequence = nothing.sequence;
       it("gives applicative of nothing when nothing", () => {
-        assert.deepEqual(
-          sequence(Either, nothing),
-          right(nothing)
-        );
+        assert.deepEqual(sequence(Either, nothing), right(nothing));
       });
       it("returns applicative of just when just", () => {
-        assert.deepEqual(
-          sequence(Either, just(right(12))),
-          right(just(12))
-        );
-        assert.deepEqual(
-          sequence(Either, just(left(12))),
-          left(12)
-        );
+        assert.deepEqual(sequence(Either, just(right(12))), right(just(12)));
+        assert.deepEqual(sequence(Either, just(left(12))), left(12));
       });
     });
   });

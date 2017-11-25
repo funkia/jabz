@@ -1,10 +1,10 @@
-import {functor} from "./functor";
-import {Monad, monad} from "./monad";
-import {AbstractApplicative} from "./applicative";
+import { functor } from "./functor";
+import { Monad, monad } from "./monad";
+import { AbstractApplicative } from "./applicative";
 
 @monad
 export default class Identity<A> implements Monad<A> {
-  constructor(private val: A) {};
+  constructor(private val: A) {}
   static of<A>(a: A): Identity<A> {
     return new Identity(a);
   }
@@ -24,7 +24,7 @@ export default class Identity<A> implements Monad<A> {
     return this.of(b);
   }
   flatten(): Identity<any> {
-    return (this.val as any);
+    return this.val as any;
   }
   chain<B>(f: (a: A) => Identity<B>): Identity<B> {
     return f(this.val);

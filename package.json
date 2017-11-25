@@ -9,12 +9,12 @@
     "prepublishOnly": "npm run build",
     "build": "tsc -P ./tsconfig-release.json; tsc -P ./tsconfig-release.json --outDir 'dist/es' --target es6 --module es6",
     "test": "nyc mocha --recursive test/**/*.ts",
-    "test-watch":
-      "mocha --watch --require ts-node/register --watch-extensions ts test/**/*.ts",
+    "test-watch": "mocha --watch --require ts-node/register --watch-extensions ts test/**/*.ts",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "release-major": "xyz --repo git@github.com:funkia/jabz.git --increment major",
     "release-minor": "xyz --repo git@github.com:funkia/jabz.git --increment minor",
     "release-patch": "xyz --repo git@github.com:funkia/jabz.git --increment patch",
+    "format": "prettier --write \"**/*.{json,ts}\"",
     "build-docs": "node metalsmith.js"
   },
   "repository": {
@@ -49,6 +49,7 @@
     "mocha": "^4.0.1",
     "normalize.css": "^7.0.0",
     "nyc": "^11.3.0",
+    "prettier": "^1.8.2",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.1",
     "xyz": "2.1.0"

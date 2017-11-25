@@ -1,17 +1,17 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
-import {Writer, createWriter, runWriter} from "../src/writer";
+import { Writer, createWriter, runWriter } from "../src/writer";
 
 import Sum from "../src/monoids/sum";
 
-import {go, fgo} from "../src/monad";
-import {map, mapTo} from "../src/functor";
+import { go, fgo } from "../src/monad";
+import { map, mapTo } from "../src/functor";
 
 describe("Writer", () => {
   describe("Sum", () => {
     const SumWriter = createWriter(Sum);
-    const {tell, listen, of} = SumWriter;
+    const { tell, listen, of } = SumWriter;
     it("works with Sum monoid", () => {
       const writer: Writer<Sum, string> = go(function*() {
         yield tell(Sum.create(3));
@@ -22,27 +22,21 @@ describe("Writer", () => {
         yield tell(next);
         return "Hello";
       });
-      assert.deepEqual(
-        runWriter(writer),
-        [Sum.create(15), "Hello"]
-      );
+      assert.deepEqual(runWriter(writer), [Sum.create(15), "Hello"]);
     });
     it("gives identity", () => {
-      assert.deepEqual(
-        runWriter(of("Hello Writer!")),
-        [Sum.create(0), "Hello Writer!"]
-      );
+      assert.deepEqual(runWriter(of("Hello Writer!")), [
+        Sum.create(0),
+        "Hello Writer!"
+      ]);
     });
     it("gives identity on instance", () => {
-      assert.deepEqual(
-        runWriter(of("Foo").of("Bar")),
-        [Sum.create(0), "Bar"]
-      );
+      assert.deepEqual(runWriter(of("Foo").of("Bar")), [Sum.create(0), "Bar"]);
     });
   });
   it("works with strings", () => {
     const StringWriter = createWriter(String);
-    const {tell, listen, of} = StringWriter;
+    const { tell, listen, of } = StringWriter;
     const written = go(function*() {
       yield tell("First");
       yield tell("-glance");
@@ -52,13 +46,13 @@ describe("Writer", () => {
       yield tell(next);
       return 22;
     });
-    assert.deepEqual<any>(
-      runWriter(written),
-      ["First-glance feeling of New York time", 22]
-    );
+    assert.deepEqual<any>(runWriter(written), [
+      "First-glance feeling of New York time",
+      22
+    ]);
   });
   it("works with logging example", () => {
-    const {tell} = createWriter(String);
+    const { tell } = createWriter(String);
     const divide = fgo(function*(n: number, m: number) {
       yield tell(`Divide ${n} by ${m}. `);
       return n / m;
@@ -73,7 +67,8 @@ describe("Writer", () => {
       return yield add(a, b);
     });
     assert.deepEqual<any>(runWriter(comp), [
-      "Add 12 to 8. Divide 132 by 11. Add 20 to 12. ", 32
+      "Add 12 to 8. Divide 132 by 11. Add 20 to 12. ",
+      32
     ]);
   });
 });

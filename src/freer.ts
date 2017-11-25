@@ -1,9 +1,9 @@
-import {Functor} from "./functor";
-import {AbstractMonad, Monad, monad} from "./monad";
+import { Functor } from "./functor";
+import { AbstractMonad, Monad, monad } from "./monad";
 
 export type FreerMatch<F, A, K> = {
-  pure: (a: A) => K
-  bind: (u: F, k: (a: any) => Freer<F, A>) => K
+  pure: (a: A) => K;
+  bind: (u: F, k: (a: any) => Freer<F, A>) => K;
 };
 
 export abstract class Freer<F, A> extends AbstractMonad<A> {

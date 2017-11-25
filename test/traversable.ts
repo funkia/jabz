@@ -1,12 +1,18 @@
 import "mocha";
-import {assert} from "chai";
+import { assert } from "chai";
 
-import {Applicative, ApplicativeDictionary} from "../src/applicative";
-import {Maybe, just} from "../src/maybe";
-import {Either} from "../src/either";
-import {testFunctor} from "./functor";
-import {Traversable, traversable, traverse, sequence, mapAccumR} from "../src/traversable";
-import {testFoldable} from "./foldable";
+import { Applicative, ApplicativeDictionary } from "../src/applicative";
+import { Maybe, just } from "../src/maybe";
+import { Either } from "../src/either";
+import { testFunctor } from "./functor";
+import {
+  Traversable,
+  traversable,
+  traverse,
+  sequence,
+  mapAccumR
+} from "../src/traversable";
+import { testFoldable } from "./foldable";
 
 export function testTraversable(list: <A>(l: A[]) => Traversable<A>) {
   it("can sequence", () => {
@@ -27,14 +33,17 @@ describe("Traversable", () => {
   describe("deriving with `traverse`", () => {
     @traversable
     class List<A> implements Traversable<A> {
-      constructor(private list: A[]) {};
+      constructor(private list: A[]) {}
       traverse<B>(
         a: ApplicativeDictionary,
         f: (a: A) => Applicative<B>
       ): Applicative<List<B>> {
         return traverse(a, f, this.list).map((a: B[]) => new List(a));
       }
-      sequence: <A>(a: ApplicativeDictionary, t: Traversable<Applicative<A>>) => Applicative<Traversable<A>>;
+      sequence: <A>(
+        a: ApplicativeDictionary,
+        t: Traversable<Applicative<A>>
+      ) => Applicative<Traversable<A>>;
       map: <B>(f: (a: A) => B) => List<B>;
       mapTo: <B>(b: B) => List<B>;
       foldr: <B>(f: (a: A, b: B) => B, acc: B) => B;
@@ -65,7 +74,10 @@ describe("Traversable", () => {
     @traversable
     class List<A> implements Traversable<A> {
       constructor(private list: A[]) {}
-      traverse: <B>(a: ApplicativeDictionary, f: (a: A) => Applicative<B>) => Applicative<List<B>>;
+      traverse: <B>(
+        a: ApplicativeDictionary,
+        f: (a: A) => Applicative<B>
+      ) => Applicative<List<B>>;
       sequence<A>(
         a: ApplicativeDictionary,
         t: List<Applicative<A>>
@@ -94,7 +106,7 @@ describe("Traversable", () => {
       assert.throws(() => {
         @traversable
         class List<A> {
-          constructor(private list: A[]) {};
+          constructor(private list: A[]) {}
           sequence<A>(
             a: ApplicativeDictionary,
             t: List<Applicative<A>>

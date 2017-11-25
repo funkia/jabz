@@ -7,9 +7,7 @@
     "type": "git",
     "url": "https://github.com/adobe-fonts/source-code-pro.git"
   },
-  "authors": [
-    { "name": "Paul D. Hunt" }
-  ],
+  "authors": [{ "name": "Paul D. Hunt" }],
   "description": "Source Code Pro font family by Adobe",
   "license": "SIL OFL 1.1"
 }

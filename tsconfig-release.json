@@ -4,7 +4,5 @@
     "target": "es5",
     "outDir": "dist/"
   },
-  "exclude": [
-    "test/**/*.ts"
-  ]
+  "exclude": ["test/**/*.ts"]
 }

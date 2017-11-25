@@ -1,16 +1,20 @@
-import {Maybe} from "./maybe";
-import {Either} from "./either";
-import {mixin} from "./utils";
+import { Maybe } from "./maybe";
+import { Either } from "./either";
+import { mixin } from "./utils";
 
 function arrayMap<A, B>(f: (a: A) => B, as: A[]): B[] {
   let newArr: B[] = [];
-  for (const a of as) { newArr.push(f(a)); }
+  for (const a of as) {
+    newArr.push(f(a));
+  }
   return newArr;
 }
 
 function repeat<A>(a: A, length: number): A[] {
   let newArr: A[] = [];
-  for (let i = 0; i < length; ++i) { newArr.push(a); }
+  for (let i = 0; i < length; ++i) {
+    newArr.push(a);
+  }
   return newArr;
 }
 
@@ -36,11 +40,17 @@ export function functor(constructor: Function): void {
 }
 
 export function map<A, B>(f: (a: A) => B, functor: Maybe<A>): Maybe<B>;
-export function map<A, B, C>(f: (b: B) => C, functor: Either<A, B>): Either<A, C>;
+export function map<A, B, C>(
+  f: (b: B) => C,
+  functor: Either<A, B>
+): Either<A, C>;
 export function map<A, B>(f: (a: A) => B, functor: Functor<A>): any;
 export function map<A, B>(f: (a: A) => B, functor: A[]): B[];
 export function map<A, B>(f: (a: A) => B, functor: any): any;
-export function map<A, B>(f: (a: A) => B, functor: Functor<A> | A[]): Functor<B> | B[] {
+export function map<A, B>(
+  f: (a: A) => B,
+  functor: Functor<A> | A[]
+): Functor<B> | B[] {
   if (Array.isArray(functor)) {
     return arrayMap(f, functor);
   } else {
