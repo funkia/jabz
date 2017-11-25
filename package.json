@@ -1,6 +1,6 @@
 {
   "name": "@funkia/jabz",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Powerful and practical abstractions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
