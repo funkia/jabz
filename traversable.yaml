@@ -1,7 +1,9 @@
 name: Traversable
 description: |
-  code.language-javascript.
-    import * as Traversable from "jabz/traversable";
+  Import with.
+  ```javascript
+  import * as Traversable from "jabz/traversable";
+  ```    
 
 functions:
 - name: sequence
