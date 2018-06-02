@@ -2,7 +2,7 @@ import "mocha";
 import { assert } from "chai";
 
 import Sum from "../src/monoids/sum";
-import { combine } from "../src/monoid";
+import { combine } from "../src/semigroup";
 import { testMonoid } from "./monoid";
 
 describe("sum", () => {

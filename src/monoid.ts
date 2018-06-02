@@ -27,5 +27,3 @@ export function identity<M extends Monoid<M>>(m: any): any {
     return m.identity();
   }
 }
-
-export { combine };

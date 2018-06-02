@@ -3,20 +3,14 @@ import { assert } from "chai";
 
 import Sum from "../src/monoids/sum";
 import { Maybe, just, nothing } from "../src/maybe";
-import { identity, combine } from "../src/monoid";
+import { identity } from "../src/monoid";
 import { map, mapTo } from "../src/functor";
 import { lift, of } from "../src/applicative";
 import { chain, flatten, go } from "../src/monad";
-import {
-  size,
-  foldr,
-  foldl,
-  foldMap,
-  sequence_,
-  isEmpty
-} from "../src/foldable";
+import { size, foldr, foldl, foldMap, sequence_, isEmpty } from "../src/foldable";
 import { traverse, sequence } from "../src/traversable";
 import { IO, call, runIO } from "../src/io";
+import { combine } from '../src/semigroup';
 
 describe("Native list", () => {
   describe("monoid", () => {

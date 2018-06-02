@@ -1,4 +1,4 @@
-import { Monoid, MonoidConstructor, combine } from "./monoid";
+import { Monoid, MonoidConstructor } from "./monoid";
 import { Applicative, ApplicativeDictionary, of, seq } from "./applicative";
 import { Monad } from "./monad";
 import { Maybe, just, nothing } from "./maybe";

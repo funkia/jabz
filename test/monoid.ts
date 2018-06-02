@@ -1,8 +1,8 @@
 import "mocha";
 import { assert } from "chai";
 
-import { Semigroup } from "../src/semigroup";
-import { Monoid, combine, identity } from "../src/monoid";
+import { Semigroup, combine } from "../src/semigroup";
+import { Monoid, identity } from "../src/monoid";
 import Sum from "../src/monoids/sum";
 
 describe("monoid", () => {

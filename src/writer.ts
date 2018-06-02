@@ -2,10 +2,10 @@ import {
   Monoid,
   MonoidDictionary,
   AnyMonoid,
-  combine,
   identity
 } from "./monoid";
 import { Monad, AbstractMonad } from "./monad";
+import { combine } from './semigroup';
 
 export class Writer<W extends AnyMonoid<W>, A> extends AbstractMonad<A> {
   constructor(public identity: W, public state: W, public value: A) {
