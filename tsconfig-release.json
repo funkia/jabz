@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "es5",
+    "sourceMap": false,
     "outDir": "dist/"
   },
   "exclude": ["test/**/*.ts"]
