@@ -23,11 +23,11 @@ export abstract class Either<A, B> implements Applicative<B> {
   of<B>(b: B): Either<A, B> {
     return new Right(b);
   }
-  ap<C>(a: Either<A, (a: B) => C>): Either<B, C> {
-    if (a.tag === EitherTag.Left) {
-      return <any>a;
+  ap<C>(a: Either<A, (a: B) => C>): Either<A, C> {
+    if (isRight(a)) {
+      return this.map(a.val);
     } else {
-      return <any>this.map(<any>a.val);
+      return <any>a;
     }
   }
   lift<A, T1, R>(f: (t: T1) => R, m: Either<A, T1>): Either<A, R>;
@@ -102,11 +102,11 @@ export function right<B>(b: B): Either<any, B> {
   return new Right(b);
 }
 
-export function isLeft<A, B>(a: Either<A, B>): boolean {
+export function isLeft<A, B>(a: Either<A, B>): a is Left<A, B> {
   return a.tag === EitherTag.Left;
 }
 
-export function isRight<A, B>(a: Either<A, B>): boolean {
+export function isRight<A, B>(a: Either<A, B>): a is Right<A, B> {
   return a.tag === EitherTag.Right;
 }
 
